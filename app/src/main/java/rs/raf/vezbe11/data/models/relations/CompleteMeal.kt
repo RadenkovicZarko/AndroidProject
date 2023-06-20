@@ -1,0 +1,48 @@
+package rs.raf.vezbe11.data.models.relations
+
+import androidx.room.Embedded
+import androidx.room.Junction
+import androidx.room.Relation
+import rs.raf.vezbe11.data.models.IngredientEntity
+import rs.raf.vezbe11.data.models.IngredientMealEntity
+import rs.raf.vezbe11.data.models.MealEntity
+
+data class CategoryMealRelation (
+    @Embedded val meal: MealEntity,
+    @Relation(
+        parentColumn = "idCategory",
+        entityColumn = "strCategoryId"
+    )
+    val mealsWithCategory: List<MealEntity>
+)
+
+
+data class AreaMealRelation (
+    @Embedded val meal: MealEntity,
+    @Relation(
+        parentColumn = "strArea",
+        entityColumn = "strAreaId"
+    )
+    val mealsWithArea: List<MealEntity>
+)
+
+
+data class MealWithIngredients(
+    @Embedded val meal: MealEntity,
+    @Relation(
+        parentColumn = "idMeal",
+        entityColumn = "idIngredient",
+        associateBy = Junction(IngredientMealEntity::class)
+    )
+    val ingredients: List<IngredientEntity>
+)
+
+data class IngredientsWithMeal(
+    @Embedded val ingredient: IngredientEntity,
+    @Relation(
+        parentColumn = "idIngredient",
+        entityColumn = "idMeal",
+        associateBy = Junction(IngredientMealEntity::class)
+    )
+    val ingredients: List<MealEntity>
+)
