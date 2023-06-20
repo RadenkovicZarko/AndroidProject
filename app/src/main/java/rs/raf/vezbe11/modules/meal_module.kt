@@ -17,6 +17,14 @@ val mealModule = module {
 
     single { get<MealDataBase>().getMealDao() }
 
+    single { get<MealDataBase>().getCategoryDao() }
+
+    single { get<MealDataBase>().getIngredientDao() }
+
+    single { get<MealDataBase>().getAreaDao() }
+
+    single { get<MealDataBase>().getIngredientMealDao() }
+
     single<MealService> {
         rs.raf.vezbe11.modules.create(
             retrofit = get()

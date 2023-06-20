@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initUi() {
         myFragment = BlankFragment()
-        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, myFragment)
+        supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, myFragment).commit()
         Timber.e("DESILOOOOO SE")
 
     }

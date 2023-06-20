@@ -11,6 +11,9 @@ import rs.raf.vezbe11.data.models.MealEntity
 import rs.raf.vezbe11.data.models.Resource
 import timber.log.Timber
 import io.reactivex.Observable
+import rs.raf.vezbe11.data.models.MealResponse
+
+import org.json.JSONArray
 
 class MealRepositoryImpl (
     private val localMealSource: MealDao,
@@ -22,14 +25,12 @@ class MealRepositoryImpl (
 )  : MealRepository{
 
     override fun fetchAll(): Observable<Resource<Unit>> {
-        Timber.e("Desilooooo se")
-
-
-        return remoteDataSource
-            .getAll()
-            .doOnNext {
-                Timber.e("Upis u bazu")
-                val entities = it.map {
+        return remoteDataSource.getAll().flatMap { mealResponse ->
+            val meals = mealResponse.meals
+            if(meals != null && meals.isNotEmpty())
+            {
+                val entities = meals.map {
+                    Timber.e(it.strMeal)
                     MealEntity(
                         it.idMeal,
                         it.strMeal,
@@ -42,14 +43,13 @@ class MealRepositoryImpl (
                         it.dateModified
                     )
                 }
-
-                localMealSource.insertAll(entities)
-
-            }
-            .map {
-                Resource.Success(Unit)
+                localMealSource.deleteAndInsertAll(entities)
+                Observable.just(Resource.Success(Unit))
+            }else {
+                Observable.just(Resource.Error())
             }
 
+        }
     }
 
     override fun getAll(): Observable<List<MealEntity>> {

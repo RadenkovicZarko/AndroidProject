@@ -20,8 +20,8 @@ class MealViewModel (private val mealRepository: MealRepository,
 
     private val subscriptions = CompositeDisposable()
     override val mealState : MutableLiveData<MealState> = MutableLiveData()
-    override fun fetchAllMeals() {
 
+    override fun fetchAllMeals() {
         val subscription = mealRepository
             .fetchAll()
             .startWith(Resource.Loading()) //Kada se pokrene fetch hocemo da postavimo stanje na Loading

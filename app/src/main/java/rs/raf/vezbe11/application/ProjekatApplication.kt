@@ -9,6 +9,7 @@ import org.koin.core.context.startKoin
 import timber.log.Timber
 import org.koin.core.logger.Level
 import rs.raf.vezbe11.modules.coreModule
+import rs.raf.vezbe11.modules.mealModule
 
 class ProjekatApplication : Application(){
 
@@ -30,7 +31,8 @@ class ProjekatApplication : Application(){
     private fun initKoin() {
 //        TODO
         val modules = listOf(
-            coreModule
+            coreModule,
+            mealModule
         )
         startKoin {
             androidLogger(Level.ERROR)

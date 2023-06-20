@@ -8,7 +8,6 @@ interface MainContract {
 
     interface ViewModel {
         val mealState: LiveData<MealState>
-
         fun fetchAllMeals()
         fun getAllMeals()
         fun getMealsByName(name: String)
