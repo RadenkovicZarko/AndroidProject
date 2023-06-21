@@ -1,4 +1,4 @@
-package rs.raf.vezbe11.data.models
+package rs.raf.vezbe11.data.models.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -14,5 +14,9 @@ data class MealEntity (
     val strInstructions: String?,
     val strMealThumb: String?,
     val strTags: String?,
-    val strYoutube: String?
+    val strYoutube: String?,
+    val strSource: String?,
+    val strImageSource: String?,
+    val strCreativeCommonsConfirmed: String?,
+    val dateModified: String?
 )

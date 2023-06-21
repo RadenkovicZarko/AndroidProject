@@ -3,22 +3,20 @@ package rs.raf.vezbe11.data.models.relations
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import rs.raf.vezbe11.data.models.IngredientEntity
-import rs.raf.vezbe11.data.models.IngredientMealEntity
-import rs.raf.vezbe11.data.models.MealEntity
+import rs.raf.vezbe11.data.models.entities.*
 
 data class CategoryMealRelation (
-    @Embedded val meal: MealEntity,
+    @Embedded val meal: CategoryEntity,
     @Relation(
-        parentColumn = "idCategory",
-        entityColumn = "strCategoryId"
+        parentColumn = "strCategory",
+        entityColumn = "strCategory"
     )
     val mealsWithCategory: List<MealEntity>
 )
 
 
 data class AreaMealRelation (
-    @Embedded val meal: MealEntity,
+    @Embedded val meal: AreaEntity,
     @Relation(
         parentColumn = "strArea",
         entityColumn = "strAreaId"

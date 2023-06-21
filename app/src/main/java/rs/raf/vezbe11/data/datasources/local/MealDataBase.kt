@@ -3,7 +3,7 @@ package rs.raf.vezbe11.data.datasources.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import rs.raf.vezbe11.data.models.*
+import rs.raf.vezbe11.data.models.entities.*
 
 
 @Database(

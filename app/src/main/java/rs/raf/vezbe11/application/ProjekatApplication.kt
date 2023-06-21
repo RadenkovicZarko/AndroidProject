@@ -25,7 +25,6 @@ class ProjekatApplication : Application(){
 
     private fun initTimber() {
         Timber.plant(Timber.DebugTree())
-        Timber.e("Desilo se")
     }
 
     private fun initKoin() {

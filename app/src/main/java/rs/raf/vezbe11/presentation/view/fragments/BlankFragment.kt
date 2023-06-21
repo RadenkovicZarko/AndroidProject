@@ -25,9 +25,12 @@ class BlankFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Timber.e("Pre")
+        mainViewModel.fetchAllCategories()
+        mainViewModel.fetchAllAreas()
+        mainViewModel.fetchAllIngredients()
         mainViewModel.fetchAllMeals()
-        Timber.e("Posle")
+        mainViewModel.fetchAllCalories()
+//        mainViewModel.getCAndMRelations()
         val view = inflater.inflate(R.layout.fragment_blank, container, false)
         textView = view.findViewById(R.id.editTextTextPersonName)
         return view

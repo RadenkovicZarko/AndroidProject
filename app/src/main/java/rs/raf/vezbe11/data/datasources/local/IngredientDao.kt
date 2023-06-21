@@ -1,13 +1,9 @@
 package rs.raf.vezbe11.data.datasources.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Observable
-import rs.raf.vezbe11.data.models.IngredientEntity
+import rs.raf.vezbe11.data.models.entities.IngredientEntity
 
 @Dao
 abstract class IngredientDao {
@@ -29,5 +25,12 @@ abstract class IngredientDao {
         deleteAll()
         insertAll(entities).blockingAwait()
     }
+
+    @Query("SELECT * FROM ingredients WHERE idIngredient=:id ")
+    abstract fun loadSingle(id: String): IngredientEntity
+
+
+    @Update
+    abstract fun updateCalories(entity: IngredientEntity)
 
 }

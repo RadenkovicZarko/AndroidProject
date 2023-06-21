@@ -1,4 +1,4 @@
-package rs.raf.vezbe11.data.models
+package rs.raf.vezbe11.data.models.entities
 
 import androidx.room.Entity
 
@@ -6,5 +6,6 @@ import androidx.room.Entity
     tableName="crossTable")
 data class IngredientMealEntity (
     val idMeal: String,
-    val idIngredient : String
+    val idIngredient : String,
+    val strMeasure: String?
 )

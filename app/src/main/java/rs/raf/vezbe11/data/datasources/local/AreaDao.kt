@@ -7,7 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import io.reactivex.Completable
 import io.reactivex.Observable
-import rs.raf.vezbe11.data.models.AreaEntity
+import rs.raf.vezbe11.data.models.entities.AreaEntity
 
 @Dao
 abstract class AreaDao {

@@ -30,11 +30,11 @@ val coreModule = module {
         .fallbackToDestructiveMigration()
         .build() }
 
-    single { createRetrofit(moshi = get(), httpClient = get()) }
+//    single { createRetrofit(moshi = get(), httpClient = get()) }
 
     single { createMoshi() }
 
-    single { createOkHttpClient() }
+//    single { createOkHttpClient() }
 }
 
 
@@ -57,6 +57,20 @@ fun createRetrofit(moshi: Moshi,
         .build()
 }
 
+fun createRetrofit2(moshi: Moshi,
+                   httpClient: OkHttpClient
+): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl("https://api.api-ninjas.com/v1/")
+//        .baseUrl("https://ghibliapi.herokuapp.com/")
+
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
+
+        .client(httpClient)
+        .build()
+}
+
 fun createOkHttpClient(): OkHttpClient {
     val httpClient = OkHttpClient.Builder()
     httpClient.readTimeout(60, TimeUnit.SECONDS)
@@ -64,6 +78,28 @@ fun createOkHttpClient(): OkHttpClient {
     httpClient.writeTimeout(60, TimeUnit.SECONDS)
 
     if (BuildConfig.DEBUG) {
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
+        httpClient.addInterceptor(logging)
+    }
+
+    return httpClient.build()
+}
+
+
+fun createOkHttpClient2(): OkHttpClient {
+    val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
+        val originalRequest = chain.request()
+        val requestWithApiKey = originalRequest.newBuilder()
+            .header("X-Api-Key", "eJrNsy+GS96wpkdL1yYAzg==OompL8KH7KE9rlQ1")
+            .build()
+        chain.proceed(requestWithApiKey)
+    }
+    httpClient.readTimeout(60, TimeUnit.SECONDS)
+    httpClient.connectTimeout(60, TimeUnit.SECONDS)
+    httpClient.writeTimeout(60, TimeUnit.SECONDS)
+
+    if (rs.raf.vezbe11.BuildConfig.DEBUG) {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         httpClient.addInterceptor(logging)

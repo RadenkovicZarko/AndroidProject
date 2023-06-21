@@ -1,7 +1,6 @@
 package rs.raf.vezbe11.presentation.view.states
 
-import android.graphics.Movie
-import rs.raf.vezbe11.data.models.MealEntity
+import rs.raf.vezbe11.data.models.entities.MealEntity
 
 sealed class MealState {
     object Loading: MealState()
