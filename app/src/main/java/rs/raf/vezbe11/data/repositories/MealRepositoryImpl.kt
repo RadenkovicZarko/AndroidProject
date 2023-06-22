@@ -233,6 +233,7 @@ class MealRepositoryImpl (
     }
 
     override fun fetchAllI(): Observable<Resource<Unit>> {
+
         return remoteDataSource.getAllIngredients().flatMap { ingredientResponse ->
             val ingredients = ingredientResponse.meals
             if(ingredients != null && ingredients.isNotEmpty())
@@ -259,7 +260,7 @@ class MealRepositoryImpl (
                 localIngredientSource.deleteAndInsertAll(entities)
                 Observable.just(Resource.Success(Unit))
             }else {
-                Observable.just(Resource.Error())
+               Observable.just(Resource.Error())
             }
         }
     }
@@ -300,32 +301,120 @@ class MealRepositoryImpl (
                     str = it2.strIngredient
                 }
             }
-            Timber.e(allIngredients)
+            if(str.equals("Gherkin Relish"))
+                Timber.e("TOOOOO")
+
             allIngredients = str
         }
-
+        listAllIngredients+=allIngredients
 
 
         Timber.e("DEsilo se 2")
-        Timber.e(allIngredients)
-        Timber.e(listAllIngredients.size.toString())
-        return caloriesRemoteDataSource.getCalories(allIngredients).flatMap { it ->
-                Timber.e(it.size.toString())
-                Timber.e("USAOOO")
-                it.forEach { it1 ->
-                    Timber.e("Desilo se")
-                    if (it1.name != "") {
-                        Timber.e(it1.name.capitalize())
-                        var ing = localIngredientSource.loadSingle(it1.name.capitalize())
+        listAllIngredients.forEach { Timber.e(it) }
+        var lista : List<IngredientEntity> = listOf()
+        return caloriesRemoteDataSource.getCalories(listAllIngredients.get(0)).flatMap{ it ->
+               var name = ""
+               var calories = 0.0
+               Timber.e("USAO123")
+               it.forEach { it1 ->
+                   var p = false
+                   val capitalizedStr = it1.name.split(" ").joinToString(" ") { it.capitalize() }
+                   name += capitalizedStr
+                   calories += it1.calories
+                   Timber.e("--------------------------------------------")
+                   Timber.e(name)
+                   listAllIngredients.forEach { it2 ->
+                       if(name == "Soda") {
+                           p =true
+                           name = "Bicarbonate Of Soda"
+                       }
 
-                        Timber.e("Prosao")
-                        ing.calories = it1.calories
-                        Timber.e("Prosao2")
-                        localIngredientSource.updateCalories(ing)
-                    }
-                }
-                Observable.just(Resource.Success(Unit))
-            }
+                       val words = it2.split(" and ")
+                       if (words.contains(name)) p = true
+                       Timber.e(it2)
+                   }
+
+                   if (p == true) {
+                       Timber.e("USAO1")
+                       var ing = localIngredientSource.loadSingle(name)
+                       ing.calories = calories
+                       Timber.e("USAO2")
+//                       localIngredientSource.updateCalories(ing)
+                       lista+=ing
+                       name = ""
+                       Timber.e("USAO3")
+                       calories = 0.0
+                   } else {
+                       name += " "
+                   }
+//                    if (it1.name != "") {
+//                        Timber.e(it1.name.capitalize())
+//                        var ing = localIngredientSource.loadSingle(it1.name.capitalize())
+//
+//                        Timber.e("Prosao")
+//                        ing.calories = it1.calories
+//                        Timber.e("Prosao2")
+//                        localIngredientSource.updateCalories(ing)
+//                    }
+               }
+
+               Observable.just(Resource.Success(Unit))
+           }
+
+
+//       listAllIngredients.forEach { it0 ->
+//           Timber.e(it0)
+//
+//           caloriesRemoteDataSource.getCalories(it0).forEach{ it ->
+//               var name = ""
+//               var calories = 0.0
+//               Timber.e("USAO123")
+//               it.forEach { it1 ->
+//                   var p = false
+//                   val capitalizedStr = it1.name.split(" ").joinToString(" ") { it.capitalize() }
+//                   name += capitalizedStr
+//                   calories += it1.calories
+//                   Timber.e("--------------------------------------------")
+//                   Timber.e(name)
+//                   listAllIngredients.forEach { it2 ->
+//                       val words = it2.split(" and ")
+//                       if (words.contains(name)) p = true
+//                   }
+//
+//                   if (p == true) {
+//                       Timber.e("USAO1")
+//                       var ing = localIngredientSource.loadSingle(name)
+//                       ing.calories = calories
+//                       Timber.e("USAO2")
+////                       localIngredientSource.updateCalories(ing)
+//                       lista+=ing
+//                       name = ""
+//                       Timber.e("USAO3")
+//                       calories = 0.0
+//                   } else {
+//                       name += " "
+//                   }
+////                    if (it1.name != "") {
+////                        Timber.e(it1.name.capitalize())
+////                        var ing = localIngredientSource.loadSingle(it1.name.capitalize())
+////
+////                        Timber.e("Prosao")
+////                        ing.calories = it1.calories
+////                        Timber.e("Prosao2")
+////                        localIngredientSource.updateCalories(ing)
+////                    }
+//               }
+//
+//               Observable.just(Resource.Success(Unit))
+//           }
+//       }
+//
+//        localIngredientSource.deleteAndInsertAll(lista)
+//
+
+
+//        return Observable.just(Resource.Success(Unit))
+
 //        listAllIngredients.forEach { it ->
 //            Timber.e(it)
 //            caloriesRemoteDataSource.getCalories(it).forEach { it ->
