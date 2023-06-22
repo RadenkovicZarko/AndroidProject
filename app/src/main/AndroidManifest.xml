@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vezbe11" >
-        <activity android:name=".presentation.view.activities.MainActivity"
+<!--        Zare, kada napravis login activity, samo njega stavi da bude main -->
+<!--        a ovaj koji je trenutno main, samo stavi u iznad, da bi mogao da ga registruje-->
+
+        <activity android:name=".presentation.view.activities.MainNavigationActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
