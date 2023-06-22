@@ -13,6 +13,8 @@ import timber.log.Timber
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.processNextEventInCurrentThread
+import okhttp3.internal.wait
 import rs.raf.vezbe11.data.datasources.remote.CalorieService
 import rs.raf.vezbe11.data.models.entities.*
 
@@ -30,72 +32,154 @@ class MealRepositoryImpl (
     private val caloriesRemoteDataSource : CalorieService
 )  : MealRepository{
 
+    @SuppressLint("CheckResult")
     override fun fetchAllM(): Observable<Resource<Unit>> {
-        return remoteDataSource.getAllMeals().flatMap { mealResponse ->
+        return remoteDataSource.getAllMealsId().flatMap { mealResponse ->
             val meals = mealResponse.meals
-            if(meals != null && meals.isNotEmpty())
-            {
-                val entities = meals.map {
-                    MealEntity(
-                        it.idMeal,
-                        it.strMeal,
-                        it.strDrinkAlternate,
-                        it.strCategory,
-                        it.strArea,
-                        it.strInstructions,
-                        it.strMealThumb,
-                        it.strTags,
-                        it.strYoutube,
-                        it.strSource,
-                        it.strImageSource,
-                        it.strCreativeCommonsConfirmed,
-                        it.dateModified
-                    )
-                }
 
-                val entitiesIngredientMeal = meals.flatMap {
-                    listOf(justDoIt(it.idMeal,it.strIngredient1,it.strMeasure1),
-                    justDoIt(it.idMeal,it.strIngredient2,it.strMeasure2),
-                    justDoIt(it.idMeal,it.strIngredient3,it.strMeasure3),
-                    justDoIt(it.idMeal,it.strIngredient4,it.strMeasure4),
-                    justDoIt(it.idMeal,it.strIngredient5,it.strMeasure5),
-                    justDoIt(it.idMeal,it.strIngredient6,it.strMeasure6),
-                    justDoIt(it.idMeal,it.strIngredient7,it.strMeasure7),
-                    justDoIt(it.idMeal,it.strIngredient8,it.strMeasure8),
-                    justDoIt(it.idMeal,it.strIngredient9,it.strMeasure9),
-                    justDoIt(it.idMeal,it.strIngredient10,it.strMeasure10),
-                    justDoIt(it.idMeal,it.strIngredient11,it.strMeasure11),
-                    justDoIt(it.idMeal,it.strIngredient12,it.strMeasure12),
-                    justDoIt(it.idMeal,it.strIngredient13,it.strMeasure13),
-                    justDoIt(it.idMeal,it.strIngredient14,it.strMeasure14),
-                    justDoIt(it.idMeal,it.strIngredient15,it.strMeasure15),
-                    justDoIt(it.idMeal,it.strIngredient16,it.strMeasure16),
-                    justDoIt(it.idMeal,it.strIngredient17,it.strMeasure17),
-                    justDoIt(it.idMeal,it.strIngredient18,it.strMeasure18),
-                    justDoIt(it.idMeal,it.strIngredient19,it.strMeasure19),
-                    justDoIt(it.idMeal,it.strIngredient20,it.strMeasure20)).filter { i -> i!=null && i.idIngredient!="" }.map{ it as IngredientMealEntity}
-                }
-                Timber.e(entitiesIngredientMeal.size.toString())
-                localIngredientMealSource.deleteAndInsertAll(entitiesIngredientMeal)
-                localMealSource.deleteAndInsertAll(entities)
+            if (meals != null && meals.isNotEmpty()) {
+                localMealSource.deleteAll()
+                localIngredientMealSource.deleteAll()
+                meals.forEach {
+                        remoteDataSource.getMealById(it.idMeal).forEach { mealResponse2 ->
+                            Timber.e("DESILO SE")
+                            val meals2 = mealResponse2.meals
+                            if ( meals2.isNotEmpty()) {
+                                val entitie = meals2.map {
+                                    MealEntity(
+                                        it.idMeal,
+                                        it.strMeal,
+                                        it.strDrinkAlternate,
+                                        it.strCategory,
+                                        it.strArea,
+                                        it.strInstructions,
+                                        it.strMealThumb,
+                                        it.strTags,
+                                        it.strYoutube,
+                                        it.strSource,
+                                        it.strImageSource,
+                                        it.strCreativeCommonsConfirmed,
+                                        it.dateModified
+                                    )
+                                }
+
+                                val entitieIngredientMeal = meals2.flatMap {
+                                    listOf(
+                                        justDoIt(it.idMeal, it.strIngredient1, it.strMeasure1),
+                                        justDoIt(it.idMeal, it.strIngredient2, it.strMeasure2),
+                                        justDoIt(it.idMeal, it.strIngredient3, it.strMeasure3),
+                                        justDoIt(it.idMeal, it.strIngredient4, it.strMeasure4),
+                                        justDoIt(it.idMeal, it.strIngredient5, it.strMeasure5),
+                                        justDoIt(it.idMeal, it.strIngredient6, it.strMeasure6),
+                                        justDoIt(it.idMeal, it.strIngredient7, it.strMeasure7),
+                                        justDoIt(it.idMeal, it.strIngredient8, it.strMeasure8),
+                                        justDoIt(it.idMeal, it.strIngredient9, it.strMeasure9),
+                                        justDoIt(it.idMeal, it.strIngredient10, it.strMeasure10),
+                                        justDoIt(it.idMeal, it.strIngredient11, it.strMeasure11),
+                                        justDoIt(it.idMeal, it.strIngredient12, it.strMeasure12),
+                                        justDoIt(it.idMeal, it.strIngredient13, it.strMeasure13),
+                                        justDoIt(it.idMeal, it.strIngredient14, it.strMeasure14),
+                                        justDoIt(it.idMeal, it.strIngredient15, it.strMeasure15),
+                                        justDoIt(it.idMeal, it.strIngredient16, it.strMeasure16),
+                                        justDoIt(it.idMeal, it.strIngredient17, it.strMeasure17),
+                                        justDoIt(it.idMeal, it.strIngredient18, it.strMeasure18),
+                                        justDoIt(it.idMeal, it.strIngredient19, it.strMeasure19),
+                                        justDoIt(it.idMeal, it.strIngredient20, it.strMeasure20)
+                                    ).filter { i -> i != null && i.idIngredient != "" }
+                                        .map { it as IngredientMealEntity }
+                                }
+                                Timber.e(entitieIngredientMeal.size.toString())
+                                Timber.e(entitie.size.toString())
+                                localIngredientMealSource.insertAll(entitieIngredientMeal).blockingAwait()
+                                localMealSource.insertAll(entitie).blockingAwait()
+                            }
+                            Observable.just(Resource.Success(Unit))
+                        }
+                    }
+
                 Observable.just(Resource.Success(Unit))
-            }else {
+            }
+            else {
                 Observable.just(Resource.Error())
             }
 
         }
+
+
+//        return remoteDataSource.getAllMeals().flatMap { mealResponse ->
+//            val meals = mealResponse.meals
+//            if(meals != null && meals.isNotEmpty())
+//            {
+//                val entities = meals.map {
+//                    MealEntity(
+//                        it.idMeal,
+//                        it.strMeal,
+//                        it.strDrinkAlternate,
+//                        it.strCategory,
+//                        it.strArea,
+//                        it.strInstructions,
+//                        it.strMealThumb,
+//                        it.strTags,
+//                        it.strYoutube,
+//                        it.strSource,
+//                        it.strImageSource,
+//                        it.strCreativeCommonsConfirmed,
+//                        it.dateModified
+//                    )
+//                }
+//
+//                val entitiesIngredientMeal = meals.flatMap {
+//                    listOf(justDoIt(it.idMeal,it.strIngredient1,it.strMeasure1),
+//                    justDoIt(it.idMeal,it.strIngredient2,it.strMeasure2),
+//                    justDoIt(it.idMeal,it.strIngredient3,it.strMeasure3),
+//                    justDoIt(it.idMeal,it.strIngredient4,it.strMeasure4),
+//                    justDoIt(it.idMeal,it.strIngredient5,it.strMeasure5),
+//                    justDoIt(it.idMeal,it.strIngredient6,it.strMeasure6),
+//                    justDoIt(it.idMeal,it.strIngredient7,it.strMeasure7),
+//                    justDoIt(it.idMeal,it.strIngredient8,it.strMeasure8),
+//                    justDoIt(it.idMeal,it.strIngredient9,it.strMeasure9),
+//                    justDoIt(it.idMeal,it.strIngredient10,it.strMeasure10),
+//                    justDoIt(it.idMeal,it.strIngredient11,it.strMeasure11),
+//                    justDoIt(it.idMeal,it.strIngredient12,it.strMeasure12),
+//                    justDoIt(it.idMeal,it.strIngredient13,it.strMeasure13),
+//                    justDoIt(it.idMeal,it.strIngredient14,it.strMeasure14),
+//                    justDoIt(it.idMeal,it.strIngredient15,it.strMeasure15),
+//                    justDoIt(it.idMeal,it.strIngredient16,it.strMeasure16),
+//                    justDoIt(it.idMeal,it.strIngredient17,it.strMeasure17),
+//                    justDoIt(it.idMeal,it.strIngredient18,it.strMeasure18),
+//                    justDoIt(it.idMeal,it.strIngredient19,it.strMeasure19),
+//                    justDoIt(it.idMeal,it.strIngredient20,it.strMeasure20)).filter { i -> i!=null && i.idIngredient!="" }.map{ it as IngredientMealEntity}
+//                }
+//                Timber.e(entitiesIngredientMeal.size.toString())
+//                localIngredientMealSource.deleteAndInsertAll(entitiesIngredientMeal)
+//                localMealSource.deleteAndInsertAll(entities)
+//                Observable.just(Resource.Success(Unit))
+//            }else {
+//                Observable.just(Resource.Error())
+//            }
+//
+//        }
     }
-    private fun justDoIt(idMeal: String, strIngredient:String?,strMeasure:String? ):IngredientMealEntity? {
-        if(strIngredient!=null && strIngredient!="")
-        {
-            var it = localIngredientSource.loadSingle(strIngredient)
-            var calories = 0.0
-            val prom = caloriesRemoteDataSource.getCalories(it.strIngredient).blockingFirst().forEach{it1->
-                        calories = it1.calories
-                    }
-            it.calories = calories
-            localIngredientSource.updateCalories(it)
-        }
+    @SuppressLint("CheckResult")
+    private fun justDoIt(idMeal: String, strIngredient:String?, strMeasure:String? ):IngredientMealEntity? {
+//        if(strIngredient!=null && strIngredient!="")
+//        {
+//
+//            var it : IngredientEntity? = localIngredientSource.loadSingle(strIngredient)
+//
+//
+//                if (it!=null && it.strIngredient!="") {
+//                    var calories = 0.0
+//                    val prom =
+//                        caloriesRemoteDataSource.getCalories(it.strIngredient).blockingFirst()
+//                            .forEach { it1 ->
+//                                calories = it1.calories
+//                            }
+//                    it.calories = calories
+//                    localIngredientSource.updateCalories(it)
+//                }
+//
+//        }
 
         val ingredientMealEntity = strIngredient?.let {
             IngredientMealEntity(
@@ -153,20 +237,25 @@ class MealRepositoryImpl (
             val ingredients = ingredientResponse.meals
             if(ingredients != null && ingredients.isNotEmpty())
             {
+                var i =0
                 val entities = ingredients.map {it->
-//                    var calories = 0.0
-//                    val prom = caloriesRemoteDataSource.getCalories(it.strIngredient).blockingFirst().forEach{it1->
-//                        calories = it1.calories
-//
-//                    }
+                    var calories = 0.0
+                    val prom = caloriesRemoteDataSource.getCalories(it.strIngredient).blockingFirst().forEach{it1->
+                        calories += it1.calories
+                    }
+                    Timber.e(i.toString())
+                    i++
+                    Timber.e(calories.toString())
+                    Timber.e("Desilo se")
                     IngredientEntity(
                         it.strIngredient,
                         it.strIngredient,
                         it.strDescription,
                         it.strType,
-                        null
+                        calories
                     )
                 }
+
                 localIngredientSource.deleteAndInsertAll(entities)
                 Observable.just(Resource.Success(Unit))
             }else {
@@ -175,25 +264,114 @@ class MealRepositoryImpl (
         }
     }
 
+//    private fun makeString () : String
+//    {
+//        val localIngredients = localIngredientSource.getAll()
+//        var allIngredients =""
+//        Timber.e("Desilo se1")
+//        localIngredients.forEach{it.forEach {it2->
+//            if(allIngredients=="")
+//                allIngredients+=it2.strIngredient
+//            else
+//                allIngredients+=" and " + it2.strIngredient
+//            }
+//        }
+//        return allIngredients
+//    }
 
+    @SuppressLint("CheckResult")
     override fun fetchAllCalories(): Observable<Resource<Unit>> {
-        val localIngredients = localIngredientSource.getAll()
-       return localIngredients
-            .doOnNext {it1->
-                it1.forEach{it2->
-                    caloriesRemoteDataSource.getCalories(it2.strIngredient) .doOnNext{it3->
-                        it3.forEach {it4->
-                            Timber.e("Novi sastojak")
-                            Timber.e(it2.strIngredient)
-                            Timber.e(it4.calories.toString())
-                        }
-                    }
 
+        var allIngredients = ""
+        var listAllIngredients: List<String> = listOf()
+        Timber.e("Desilo se1")
+        localIngredientSource.getAll().blockingFirst().forEach { it2 ->
+            var str = ""
+            if (allIngredients == "") {
+                str = allIngredients + it2.strIngredient
+                if (str.length >= 500) {
+                    listAllIngredients += allIngredients
+                    str = it2.strIngredient
+                }
+            } else {
+                str = allIngredients + " and " + it2.strIngredient
+                if (str.length >= 500) {
+                    listAllIngredients += allIngredients
+                    str = it2.strIngredient
                 }
             }
-           .map {
-               Resource.Success(Unit)
-           }
+            Timber.e(allIngredients)
+            allIngredients = str
+        }
+
+
+
+        Timber.e("DEsilo se 2")
+        Timber.e(allIngredients)
+        Timber.e(listAllIngredients.size.toString())
+        return caloriesRemoteDataSource.getCalories(allIngredients).flatMap { it ->
+                Timber.e(it.size.toString())
+                Timber.e("USAOOO")
+                it.forEach { it1 ->
+                    Timber.e("Desilo se")
+                    if (it1.name != "") {
+                        Timber.e(it1.name.capitalize())
+                        var ing = localIngredientSource.loadSingle(it1.name.capitalize())
+
+                        Timber.e("Prosao")
+                        ing.calories = it1.calories
+                        Timber.e("Prosao2")
+                        localIngredientSource.updateCalories(ing)
+                    }
+                }
+                Observable.just(Resource.Success(Unit))
+            }
+//        listAllIngredients.forEach { it ->
+//            Timber.e(it)
+//            caloriesRemoteDataSource.getCalories(it).forEach { it ->
+//                Timber.e(it.size.toString())
+//                it.forEach { it1 ->
+//                    Timber.e("Desilo se")
+//                    if (it1.name != "") {
+//                        var ing = localIngredientSource.loadSingle(it1.name)
+//                        ing.calories = it1.calories
+//                        localIngredientSource.updateCalories(ing)
+//                    }
+//                }
+//                Observable.just(Resource.Success(Unit))
+//            }
+//
+//        }
+//
+//        return Observable.just(Resource.Success(Unit))
+
+
+//        var i = 0
+//        var listIngredientEntity : List<IngredientEntity> = listOf()
+//        localIngredientSource.getAll().forEach { it1 ->
+//            it1.map { it2 ->
+//                Timber.e(i.toString())
+//                i++
+//                var calories = 0.0
+//                caloriesRemoteDataSource.getCalories(it2.strIngredient).forEach { it3 ->
+//                    it3.forEach { it4 ->
+//                        calories = it4.calories
+//                    }
+//                }
+//                it2.calories = calories
+//                listIngredientEntity+=it2
+//            }
+//
+//        }
+//       listIngredientEntity.forEach{
+//            it->
+//            localIngredientSource.updateCalories(it)
+//        }
+//
+//        return Observable.just(Resource.Success(Unit))
+
+
+
     }
 
 
