@@ -10,5 +10,6 @@
     <string name="filter">filter</string>
     <string name="user">user</string>
     <string name="save">save</string>
+    <string name="choose_a_meal">Choose a meal</string>
 
 </resources>

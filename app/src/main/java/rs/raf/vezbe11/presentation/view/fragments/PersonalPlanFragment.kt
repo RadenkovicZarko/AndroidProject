@@ -28,8 +28,6 @@ import java.util.*
 
 // change it later to fragment_personal_plan
 class PersonalPlanFragment: Fragment(R.layout.fragment_personal_save_meal) {
-    var viewPager: ViewPager? = null
-    var tabLayout: TabLayout? = null
     var datePickerTV: TextView? = null
     var arrayAdapter: ArrayAdapter<String>? = null
     var autocompleteTV: AutoCompleteTextView? = null
@@ -59,7 +57,19 @@ class PersonalPlanFragment: Fragment(R.layout.fragment_personal_save_meal) {
         saveBtn = view.findViewById<Button>(R.id.save_personal_meal_btn)
         saveBtn?.setOnClickListener{
             // TODO save the personal meal to the db
-            Toast.makeText(requireContext(), "Meal saved", Toast.LENGTH_SHORT).show()
+            val type_of_meal = autocompleteTV?.text.toString()
+            if (type_of_meal == context?.getString(R.string.choose_a_meal))
+                Toast.makeText(requireContext(), "Please choose a type of meal", Toast.LENGTH_SHORT).show()
+            else{
+//                type_of_meal
+//                day
+//                month
+//                year
+//                change_with_db_image
+
+                Toast.makeText(requireContext(), "Meal saved: $type_of_meal", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -76,7 +86,6 @@ class PersonalPlanFragment: Fragment(R.layout.fragment_personal_save_meal) {
 
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Ensure that there's a camera activity to handle the intent

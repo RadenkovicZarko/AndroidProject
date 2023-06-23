@@ -64,7 +64,7 @@
                 android:layout_height="50dp"
                 android:textColor="@color/eva_green"
                 android:inputType="none"
-                android:text="Choose a meal"
+                android:text="@string/choose_a_meal"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
