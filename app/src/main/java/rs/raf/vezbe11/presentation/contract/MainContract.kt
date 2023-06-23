@@ -25,5 +25,7 @@ interface MainContract {
         fun getMealsByName(name: String)
 
         fun getAllCategories()
+
+        fun getCaloriesByNameOfIngredientOrMeal(letters: String)
     }
 }

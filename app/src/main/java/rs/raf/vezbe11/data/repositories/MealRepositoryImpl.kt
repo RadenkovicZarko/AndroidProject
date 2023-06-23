@@ -485,6 +485,10 @@ class MealRepositoryImpl (
         TODO("Not yet implemented")
     }
 
+    override fun getCaloriesByNameOfIngredientOrMeal(letters: String): Observable<List<CategoryEntity>> {
+        return localCategorySource.getCaloriesByNameOfIngredientOrMeal(letters)
+    }
+
     override fun getAllCategories(): Observable<List<CategoryEntity>> {
         return localCategorySource.getAll()
     }
