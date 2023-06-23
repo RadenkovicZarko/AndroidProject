@@ -3,6 +3,10 @@
     package="rs.raf.vezbe11">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+
 
     <application
         android:name=".application.ProjekatApplication"
@@ -24,6 +28,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Add this provider element as a direct child of the <application> element -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="rs.raf.vezbe11.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <!-- Add the meta-data element for the file paths -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
+
+    <!-- If targeting Android 11 or higher, also include the <queries> element -->
+    <queries>
+        <provider
+            android:authorities="rs.raf.vezbe11.fileprovider"
+            android:name="androidx.core.content.FileProvider" />
+    </queries>
+
 
 </manifest>

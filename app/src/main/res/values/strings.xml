@@ -9,4 +9,6 @@
     <string name="home">home</string>
     <string name="filter">filter</string>
     <string name="user">user</string>
+    <string name="save">save</string>
+
 </resources>

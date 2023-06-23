@@ -37,7 +37,7 @@ class TabbedPageAdapter (
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position) {
-            FRAGMENT_1 -> "Meals"
+            FRAGMENT_1 -> "My Meals"
             FRAGMENT_2 -> "Plan"
             FRAGMENT_3 -> "Stats"
             else -> "Meals"
