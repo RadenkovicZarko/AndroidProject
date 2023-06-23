@@ -23,5 +23,7 @@ interface MainContract {
 
         fun findUserWithUsernameAndPassword(username:String, password:String)
         fun getMealsByName(name: String)
+
+        fun getAllCategories()
     }
 }

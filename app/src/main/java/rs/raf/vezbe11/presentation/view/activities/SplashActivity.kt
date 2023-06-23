@@ -18,9 +18,10 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.splash_screen)
         // Create a new SplashScreen with a time delay
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, MainNavigationActivity::class.java)
+            val intent = Intent(this, LogInActivity::class.java)
             startActivity(intent)
             finish()
         }, 500)
+
     }
 }

@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import rs.raf.vezbe11.R
-import rs.raf.vezbe11.presentation.view.fragments.BlankFragment
-import rs.raf.vezbe11.presentation.view.viewpager.PagerAdapter
+import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
 
 class MainNavigationActivity: AppCompatActivity()  {
     var viewPager: ViewPager? = null

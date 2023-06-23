@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
 import rs.raf.vezbe11.databinding.ActivityLoginBinding
@@ -30,6 +31,7 @@ class LogInActivity : AppCompatActivity() {
             finish()
         }
 
+
         setContentView(binding.root)
         init()
     }
@@ -41,24 +43,20 @@ class LogInActivity : AppCompatActivity() {
     private fun initUi() {
 
         binding.loginButton.setOnClickListener { e ->
-            Timber.e("USAOO")
-            mainViewModel.findUserWithUsernameAndPassword("ZareJarePare1", "123")
+            mainViewModel.findUserWithUsernameAndPassword("ZareJarePare", "123")
             mainViewModel.userState.observe(this, Observer { it ->
                 when(it){
                     is UserState.Success -> {
-//                        val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
-//                        val gson = Gson()
-//                        val json: String = gson.toJson(User(username, email, password))
-//
-//                        val editor = sharedPreferences.edit()
-//                        editor.putString(
-//                            com.example.rafdnevnjakproject.view.activities.LoginActivity.LOGIN_KEY,
-//                            json
-//                        )
-//                        editor.apply()
-//                        val intent = Intent(this, MainActivity::class.java)
-//                        startActivity(intent)
-//                        finish()
+                        val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
+                        val gson = Gson()
+                        val json: String = gson.toJson(it)
+
+                        val editor = sharedPreferences.edit()
+                        editor.putString(LOGIN_KEY,json)
+                        editor.apply()
+                        val intent = Intent(this, MainNavigationActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     }
                 }
             })

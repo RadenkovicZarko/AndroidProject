@@ -477,7 +477,6 @@ class MealRepositoryImpl (
     }
 
     override fun findUserWithUsernameAndPassword(username:String, password:String): Observable<UserEntity> {
-        Timber.e("Pozvao")
         return localUserSource.findUserWithUsernameAndPassword(username, password)
 
     }
@@ -486,7 +485,9 @@ class MealRepositoryImpl (
         TODO("Not yet implemented")
     }
 
-
+    override fun getAllCategories(): Observable<List<CategoryEntity>> {
+        return localCategorySource.getAll()
+    }
 
 
 }

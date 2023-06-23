@@ -30,11 +30,11 @@ val coreModule = module {
         .fallbackToDestructiveMigration()
         .build() }
 
-//    single { createRetrofit(moshi = get(), httpClient = get()) }
+    single { createRetrofit(moshi = get(), httpClient = get()) }
 
     single { createMoshi() }
 
-//    single { createOkHttpClient() }
+    single { createOkHttpClient() }
 }
 
 

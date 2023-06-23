@@ -13,4 +13,4 @@ data class UserEntity (
     var weight: Double,
     var sex: Int,
     var activityLevel: Int
-    )
+    ) : java.io.Serializable

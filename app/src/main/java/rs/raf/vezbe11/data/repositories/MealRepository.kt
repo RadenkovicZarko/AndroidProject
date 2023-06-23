@@ -26,4 +26,7 @@ interface MealRepository {
     fun findUserWithUsernameAndPassword(username:String, password:String): Observable<UserEntity>
 
     fun insert(meal: MealEntity): Completable
+
+
+    fun getAllCategories():Observable<List<CategoryEntity>>
 }

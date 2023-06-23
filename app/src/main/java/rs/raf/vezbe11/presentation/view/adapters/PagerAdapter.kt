@@ -1,4 +1,4 @@
-package rs.raf.vezbe11.presentation.view.viewpager
+package rs.raf.vezbe11.presentation.view.adapters
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter

@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import rs.raf.vezbe11.R
-import rs.raf.vezbe11.presentation.view.viewpager.TabbedPageAdapter
+import rs.raf.vezbe11.presentation.view.adapters.TabbedPageAdapter
 
 class PersonalFragment: Fragment(R.layout.fragment_personal) {
 
