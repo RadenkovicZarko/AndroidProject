@@ -23,7 +23,7 @@ class MyDialogFragment : DialogFragment() {
         val text = arguments?.getString(ARG_TEXT)
 
         val builder = AlertDialog.Builder(requireContext())
-            .setTitle("Category detail")
+            .setTitle("Category details")
             .setMessage(text)
             .setPositiveButton("OK") { dialog, _ ->
                 // Handle positive button click if needed

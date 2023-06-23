@@ -45,7 +45,6 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
         init()
-        Timber.e("DOSLOOO")
     }
 
     private fun init() {
@@ -89,7 +88,6 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
     private fun renderState(state: CategoryState) {
         when (state) {
             is CategoryState.Success -> {
-                Timber.e("USPELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
                 adapter.submitList(state.categories)
             }
             is CategoryState.Error -> {
@@ -107,7 +105,7 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
 
     override fun onImageClick(position: Int, text: String) {
         val dialog = MyDialogFragment.newInstance(text)
-        dialog.show(requireFragmentManager(), "YourDialogFragment")
+        dialog.show(childFragmentManager, "YourDialogFragment")
     }
 
 

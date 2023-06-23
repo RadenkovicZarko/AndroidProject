@@ -13,11 +13,11 @@ class CategoryAdapter(private val listener: OnItemClickListener)  : ListAdapter<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val itemBinding = LayoutItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CategoryViewHolder(itemBinding)
+        return CategoryViewHolder(itemBinding, listener)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position))
     }
 
     interface OnItemClickListener {
