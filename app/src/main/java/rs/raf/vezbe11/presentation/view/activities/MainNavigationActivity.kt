@@ -27,6 +27,7 @@ class MainNavigationActivity: AppCompatActivity()  {
     private fun initViewPager() {
         viewPager = findViewById(R.id.viewPager)
         viewPager?.adapter = PagerAdapter(supportFragmentManager)
+
     }
 
     private fun initNavigation() {
@@ -46,5 +47,7 @@ class MainNavigationActivity: AppCompatActivity()  {
             true
         }
     }
+
+
 
 }

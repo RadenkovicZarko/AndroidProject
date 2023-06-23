@@ -7,7 +7,7 @@ import rs.raf.vezbe11.data.models.entities.*
 
 
 @Database(
-    entities = [MealEntity::class, AreaEntity::class, IngredientEntity::class , IngredientMealEntity::class, CategoryEntity::class],
+    entities = [MealEntity::class, AreaEntity::class, IngredientEntity::class , IngredientMealEntity::class, CategoryEntity::class, UserEntity::class],
     version = 1,
     exportSchema = false)
 @TypeConverters()
@@ -18,4 +18,6 @@ abstract class MealDataBase : RoomDatabase(){
     abstract fun getAreaDao(): AreaDao
     abstract fun getIngredientDao(): IngredientDao
     abstract fun getIngredientMealDao(): IngredientMealDao
+
+    abstract fun getUserDao(): UserDao
 }

@@ -3,6 +3,7 @@ package rs.raf.vezbe11.modules
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import rs.raf.vezbe11.data.datasources.local.MealDataBase
+import rs.raf.vezbe11.data.datasources.local.UserDao
 import rs.raf.vezbe11.data.datasources.remote.CalorieService
 import rs.raf.vezbe11.data.datasources.remote.MealService
 import rs.raf.vezbe11.data.repositories.MealRepository
@@ -14,7 +15,7 @@ val mealModule = module {
     viewModel { MealViewModel(mealRepository = get()) }
 
     single<MealRepository> { MealRepositoryImpl(localMealSource = get(),localCategorySource = get(), localIngredientSource = get(),
-        localAreaSource = get(), localIngredientMealSource = get(), remoteDataSource = get() , caloriesRemoteDataSource = get()) }
+        localAreaSource = get(), localIngredientMealSource = get(), localUserSource = get(),  remoteDataSource = get() , caloriesRemoteDataSource = get()) }
 
     single { get<MealDataBase>().getMealDao() }
 
@@ -25,6 +26,8 @@ val mealModule = module {
     single { get<MealDataBase>().getAreaDao() }
 
     single { get<MealDataBase>().getIngredientMealDao() }
+
+    single { get<MealDataBase>().getUserDao() }
 
     single<MealService> {
         rs.raf.vezbe11.modules.create(

@@ -3,24 +3,27 @@ package rs.raf.vezbe11.presentation.viewmodel
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import rs.raf.vezbe11.data.models.Resource
+import rs.raf.vezbe11.data.models.entities.UserEntity
 import rs.raf.vezbe11.data.repositories.MealRepository
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.states.CategoryState
 import rs.raf.vezbe11.presentation.view.states.MealState
+import rs.raf.vezbe11.presentation.view.states.UserState
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class MealViewModel (private val mealRepository: MealRepository,
 ) : ViewModel(), MainContract.ViewModel{
 
-
     private val subscriptions = CompositeDisposable()
     override val mealState : MutableLiveData<MealState> = MutableLiveData()
+    override val userState : MutableLiveData<UserState> = MutableLiveData()
     override val categoryState : MutableLiveData<CategoryState> = MutableLiveData()
 
     override fun fetchAllMeals() {
@@ -138,6 +141,23 @@ class MealViewModel (private val mealRepository: MealRepository,
 
     }
 
+    override fun findUserWithUsernameAndPassword(username:String, password:String){
+            val subscription = mealRepository
+                .findUserWithUsernameAndPassword(username, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        userState.value = UserState.Success(listOf(it))
+                    },
+                    {
+                        userState.value = UserState.Error("Error happened while fetching data from db")
+                        Timber.e(it)
+                    }
+                )
+            subscriptions.add(subscription)
+    }
+
     override fun getMealsByName(name: String) {
         TODO("Not yet implemented")
     }
@@ -145,31 +165,32 @@ class MealViewModel (private val mealRepository: MealRepository,
 
     private val publishSubject: PublishSubject<String> = PublishSubject.create()
 
-    init {
-        val subscriptionMeal = publishSubject
-            .debounce(200, TimeUnit.MILLISECONDS)
-            .distinctUntilChanged()
-            .switchMap { it ->
-                mealRepository
-                    .getAllByName(it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError {
-                        Timber.e("Error in publish subject")
-                    }
-            }
-            .subscribe(
-                {
-                    mealState.value = MealState.Success(it)
-                },
-                {
-                    mealState.value = MealState.Error("Error happened while fetching data from db")
-                }
-            )
-        subscriptions.add(subscriptionMeal)
-
-
-    }
+//    init {
+//        val subscriptionMeal = publishSubject
+//            .debounce(200, TimeUnit.MILLISECONDS)
+//            .distinctUntilChanged()
+//            .switchMap { it ->
+//                mealRepository
+//                    .getAllByName(it)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .doOnError {
+//                        Timber.e("Error in publish subject")
+//                    }
+//            }
+//            .subscribe(
+//                {
+//                    mealState.value = MealState.Success(it)
+//                },
+//                {
+//                    mealState.value = MealState.Error("Error happened while fetching data from db")
+//                }
+//            )
+//        subscriptions.add(subscriptionMeal)
+//
+//
+//
+//    }
 
 
 

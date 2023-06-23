@@ -27,8 +27,11 @@ class BlankFragment : Fragment() {
     ): View? {
         mainViewModel.fetchAllCategories()
         mainViewModel.fetchAllAreas()
+
         mainViewModel.fetchAllIngredients()
+
         mainViewModel.fetchAllMeals()
+
 //        mainViewModel.fetchAllCalories()
 //        mainViewModel.getCAndMRelations()
         val view = inflater.inflate(R.layout.fragment_blank, container, false)

@@ -2,11 +2,6 @@ package rs.raf.vezbe11.data.repositories
 
 import android.annotation.SuppressLint
 import io.reactivex.Completable
-import rs.raf.vezbe11.data.datasources.local.AreaDao
-import rs.raf.vezbe11.data.datasources.local.CategoryDao
-import rs.raf.vezbe11.data.datasources.local.IngredientDao
-import rs.raf.vezbe11.data.datasources.local.IngredientMealDao
-import rs.raf.vezbe11.data.datasources.local.MealDao
 import rs.raf.vezbe11.data.datasources.remote.MealService
 import rs.raf.vezbe11.data.models.Resource
 import timber.log.Timber
@@ -15,6 +10,7 @@ import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.processNextEventInCurrentThread
 import okhttp3.internal.wait
+import rs.raf.vezbe11.data.datasources.local.*
 import rs.raf.vezbe11.data.datasources.remote.CalorieService
 import rs.raf.vezbe11.data.models.entities.*
 
@@ -28,6 +24,7 @@ class MealRepositoryImpl (
     private val localIngredientSource: IngredientDao,
     private val localAreaSource: AreaDao,
     private val localIngredientMealSource: IngredientMealDao,
+    private val localUserSource: UserDao,
     private val remoteDataSource: MealService,
     private val caloriesRemoteDataSource : CalorieService
 )  : MealRepository{
@@ -228,7 +225,6 @@ class MealRepositoryImpl (
             }else {
                 Observable.just(Resource.Error())
             }
-
         }
     }
 
@@ -478,6 +474,12 @@ class MealRepositoryImpl (
 
     override fun getCategoryMealRelations(): Observable<List<CategoryMealRelation>> {
         return localCategorySource. getCategoryMealRelations()
+    }
+
+    override fun findUserWithUsernameAndPassword(username:String, password:String): Observable<UserEntity> {
+        Timber.e("Pozvao")
+        return localUserSource.findUserWithUsernameAndPassword(username, password)
+
     }
 
     override fun insert(meal: MealEntity): Completable {
