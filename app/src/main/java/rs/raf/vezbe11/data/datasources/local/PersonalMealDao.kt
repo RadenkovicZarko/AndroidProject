@@ -33,4 +33,5 @@ abstract class PersonalMealDao {
     }
     @Query("SELECT * FROM personal_meals WHERE idUserForeign=:idUser")
     abstract fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealEntity>>
+
 }
