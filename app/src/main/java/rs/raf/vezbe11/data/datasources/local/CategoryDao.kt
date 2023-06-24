@@ -29,4 +29,9 @@ abstract class CategoryDao {
     @Transaction
     @Query("SELECT * FROM categories")
     abstract fun getCategoryMealRelations(): Observable<List<CategoryMealRelation>>
+
+    @Query("SELECT * FROM categories WHERE strCategory IN ( SELECT DISTINCT strCategory FROM ( SELECT strCategory FROM meals  WHERE strMeal LIKE :letters || '%'  UNION  \n" +
+            "SELECT strCategory FROM  ingredients i JOIN crossTable c ON (i.idIngredient = c.idIngredient) JOIN meals m  ON (c.idMeal = m.idMeal) WHERE strIngredient LIKE :letters || '%'  ) AS categoryData )")
+    abstract fun getCaloriesByNameOfIngredientOrMeal(letters: String): Observable<List<CategoryEntity>>
+
 }

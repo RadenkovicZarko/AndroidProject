@@ -31,6 +31,8 @@ interface MainContract {
 
         fun getAllCategories()
 
+        fun getCaloriesByNameOfIngredientOrMeal(letters: String)
+
         fun setPersonalMealForSaving(meal: MealEntity)
 
         fun setCurrentUser(user: UserEntity)

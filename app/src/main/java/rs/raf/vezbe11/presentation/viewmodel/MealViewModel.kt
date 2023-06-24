@@ -211,35 +211,36 @@ class MealViewModel (private val mealRepository: MealRepository,
         subscriptions.add(subscription)
     }
 
+    override fun getCaloriesByNameOfIngredientOrMeal(letters: String) {
+        publishSubject.onNext(letters)
+    }
+
 
     private val publishSubject: PublishSubject<String> = PublishSubject.create()
 
-//    init {
-//        val subscriptionMeal = publishSubject
-//            .debounce(200, TimeUnit.MILLISECONDS)
-//            .distinctUntilChanged()
-//            .switchMap { it ->
-//                mealRepository
-//                    .getAllByName(it)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .doOnError {
-//                        Timber.e("Error in publish subject")
-//                    }
-//            }
-//            .subscribe(
-//                {
-//                    mealState.value = MealState.Success(it)
-//                },
-//                {
-//                    mealState.value = MealState.Error("Error happened while fetching data from db")
-//                }
-//            )
-//        subscriptions.add(subscriptionMeal)
-//
-//
-//
-//    }
+    init {
+        val subscriptionMeal = publishSubject
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap { it ->
+                mealRepository
+                    .getCaloriesByNameOfIngredientOrMeal(it)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError {
+                        Timber.e("Error in publish subject")
+                    }
+            }
+            .subscribe(
+                {
+                    categoryState.value = CategoryState.Success(it)
+                },
+                {
+                    categoryState.value = CategoryState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscriptionMeal)
+    }
 
 
 

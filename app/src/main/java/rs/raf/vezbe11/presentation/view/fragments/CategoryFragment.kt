@@ -67,6 +67,7 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
         binding.inputEt.doAfterTextChanged {
             val filter = it.toString()
             //mainViewModel.getMoviesByName(filter)
+            mainViewModel.getCaloriesByNameOfIngredientOrMeal(filter)
         }
     }
 
@@ -83,6 +84,8 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
 //        // bice sacuvani u bazi, tada ce se triggerovati observable na koji smo se pretplatili
 //        // preko metode getAllMovies()
         mainViewModel.fetchAllCategories()
+        mainViewModel.fetchAllIngredients()
+        mainViewModel.fetchAllMeals()
     }
 
     private fun renderState(state: CategoryState) {
