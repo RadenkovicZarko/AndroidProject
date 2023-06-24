@@ -9,7 +9,6 @@ import rs.raf.vezbe11.data.models.entities.CategoryEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
 import rs.raf.vezbe11.data.models.relations.CategoryMealRelation
-import rs.raf.vezbe11.data.models.relations.PersonalMealAndUser
 
 
 interface MealRepository {
@@ -32,7 +31,7 @@ interface MealRepository {
     fun getCaloriesByNameOfIngredientOrMeal(letters: String):Observable<List<CategoryEntity>>
     fun insertPersonalMeal(meal: PersonalMealEntity): Completable
 
-    fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealAndUser>>
+    fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealEntity>>
     fun getAllCategories():Observable<List<CategoryEntity>>
 
     fun getAllMealsForCategory(category : String) : Observable<List<MealEntity>>

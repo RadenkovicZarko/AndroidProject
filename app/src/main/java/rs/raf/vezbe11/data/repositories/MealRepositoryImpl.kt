@@ -11,7 +11,6 @@ import rs.raf.vezbe11.data.datasources.remote.CalorieService
 import rs.raf.vezbe11.data.models.entities.*
 
 import rs.raf.vezbe11.data.models.relations.CategoryMealRelation
-import rs.raf.vezbe11.data.models.relations.PersonalMealAndUser
 
 class MealRepositoryImpl (
     private val localMealSource: MealDao,
@@ -257,13 +256,11 @@ class MealRepositoryImpl (
         }
     }
     override fun insertPersonalMeal(meal: PersonalMealEntity): Completable {
-//        return localPersonalMealSource.insert(meal)
-        TODO("Not yet implemented")
+        return localPersonalMealSource.insert(meal)
 
     }
-    override fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealAndUser>> {
-//        return localPersonalMealSource.getPersonalMealsForUser(idUser)
-        TODO("Not yet implemented")
+    override fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealEntity>> {
+        return localPersonalMealSource.getAllPersonalMealsByUser(idUser)
 
     }
 

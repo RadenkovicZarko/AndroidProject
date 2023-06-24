@@ -31,11 +31,7 @@ abstract class PersonalMealDao {
         deleteAll()
         insertAll(entities).blockingAwait()
     }
+    @Query("SELECT * FROM personal_meals WHERE idUserForeign=:idUser")
+    abstract fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealEntity>>
 
-//    @Query("SELECT * FROM personal_meals join meals on personal_meals.idMealForeign=meals.idMeal")
-//    abstract fun getPersonalMealsDetailed(): Observable<List<PersonalMealAndMeal>>
-//
-//
-//    @Query("SELECT * FROM personal_meals WHERE idUserForeign=:idUser")
-//    abstract fun getPersonalMealsForUser(idUser: String): Observable<List<PersonalMealAndUser>>
 }

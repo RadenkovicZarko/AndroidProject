@@ -5,10 +5,7 @@ import io.reactivex.Observable
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
-import rs.raf.vezbe11.presentation.view.states.AddPersonalMealState
-import rs.raf.vezbe11.presentation.view.states.CategoryState
-import rs.raf.vezbe11.presentation.view.states.MealState
-import rs.raf.vezbe11.presentation.view.states.UserState
+import rs.raf.vezbe11.presentation.view.states.*
 
 
 interface MainContract {
@@ -20,6 +17,7 @@ interface MainContract {
         val currentPersonalMealSave: LiveData<MealEntity>
         val currentUser: LiveData<UserEntity>
         val insertPersonalMeal: LiveData<AddPersonalMealState>
+        val personalMealsState: LiveData<PersonalMealState>
         fun fetchAllMeals()
         fun fetchAllCategories()
         fun fetchAllAreas()
@@ -31,6 +29,8 @@ interface MainContract {
         fun getMealsByName(name: String)
 
         fun getAllCategories()
+
+        fun getAllPersonalMealsByUser(idUser: String)
 
         fun getCaloriesByNameOfIngredientOrMeal(letters: String)
 

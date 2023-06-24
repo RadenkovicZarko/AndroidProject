@@ -11,6 +11,7 @@
         android:layout_height="48dp"
         android:gravity="center"
         android:text="Meal planner"
+        android:textColor="@color/eva_green"
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

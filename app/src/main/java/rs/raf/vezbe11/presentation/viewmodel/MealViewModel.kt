@@ -1,6 +1,7 @@
 package rs.raf.vezbe11.presentation.viewmodel
 
 import android.annotation.SuppressLint
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,10 +14,7 @@ import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
 import rs.raf.vezbe11.data.repositories.MealRepository
 import rs.raf.vezbe11.presentation.contract.MainContract
-import rs.raf.vezbe11.presentation.view.states.AddPersonalMealState
-import rs.raf.vezbe11.presentation.view.states.CategoryState
-import rs.raf.vezbe11.presentation.view.states.MealState
-import rs.raf.vezbe11.presentation.view.states.UserState
+import rs.raf.vezbe11.presentation.view.states.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -31,6 +29,7 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val currentPersonalMealSave : MutableLiveData<MealEntity> = MutableLiveData()
     override val currentUser : MutableLiveData<UserEntity> = MutableLiveData()
     override val insertPersonalMeal : MutableLiveData<AddPersonalMealState> = MutableLiveData()
+    override val personalMealsState: MutableLiveData<PersonalMealState> = MutableLiveData()
 
     override fun fetchAllMeals() {
         val subscription = mealRepository
@@ -193,6 +192,22 @@ class MealViewModel (private val mealRepository: MealRepository,
 
     override fun setCurrentUser(user: UserEntity) {
         currentUser.value = user
+    }
+
+    override fun getAllPersonalMealsByUser(userId: String){
+        val subscription = mealRepository
+            .getAllPersonalMealsByUser(userId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    personalMealsState.value = PersonalMealState.Success(it)
+                },
+                {
+                    personalMealsState.value = PersonalMealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscription)
     }
 
     override fun insertPersonalMeal(meal: PersonalMealEntity) {
