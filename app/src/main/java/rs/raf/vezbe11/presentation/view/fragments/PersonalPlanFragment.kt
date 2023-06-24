@@ -84,7 +84,8 @@ class PersonalPlanFragment: Fragment(R.layout.fragment_personal_save_meal) {
 
                 var mealId = mainViewModel.currentPersonalMealSave.value?.idMeal
                 var userId = mainViewModel.currentUser.value?.userName
-//                val date1 = java.sql.Date.valueOf(date_str)
+
+                Toast.makeText(requireContext(), "Meal saved: $userId", Toast.LENGTH_SHORT).show()
 
                 val personalMeal = PersonalMealEntity(1, type_of_meal, date_str, currentImageUrl, mealId, userId)
 

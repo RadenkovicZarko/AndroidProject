@@ -6,14 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.compat.SharedViewModelCompat.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
 import rs.raf.vezbe11.data.models.entities.UserEntity
+import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
+import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
 
 class MainNavigationActivity: AppCompatActivity()  {
     var viewPager: ViewPager? = null
     var bottomNavigationView: BottomNavigationView? = null
     val LOGIN_KEY = "loginKey"
+    private val mainViewModel: MainContract.ViewModel by viewModel<MealViewModel>()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,13 +36,13 @@ class MainNavigationActivity: AppCompatActivity()  {
     }
 
     private fun loadCurrentUser() {
-//        val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
-//        val message = sharedPreferences.getString(LOGIN_KEY,null)
-//
-//        val gson = Gson()
-//        val user = gson.fromJson(message, UserEntity::class.java)
-//
-//        Toast.makeText(this, "Welcome ${user.userName}", Toast.LENGTH_SHORT).show()
+        val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
+        val message = sharedPreferences.getString(LOGIN_KEY,null)
+
+        val gson = Gson()
+        val user = gson.fromJson(message, UserEntity::class.java)
+        mainViewModel.setCurrentUser(user)
+        Toast.makeText(this, "Welcome ${user.userName}", Toast.LENGTH_LONG).show()
     }
 
     private fun initViewPager() {
