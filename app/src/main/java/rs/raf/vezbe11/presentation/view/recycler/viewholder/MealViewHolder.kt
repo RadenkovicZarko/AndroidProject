@@ -8,10 +8,12 @@ import rs.raf.vezbe11.databinding.LayoutItemCategoryBinding
 import rs.raf.vezbe11.databinding.LayoutItemMealBinding
 import rs.raf.vezbe11.presentation.view.recycler.adapter.CategoryAdapter
 import rs.raf.vezbe11.presentation.view.recycler.adapter.MealAdapter
+import timber.log.Timber
 
 class MealViewHolder (private val itemBinding: LayoutItemMealBinding, private val listener: MealAdapter.OnItemClickListener) : RecyclerView.ViewHolder(itemBinding.root) {
 
     fun bind(meal: MealEntity) {
+        Timber.e("ODRADIO")
         itemBinding.mealNameTv.text = meal.strMeal
         Picasso.get().load(meal.strMealThumb).into(itemBinding.iconMealIvRc)
         itemView.setOnClickListener{

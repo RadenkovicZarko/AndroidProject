@@ -24,6 +24,8 @@ abstract class MealDao {
     @Query("DELETE FROM meals")
     abstract fun deleteAll()
 
+    @Query("SELECT * FROM meals WHERE strCategory= :category")
+    abstract fun getAllMealsForCategory(category : String) : Observable<List<MealEntity>>
 
     @Transaction
     open fun deleteAndInsertAll(entities: List<MealEntity>) {

@@ -1,13 +1,10 @@
 package rs.raf.vezbe11.presentation.view.activities
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
 import rs.raf.vezbe11.R
-import rs.raf.vezbe11.data.models.entities.UserEntity
 import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
 
 class MainNavigationActivity: AppCompatActivity()  {
@@ -39,7 +36,7 @@ class MainNavigationActivity: AppCompatActivity()  {
     }
 
     private fun initViewPager() {
-        viewPager = findViewById(R.id.viewPager)
+        viewPager = findViewById(R.id.viewPagerNavigation)
         viewPager?.adapter = PagerAdapter(supportFragmentManager)
 
     }

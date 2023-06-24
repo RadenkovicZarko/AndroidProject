@@ -23,7 +23,7 @@ class PersonalFragment: Fragment(R.layout.fragment_personal) {
     }
 
     private fun initTabs() {
-        viewPager = view?.findViewById(R.id.viewPager)
+        viewPager = view?.findViewById(R.id.viewPagerNavigation)
         viewPager?.adapter = TabbedPageAdapter(childFragmentManager, requireContext())
         tabLayout = view?.findViewById(R.id.tabLayout)
         tabLayout?.setupWithViewPager(viewPager)

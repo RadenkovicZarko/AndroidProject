@@ -8,9 +8,7 @@ import rs.raf.vezbe11.databinding.LayoutItemMealBinding
 import rs.raf.vezbe11.presentation.view.recycler.diff.MealDiffCallback
 import rs.raf.vezbe11.presentation.view.recycler.viewholder.MealViewHolder
 
-class MealAdapter(private val listener: OnItemClickListener)  : ListAdapter<MealEntity, MealViewHolder>(
-    MealDiffCallback()
-) {
+class MealAdapter(private val listener: OnItemClickListener)  : ListAdapter<MealEntity, MealViewHolder>(MealDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealViewHolder {
         val itemBinding = LayoutItemMealBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -1,39 +1,42 @@
 package rs.raf.vezbe11.presentation.view.fragments
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.vezbe11.R
-import rs.raf.vezbe11.databinding.FragmentListBinding
+import rs.raf.vezbe11.databinding.FragmentCategoryBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
+import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
 import rs.raf.vezbe11.presentation.view.recycler.adapter.CategoryAdapter
 import rs.raf.vezbe11.presentation.view.states.CategoryState
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
 import timber.log.Timber
 
 
-class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.OnItemClickListener {
+class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.OnItemClickListener {
     private val mainViewModel: MainContract.ViewModel by sharedViewModel<MealViewModel>()
 
 
-    private var _binding: FragmentListBinding? = null
+    private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: CategoryAdapter
-
-
-
+    lateinit var editText : EditText
+    var mainAdapter = mainAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 //        mainViewModel.fetchAllMeals()
-        _binding = FragmentListBinding.inflate(inflater, container, false)
+        _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -47,19 +50,21 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
         initObservers()
     }
 
+
     private fun initUi() {
+
         initRecycler()
         initListeners()
     }
 
     private fun initRecycler() {
-        binding.listRv.layoutManager = LinearLayoutManager(context)
+        binding.listRvCat.layoutManager = LinearLayoutManager(context)
         adapter = CategoryAdapter(this)
-        binding.listRv.adapter = adapter
+        binding.listRvCat.adapter = adapter
     }
 
     private fun initListeners() {
-        binding.inputEt.doAfterTextChanged {
+        binding.inputEtCat.doAfterTextChanged {
             val filter = it.toString()
             //mainViewModel.getMoviesByName(filter)
             mainViewModel.getCaloriesByNameOfIngredientOrMeal(filter)
@@ -86,6 +91,7 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
     private fun renderState(state: CategoryState) {
         when (state) {
             is CategoryState.Success -> {
+                Timber.e("DESILO SE")
                 adapter.submitList(state.categories)
             }
             is CategoryState.Error -> {
@@ -107,17 +113,14 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
     }
 
     override fun onItemClick(text: String) {
-        // Create the new fragment instance with the required text
-        val newFragment = ListOfMealsFragment.newInstance(text)
+        Timber.e("DESILO SE")
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
 
-        // Perform the fragment transaction to switch to the new fragment
-        val transaction = fragmentManager?.beginTransaction()
-        if (transaction != null) {
-            transaction.replace(R.id.viewPager, newFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+        if (fragmentTransaction != null){
+
+            mainAdapter.updateItem(ListOfMealsFragment.newInstance("Beef"),0)
         }
-
+        mainAdapter.notifyDataSetChanged()
     }
 
 

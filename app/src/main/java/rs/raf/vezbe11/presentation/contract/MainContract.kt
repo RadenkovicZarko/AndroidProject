@@ -1,6 +1,7 @@
 package rs.raf.vezbe11.presentation.contract
 
 import androidx.lifecycle.LiveData
+import io.reactivex.Observable
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
@@ -38,5 +39,8 @@ interface MainContract {
         fun setCurrentUser(user: UserEntity)
 
         fun insertPersonalMeal(meal: PersonalMealEntity)
+
+
+        fun getAllMealsForCategory(category : String)
     }
 }

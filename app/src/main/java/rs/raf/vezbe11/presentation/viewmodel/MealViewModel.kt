@@ -212,6 +212,22 @@ class MealViewModel (private val mealRepository: MealRepository,
         subscriptions.add(subscription)
     }
 
+    override fun getAllMealsForCategory(category: String) {
+        val subscription = mealRepository
+            .getAllMealsForCategory(category)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    mealState.value = MealState.Success(it)
+                },
+                {
+                    mealState.value = MealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
     override fun getCaloriesByNameOfIngredientOrMeal(letters: String) {
         publishSubject.onNext(letters)
     }

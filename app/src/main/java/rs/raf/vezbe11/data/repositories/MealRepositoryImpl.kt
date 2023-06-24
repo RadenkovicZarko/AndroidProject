@@ -499,5 +499,9 @@ class MealRepositoryImpl (
         return localCategorySource.getAll()
     }
 
+    override fun getAllMealsForCategory(category: String): Observable<List<MealEntity>> {
+        return localMealSource.getAllMealsForCategory(category)
+    }
+
 
 }
