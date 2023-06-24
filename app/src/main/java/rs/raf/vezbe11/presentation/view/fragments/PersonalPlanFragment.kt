@@ -55,7 +55,7 @@ class PersonalPlanFragment: Fragment(R.layout.fragment_personal_save_meal) {
     private fun init(view : View) {
 //        TODO remove after testing
         val url = "https://preview.redd.it/h3qww4vmh3191.jpg?width=960&crop=smart&auto=webp&v=enabled&s=9b5ce1a7e50e30a2bc2c2873e895dcdae2626289"
-        var meal = MealEntity("52885", "meal_test", "test", "category_test", "area_test", "test", "mealThumb", "test", "test", "test", url, "test", "test")
+        var meal = MealEntity("52885", "meal_test", "test", "category_test", "area_test", "test", "mealThumb", "test", "test", "test", url, "test", "test",0.0)
         mainViewModel.setPersonalMealForSaving(meal)
 
         initImageView(view)

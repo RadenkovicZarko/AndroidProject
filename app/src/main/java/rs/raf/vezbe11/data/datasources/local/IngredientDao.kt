@@ -24,6 +24,8 @@ abstract class IngredientDao {
         deleteAll()
         insertAll(entities).blockingAwait()
     }
+    @Query("SELECT * FROM ingredients WHERE strIngredient = :strIngredient")
+    abstract fun getIngredientByName(strIngredient: String) : IngredientEntity
 
     @Transaction
     @Query("SELECT * FROM ingredients WHERE idIngredient=:id ")

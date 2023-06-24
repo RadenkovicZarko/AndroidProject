@@ -7,5 +7,5 @@ import androidx.room.Entity
 data class IngredientMealEntity (
     val idMeal: String,
     val idIngredient : String,
-    val strMeasure: String?
+    val strMeasure: Double?
 )

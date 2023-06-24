@@ -11,6 +11,8 @@ import rs.raf.vezbe11.data.datasources.remote.CalorieService
 import rs.raf.vezbe11.data.models.entities.*
 
 import rs.raf.vezbe11.data.models.relations.CategoryMealRelation
+import java.sql.Time
+import java.text.DecimalFormat
 
 class MealRepositoryImpl (
     private val localMealSource: MealDao,
@@ -37,6 +39,103 @@ class MealRepositoryImpl (
                             Timber.e("DESILO SE")
                             val meals2 = mealResponse2.meals
                             if ( meals2.isNotEmpty()) {
+
+
+                                fun parseValueToGrams(value: String?): Double {
+                                    if(value==null)
+                                        return 0.0
+                                    val numericRegex = Regex("[0-9]+(\\.[0-9]+)?") // Regex to extract numeric values
+                                    val quantity = numericRegex.find(value)?.value?.toDoubleOrNull() ?: 0.0
+
+                                    val unitConversionTable = mapOf(
+                                        "g" to 1.0,          // gram
+                                        "oz" to 28.3495,     // ounce
+                                        "ml" to 1.0,         // milliliter
+                                        "fl" to 29.5735,     // fluid ounce
+                                        "tbs" to 15.0,       // tablespoon
+                                        "cup" to 236.588    // cup
+                                        // Add more conversions as needed
+                                    )
+
+                                    val unitRegex = Regex("[a-zA-Z]+") // Regex to extract unit of measurement
+                                    val unit = unitRegex.find(value)?.value ?: ""
+
+                                    return (quantity * (unitConversionTable[unit.toLowerCase()] ?: 1.0)).takeIf { quantity != 0.0 } ?: 0.0
+                                }
+
+                                @SuppressLint("CheckResult")
+                                fun justDoIt(idMeal: String, strIngredient:String?, strMeasure:Double? ):IngredientMealEntity? {
+                                    val ingredientMealEntity = strIngredient?.let {
+                                        IngredientMealEntity(
+                                            idMeal,
+                                            it,
+                                            strMeasure
+                                        )
+                                    }
+                                    return ingredientMealEntity
+                                }
+
+                                fun sumOfCaloriesInMeal(strIngredient1 : String?, strMeasure1 :  String? ,
+                                                        strIngredient2 : String?, strMeasure2  : String? ,
+                                                        strIngredient3 : String?, strMeasure3  : String? ,
+                                                        strIngredient4 : String?, strMeasure4  : String? ,
+                                                        strIngredient5 : String?, strMeasure5  : String? ,
+                                                        strIngredient6 : String?, strMeasure6  : String? ,
+                                                        strIngredient7 : String?, strMeasure7  : String? ,
+                                                        strIngredient8 : String?, strMeasure8  : String? ,
+                                                        strIngredient9 : String?, strMeasure9  : String? ,
+                                                        strIngredient10: String?, strMeasure10 : String? ,
+                                                        strIngredient11: String?, strMeasure11 : String? ,
+                                                        strIngredient12: String?, strMeasure12 : String? ,
+                                                        strIngredient13: String?, strMeasure13 : String? ,
+                                                        strIngredient14: String?, strMeasure14 : String? ,
+                                                        strIngredient15: String?, strMeasure15 : String? ,
+                                                        strIngredient16: String?, strMeasure16 : String? ,
+                                                        strIngredient17: String?, strMeasure17 : String? ,
+                                                        strIngredient18: String?, strMeasure18 : String? ,
+                                                        strIngredient19: String?, strMeasure19 : String? ,
+                                                        strIngredient20: String?, strMeasure20 : String?  ) : Double
+                                {
+                                    var listaObroka = listOf<String?>()
+                                    var listaMeasures = listOf<String?>()
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient1; listaMeasures+=strMeasure1}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient2; listaMeasures+=strMeasure2}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient3; listaMeasures+=strMeasure3}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient4; listaMeasures+=strMeasure4}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient5; listaMeasures+=strMeasure5}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient6; listaMeasures+=strMeasure6}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient7; listaMeasures+=strMeasure7}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient8; listaMeasures+=strMeasure8}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient9; listaMeasures+=strMeasure9}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient10; listaMeasures+=strMeasure10}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient11; listaMeasures+=strMeasure11}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient12; listaMeasures+=strMeasure12}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient13; listaMeasures+=strMeasure13}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient14; listaMeasures+=strMeasure14}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient15; listaMeasures+=strMeasure15}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient16; listaMeasures+=strMeasure16}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient17; listaMeasures+=strMeasure17}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient18; listaMeasures+=strMeasure18}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient19; listaMeasures+=strMeasure19}
+                                    if(strIngredient1!=null) { listaObroka+=strIngredient20; listaMeasures+=strMeasure20}
+
+
+                                    var suma = 0.0
+                                    var  i = 0
+                                    listaObroka.forEach {
+                                        var ingredient= it?.let { it1 -> localIngredientSource.getIngredientByName(it1) }
+                                        var measure = parseValueToGrams(listaMeasures.get(i))
+                                        i++
+                                        suma+= ingredient?.calories?.times(measure) ?: 0.0
+
+                                    }
+                                    val decimalFormat = DecimalFormat("#.##")
+                                    val roundedValue = decimalFormat.format(suma).toDouble()
+                                    return roundedValue
+
+                                }
+
+
                                 val entitie = meals2.map {
                                     MealEntity(
                                         it.idMeal,
@@ -51,32 +150,52 @@ class MealRepositoryImpl (
                                         it.strSource,
                                         it.strImageSource,
                                         it.strCreativeCommonsConfirmed,
-                                        it.dateModified
+                                        it.dateModified,
+                                        sumOfCaloriesInMeal(it.strIngredient1 ,it.strMeasure1,
+                                                it.strIngredient2 , it.strMeasure2,
+                                                it.strIngredient3 , it.strMeasure3,
+                                                it.strIngredient4 , it.strMeasure4,
+                                                it.strIngredient5 , it.strMeasure5,
+                                                it.strIngredient6 , it.strMeasure6,
+                                                it.strIngredient7 , it.strMeasure7,
+                                                it.strIngredient8 , it.strMeasure8,
+                                                it.strIngredient9 , it.strMeasure9,
+                                                it.strIngredient10, it.strMeasure10,
+                                                it.strIngredient11, it.strMeasure11,
+                                                it.strIngredient12, it.strMeasure12,
+                                                it.strIngredient13, it.strMeasure13,
+                                                it.strIngredient14, it.strMeasure14,
+                                                it.strIngredient15, it.strMeasure15,
+                                                it.strIngredient16, it.strMeasure16,
+                                                it.strIngredient17, it.strMeasure17,
+                                                it.strIngredient18, it.strMeasure18,
+                                                it.strIngredient19, it.strMeasure19,
+                                                it.strIngredient20, it.strMeasure20)
                                     )
                                 }
 
                                 val entitieIngredientMeal = meals2.flatMap {
                                     listOf(
-                                        justDoIt(it.idMeal, it.strIngredient1, it.strMeasure1),
-                                        justDoIt(it.idMeal, it.strIngredient2, it.strMeasure2),
-                                        justDoIt(it.idMeal, it.strIngredient3, it.strMeasure3),
-                                        justDoIt(it.idMeal, it.strIngredient4, it.strMeasure4),
-                                        justDoIt(it.idMeal, it.strIngredient5, it.strMeasure5),
-                                        justDoIt(it.idMeal, it.strIngredient6, it.strMeasure6),
-                                        justDoIt(it.idMeal, it.strIngredient7, it.strMeasure7),
-                                        justDoIt(it.idMeal, it.strIngredient8, it.strMeasure8),
-                                        justDoIt(it.idMeal, it.strIngredient9, it.strMeasure9),
-                                        justDoIt(it.idMeal, it.strIngredient10, it.strMeasure10),
-                                        justDoIt(it.idMeal, it.strIngredient11, it.strMeasure11),
-                                        justDoIt(it.idMeal, it.strIngredient12, it.strMeasure12),
-                                        justDoIt(it.idMeal, it.strIngredient13, it.strMeasure13),
-                                        justDoIt(it.idMeal, it.strIngredient14, it.strMeasure14),
-                                        justDoIt(it.idMeal, it.strIngredient15, it.strMeasure15),
-                                        justDoIt(it.idMeal, it.strIngredient16, it.strMeasure16),
-                                        justDoIt(it.idMeal, it.strIngredient17, it.strMeasure17),
-                                        justDoIt(it.idMeal, it.strIngredient18, it.strMeasure18),
-                                        justDoIt(it.idMeal, it.strIngredient19, it.strMeasure19),
-                                        justDoIt(it.idMeal, it.strIngredient20, it.strMeasure20)
+                                        justDoIt(it.idMeal, it.strIngredient1 , parseValueToGrams(it.strMeasure1) ),
+                                        justDoIt(it.idMeal, it.strIngredient2 , parseValueToGrams(it.strMeasure2) ),
+                                        justDoIt(it.idMeal, it.strIngredient3 , parseValueToGrams(it.strMeasure3) ),
+                                        justDoIt(it.idMeal, it.strIngredient4 , parseValueToGrams(it.strMeasure4) ),
+                                        justDoIt(it.idMeal, it.strIngredient5 , parseValueToGrams(it.strMeasure5) ),
+                                        justDoIt(it.idMeal, it.strIngredient6 , parseValueToGrams(it.strMeasure6) ),
+                                        justDoIt(it.idMeal, it.strIngredient7 , parseValueToGrams(it.strMeasure7) ),
+                                        justDoIt(it.idMeal, it.strIngredient8 , parseValueToGrams(it.strMeasure8) ),
+                                        justDoIt(it.idMeal, it.strIngredient9 , parseValueToGrams(it.strMeasure9) ),
+                                        justDoIt(it.idMeal, it.strIngredient10, parseValueToGrams(it.strMeasure10)),
+                                        justDoIt(it.idMeal, it.strIngredient11, parseValueToGrams(it.strMeasure11)),
+                                        justDoIt(it.idMeal, it.strIngredient12, parseValueToGrams(it.strMeasure12)),
+                                        justDoIt(it.idMeal, it.strIngredient13, parseValueToGrams(it.strMeasure13)),
+                                        justDoIt(it.idMeal, it.strIngredient14, parseValueToGrams(it.strMeasure14)),
+                                        justDoIt(it.idMeal, it.strIngredient15, parseValueToGrams(it.strMeasure15)),
+                                        justDoIt(it.idMeal, it.strIngredient16, parseValueToGrams(it.strMeasure16)),
+                                        justDoIt(it.idMeal, it.strIngredient17, parseValueToGrams(it.strMeasure17)),
+                                        justDoIt(it.idMeal, it.strIngredient18, parseValueToGrams(it.strMeasure18)),
+                                        justDoIt(it.idMeal, it.strIngredient19, parseValueToGrams(it.strMeasure19)),
+                                        justDoIt(it.idMeal, it.strIngredient20, parseValueToGrams(it.strMeasure20))
                                     ).filter { i -> i != null && i.idIngredient != "" }
                                         .map { it as IngredientMealEntity }
                                 }
@@ -96,6 +215,10 @@ class MealRepositoryImpl (
             }
 
         }
+
+
+
+
 
 
 //        return remoteDataSource.getAllMeals().flatMap { mealResponse ->
@@ -152,36 +275,7 @@ class MealRepositoryImpl (
 //
 //        }
     }
-    @SuppressLint("CheckResult")
-    private fun justDoIt(idMeal: String, strIngredient:String?, strMeasure:String? ):IngredientMealEntity? {
-//        if(strIngredient!=null && strIngredient!="")
-//        {
-//
-//            var it : IngredientEntity? = localIngredientSource.loadSingle(strIngredient)
-//
-//
-//                if (it!=null && it.strIngredient!="") {
-//                    var calories = 0.0
-//                    val prom =
-//                        caloriesRemoteDataSource.getCalories(it.strIngredient).blockingFirst()
-//                            .forEach { it1 ->
-//                                calories = it1.calories
-//                            }
-//                    it.calories = calories
-//                    localIngredientSource.updateCalories(it)
-//                }
-//
-//        }
 
-        val ingredientMealEntity = strIngredient?.let {
-            IngredientMealEntity(
-                idMeal,
-                it,
-                strMeasure
-            )
-        }
-        return ingredientMealEntity
-    }
     override fun fetchAllC(): Observable<Resource<Unit>> {
         return remoteDataSource.getAllCategories().flatMap { categoryResponse ->
             val categories = categoryResponse.categories

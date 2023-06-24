@@ -16,6 +16,7 @@ class MealViewHolder (private val itemBinding: LayoutItemMealBinding, private va
         Timber.e("ODRADIO")
         itemBinding.mealNameTv.text = meal.strMeal
         Picasso.get().load(meal.strMealThumb).into(itemBinding.iconMealIvRc)
+        itemBinding.caloriesTv.text = 0.0.toString()
         itemView.setOnClickListener{
             val position = adapterPosition
             val text = meal.idMeal

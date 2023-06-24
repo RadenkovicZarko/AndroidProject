@@ -20,6 +20,7 @@
 <!--        a ovaj koji je trenutno main, samo stavi u iznad, da bi mogao da ga registruje-->
         <activity android:name=".presentation.view.activities.MainNavigationActivity"/>
         <activity android:name=".presentation.view.activities.LogInActivity"/>
+        <activity android:name=".presentation.view.activities.ListOfMealsActivity"/>
         <activity android:name=".presentation.view.activities.SplashActivity"
             android:exported="true">
             <intent-filter>

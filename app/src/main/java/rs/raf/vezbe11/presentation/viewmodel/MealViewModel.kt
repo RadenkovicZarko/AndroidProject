@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
+import io.reactivex.Observable.zip
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -30,6 +32,8 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val currentUser : MutableLiveData<UserEntity> = MutableLiveData()
     override val insertPersonalMeal : MutableLiveData<AddPersonalMealState> = MutableLiveData()
     override val personalMealsState: MutableLiveData<PersonalMealState> = MutableLiveData()
+
+
 
     override fun fetchAllMeals() {
         val subscription = mealRepository

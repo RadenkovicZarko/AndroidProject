@@ -88,6 +88,7 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
         mainViewModel.fetchAllCategories()
         mainViewModel.fetchAllIngredients()
         mainViewModel.fetchAllMeals()
+
     }
 
     private fun renderState(state: CategoryState) {
