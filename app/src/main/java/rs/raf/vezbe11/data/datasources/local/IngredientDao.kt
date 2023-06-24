@@ -7,7 +7,6 @@ import rs.raf.vezbe11.data.models.entities.IngredientEntity
 
 @Dao
 abstract class IngredientDao {
-
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     abstract fun insert(entity: IngredientEntity): Completable
 
@@ -26,10 +25,12 @@ abstract class IngredientDao {
         insertAll(entities).blockingAwait()
     }
 
+    @Transaction
     @Query("SELECT * FROM ingredients WHERE idIngredient=:id ")
     abstract fun loadSingle(id: String): IngredientEntity
 
 
+    @Transaction
     @Update
     abstract fun updateCalories(entity: IngredientEntity)
 

@@ -1,15 +1,19 @@
 package rs.raf.vezbe11.presentation.view.activities
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.data.models.entities.UserEntity
 import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
 
 class MainNavigationActivity: AppCompatActivity()  {
     var viewPager: ViewPager? = null
     var bottomNavigationView: BottomNavigationView? = null
+    val LOGIN_KEY = "loginKey"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +25,17 @@ class MainNavigationActivity: AppCompatActivity()  {
     private fun init() {
         initViewPager()
         initNavigation()
+        loadCurrentUser()
+    }
+
+    private fun loadCurrentUser() {
+//        val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
+//        val message = sharedPreferences.getString(LOGIN_KEY,null)
+//
+//        val gson = Gson()
+//        val user = gson.fromJson(message, UserEntity::class.java)
+//
+//        Toast.makeText(this, "Welcome ${user.userName}", Toast.LENGTH_SHORT).show()
     }
 
     private fun initViewPager() {

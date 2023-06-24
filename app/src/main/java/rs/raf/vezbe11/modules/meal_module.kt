@@ -15,7 +15,7 @@ val mealModule = module {
     viewModel { MealViewModel(mealRepository = get()) }
 
     single<MealRepository> { MealRepositoryImpl(localMealSource = get(),localCategorySource = get(), localIngredientSource = get(),
-        localAreaSource = get(), localIngredientMealSource = get(), localUserSource = get(),  remoteDataSource = get() , caloriesRemoteDataSource = get()) }
+        localAreaSource = get(), localIngredientMealSource = get(), localUserSource = get(),  remoteDataSource = get() , caloriesRemoteDataSource = get(), localPersonalMealSource = get()) }
 
     single { get<MealDataBase>().getMealDao() }
 
@@ -29,6 +29,7 @@ val mealModule = module {
 
     single { get<MealDataBase>().getUserDao() }
 
+
     single<MealService> {
         rs.raf.vezbe11.modules.create(
             retrofit = createRetrofit(moshi = get() , httpClient = createOkHttpClient())
@@ -40,4 +41,5 @@ val mealModule = module {
             retrofit = createRetrofit2(moshi = get(), httpClient = createOkHttpClient2())
         )
     }
+    single { get<MealDataBase>().getPersonalMealDao() }
 }

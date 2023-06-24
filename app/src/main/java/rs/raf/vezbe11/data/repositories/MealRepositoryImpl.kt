@@ -6,17 +6,12 @@ import rs.raf.vezbe11.data.datasources.remote.MealService
 import rs.raf.vezbe11.data.models.Resource
 import timber.log.Timber
 import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.processNextEventInCurrentThread
-import okhttp3.internal.wait
 import rs.raf.vezbe11.data.datasources.local.*
 import rs.raf.vezbe11.data.datasources.remote.CalorieService
 import rs.raf.vezbe11.data.models.entities.*
 
 import rs.raf.vezbe11.data.models.relations.CategoryMealRelation
-import rs.raf.vezbe11.data.models.responses.CalorieReponse
-import java.util.PrimitiveIterator
+import rs.raf.vezbe11.data.models.relations.PersonalMealAndUser
 
 class MealRepositoryImpl (
     private val localMealSource: MealDao,
@@ -26,7 +21,8 @@ class MealRepositoryImpl (
     private val localIngredientMealSource: IngredientMealDao,
     private val localUserSource: UserDao,
     private val remoteDataSource: MealService,
-    private val caloriesRemoteDataSource : CalorieService
+    private val caloriesRemoteDataSource : CalorieService,
+    private val localPersonalMealSource: PersonalMealDao
 )  : MealRepository{
 
     @SuppressLint("CheckResult")
@@ -259,6 +255,16 @@ class MealRepositoryImpl (
                Observable.just(Resource.Error())
             }
         }
+    }
+    override fun insertPersonalMeal(meal: PersonalMealEntity): Completable {
+//        return localPersonalMealSource.insert(meal)
+        TODO("Not yet implemented")
+
+    }
+    override fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealAndUser>> {
+//        return localPersonalMealSource.getPersonalMealsForUser(idUser)
+        TODO("Not yet implemented")
+
     }
 
 //    private fun makeString () : String

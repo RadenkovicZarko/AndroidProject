@@ -13,13 +13,10 @@ import rs.raf.vezbe11.data.models.entities.AreaEntity
 abstract class AreaDao {
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     abstract fun insert(entity: AreaEntity): Completable
-
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     abstract fun insertAll(entities: List<AreaEntity>): Completable
-
     @Query("SELECT * FROM areas")
     abstract fun getAll(): Observable<List<AreaEntity>>
-
     @Query("DELETE FROM areas")
     abstract fun deleteAll()
 

@@ -6,8 +6,10 @@ import io.reactivex.Observable
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.models.entities.CategoryEntity
+import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
 import rs.raf.vezbe11.data.models.relations.CategoryMealRelation
+import rs.raf.vezbe11.data.models.relations.PersonalMealAndUser
 
 
 interface MealRepository {
@@ -27,6 +29,8 @@ interface MealRepository {
 
     fun insert(meal: MealEntity): Completable
 
+    fun insertPersonalMeal(meal: PersonalMealEntity): Completable
 
+    fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealAndUser>>
     fun getAllCategories():Observable<List<CategoryEntity>>
 }

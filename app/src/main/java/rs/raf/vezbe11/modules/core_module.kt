@@ -50,7 +50,6 @@ fun createRetrofit(moshi: Moshi,
 ): Retrofit {
     return Retrofit.Builder()
         .baseUrl("https://www.themealdb.com/api/json/v1/1/")
-//        .baseUrl("https://ghibliapi.herokuapp.com/")
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
         .client(httpClient)
@@ -62,7 +61,6 @@ fun createRetrofit2(moshi: Moshi,
 ): Retrofit {
     return Retrofit.Builder()
         .baseUrl("https://api.api-ninjas.com/v1/")
-//        .baseUrl("https://ghibliapi.herokuapp.com/")
 
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())

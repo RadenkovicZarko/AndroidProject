@@ -13,16 +13,12 @@ import rs.raf.vezbe11.data.models.entities.IngredientMealEntity
 abstract class IngredientMealDao {
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     abstract fun insert(entity: IngredientMealEntity): Completable
-
     @Insert( onConflict = OnConflictStrategy.REPLACE )
     abstract fun insertAll(entities: List<IngredientMealEntity>): Completable
-
     @Query("SELECT * FROM crossTable")
     abstract fun getAll(): Observable<List<IngredientMealEntity>>
-
     @Query("DELETE FROM crossTable")
     abstract fun deleteAll()
-
     @Transaction
     open fun deleteAndInsertAll(entities: List<IngredientMealEntity>) {
         deleteAll()

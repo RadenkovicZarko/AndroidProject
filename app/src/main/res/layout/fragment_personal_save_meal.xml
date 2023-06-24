@@ -19,8 +19,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         />
+
+    <TextView
+        android:id="@+id/saved_meal_name"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:gravity="left|center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="meal_name"
+        android:textColor="@color/eva_green"
+        android:textSize="30sp" />
 
 
     <!--Create a TextInputLayout and choose the style,

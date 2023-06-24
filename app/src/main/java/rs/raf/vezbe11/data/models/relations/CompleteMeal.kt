@@ -44,3 +44,21 @@ data class IngredientsWithMeal(
     )
     val ingredients: List<MealEntity>
 )
+
+data class PersonalMealAndMeal(
+    @Embedded val personalMeal: PersonalMealEntity,
+    @Relation(
+        parentColumn = "idMeal",
+        entityColumn = "idMealForeign"
+    )
+    val meal: MealEntity
+)
+
+data class PersonalMealAndUser(
+    @Embedded val personalMeal: PersonalMealEntity,
+    @Relation(
+        parentColumn = "userName",
+        entityColumn = "idUserForeign"
+    )
+    val user: UserEntity
+)

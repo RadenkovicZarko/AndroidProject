@@ -3,6 +3,7 @@ package rs.raf.vezbe11.presentation.view.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,13 +44,13 @@ class LogInActivity : AppCompatActivity() {
     private fun initUi() {
 
         binding.loginButton.setOnClickListener { e ->
-            mainViewModel.findUserWithUsernameAndPassword("ZareJarePare", "123")
+            mainViewModel.findUserWithUsernameAndPassword(binding.etUsername.text.toString(), binding.etPassword.text.toString())
             mainViewModel.userState.observe(this, Observer { it ->
                 when(it){
                     is UserState.Success -> {
                         val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
                         val gson = Gson()
-                        val json: String = gson.toJson(it)
+                        val json: String = gson.toJson(it.users[0])
 
                         val editor = sharedPreferences.edit()
                         editor.putString(LOGIN_KEY,json)
