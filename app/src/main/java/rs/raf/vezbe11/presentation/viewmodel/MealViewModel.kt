@@ -18,6 +18,7 @@ import rs.raf.vezbe11.presentation.view.states.CategoryState
 import rs.raf.vezbe11.presentation.view.states.MealState
 import rs.raf.vezbe11.presentation.view.states.UserState
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class MealViewModel (private val mealRepository: MealRepository,
 ) : ViewModel(), MainContract.ViewModel{

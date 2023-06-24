@@ -22,5 +22,6 @@ class CategoryAdapter(private val listener: OnItemClickListener)  : ListAdapter<
 
     interface OnItemClickListener {
         fun onImageClick(position: Int, text: String)
+        fun onItemClick(text: String)
     }
 }

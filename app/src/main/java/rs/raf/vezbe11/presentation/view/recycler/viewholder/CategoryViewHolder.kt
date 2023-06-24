@@ -17,6 +17,11 @@ class CategoryViewHolder(private val itemBinding: LayoutItemCategoryBinding, pri
             val text = category.strCategoryDescription
             listener.onImageClick(position, text)
         }
+        itemView.setOnClickListener{
+            val position = adapterPosition
+            val text = category.idCategory
+            listener.onItemClick(text)
+        }
 
     }
 

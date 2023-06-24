@@ -13,20 +13,29 @@ import rs.raf.vezbe11.R
 import rs.raf.vezbe11.databinding.FragmentListBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.recycler.adapter.CategoryAdapter
+import rs.raf.vezbe11.presentation.view.recycler.adapter.MealAdapter
 import rs.raf.vezbe11.presentation.view.states.CategoryState
+import rs.raf.vezbe11.presentation.view.states.MealState
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
 import timber.log.Timber
 
-
-class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.OnItemClickListener {
+class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapter.OnItemClickListener{
     private val mainViewModel: MainContract.ViewModel by sharedViewModel<MealViewModel>()
 
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter: CategoryAdapter
+    private lateinit var adapter: MealAdapter
 
-
+    companion object {
+        fun newInstance(text: String): ListOfMealsFragment {
+            val fragment = ListOfMealsFragment()
+            val args = Bundle()
+            args.putString("text", text)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +51,15 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
         init()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Retrieve the text from arguments
+        val text = arguments?.getString("text")
+        Timber.e(text)
+        // Use the text as needed
+    }
+
     private fun init() {
         initUi()
         initObservers()
@@ -52,9 +70,10 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
         initListeners()
     }
 
+
     private fun initRecycler() {
         binding.listRv.layoutManager = LinearLayoutManager(context)
-        adapter = CategoryAdapter(this)
+        adapter = MealAdapter(this)
         binding.listRv.adapter = adapter
     }
 
@@ -62,71 +81,51 @@ class CategoryFragment: Fragment(R.layout.fragment_category), CategoryAdapter.On
         binding.inputEt.doAfterTextChanged {
             val filter = it.toString()
             //mainViewModel.getMoviesByName(filter)
-            mainViewModel.getCaloriesByNameOfIngredientOrMeal(filter)
+//            mainViewModel.getAllMealsForCategoryWithFilter(filter)
         }
     }
 
-
     private fun initObservers() {
-        mainViewModel.categoryState.observe(viewLifecycleOwner, Observer{ it->
+        mainViewModel.mealState.observe(viewLifecycleOwner, Observer{ it->
             renderState(it)
         })
 //        // Pravimo subscription kad observablu koji je vezan za getAll iz baze
 //        // Na svaku promenu tabele, obserrvable ce emitovati na onNext sve elemente
 //        // koji zadovoljavaju query
-        mainViewModel.getAllCategories()
+//        mainViewModel.getAllMealsForCategory()
 //        // Pokrecemo operaciju dovlacenja podataka sa servera, kada podaci stignu,
 //        // bice sacuvani u bazi, tada ce se triggerovati observable na koji smo se pretplatili
 //        // preko metode getAllMovies()
-        mainViewModel.fetchAllCategories()
-        mainViewModel.fetchAllIngredients()
-        mainViewModel.fetchAllMeals()
+//        mainViewModel.fetchAllMeals()
     }
 
-    private fun renderState(state: CategoryState) {
+
+
+    private fun renderState(state: MealState) {
         when (state) {
-            is CategoryState.Success -> {
-                adapter.submitList(state.categories)
+            is MealState.Success -> {
+                adapter.submitList(state.meals)
             }
-            is CategoryState.Error -> {
+            is MealState.Error -> {
                 Timber.e("Error")
             }
-            is CategoryState.DataFetched -> {
+            is MealState.DataFetched -> {
                 Timber.e("DataFetched")
             }
-            is CategoryState.Loading -> {
+            is MealState.Loading -> {
                 Timber.e("Loading")
             }
         }
     }
 
 
-    override fun onImageClick(position: Int, text: String) {
-        val dialog = MyDialogFragment.newInstance(text)
-        dialog.show(childFragmentManager, "YourDialogFragment")
-    }
-
     override fun onItemClick(text: String) {
-        // Create the new fragment instance with the required text
-        val newFragment = ListOfMealsFragment.newInstance(text)
-
-        // Perform the fragment transaction to switch to the new fragment
-        val transaction = fragmentManager?.beginTransaction()
-        if (transaction != null) {
-            transaction.replace(R.id.viewPager, newFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
-
+        TODO("Not yet implemented")
     }
-
-
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }
