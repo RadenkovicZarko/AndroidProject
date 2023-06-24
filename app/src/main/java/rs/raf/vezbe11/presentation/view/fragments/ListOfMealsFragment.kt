@@ -1,24 +1,18 @@
 package rs.raf.vezbe11.presentation.view.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.set
-import androidx.core.widget.TintableImageSourceView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.vezbe11.R
-import rs.raf.vezbe11.databinding.FragmentListBinding
 import rs.raf.vezbe11.databinding.FragmentListOfMealsBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
-import rs.raf.vezbe11.presentation.view.recycler.adapter.CategoryAdapter
 import rs.raf.vezbe11.presentation.view.recycler.adapter.MealAdapter
-import rs.raf.vezbe11.presentation.view.states.CategoryState
 import rs.raf.vezbe11.presentation.view.states.MealState
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
 import timber.log.Timber

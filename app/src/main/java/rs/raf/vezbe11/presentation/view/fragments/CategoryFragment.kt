@@ -1,6 +1,7 @@
 package rs.raf.vezbe11.presentation.view.fragments
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.vezbe11.R
 import rs.raf.vezbe11.databinding.FragmentCategoryBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
+import rs.raf.vezbe11.presentation.view.activities.ListOfMealsActivity
 import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
 import rs.raf.vezbe11.presentation.view.recycler.adapter.CategoryAdapter
 import rs.raf.vezbe11.presentation.view.states.CategoryState
@@ -113,14 +115,10 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
     }
 
     override fun onItemClick(text: String) {
-        Timber.e("DESILO SE")
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
 
-        if (fragmentTransaction != null){
-
-            mainAdapter.updateItem(ListOfMealsFragment.newInstance("Beef"),0)
-        }
-        mainAdapter.notifyDataSetChanged()
+        val intent = Intent(requireContext() , ListOfMealsActivity::class.java)
+        intent.putExtra("category", text)
+        startActivity(intent)
     }
 
 
