@@ -33,6 +33,40 @@ abstract class MealDao {
         insertAll(entities).blockingAwait()
     }
 
-//    @Query("SELECT * FROM meals WHERE idMeal LIKE :name || '%'")
-//    abstract fun getByName(name: String): Observable<List<MealEntity>>
+    @Query("SELECT * FROM meals LIMIT 10 OFFSET :a")
+    abstract fun getMealsInRange(a:Int):Observable<List<MealEntity>>
+
+    @Query("SELECT COUNT(*) FROM meals WHERE strCategory = :category")
+    abstract fun getNumOfMeals(category: String):Observable<Int>
+
+//    @Query(" SELECT * FROM meals WHERE " +
+//            "(:mealName IS NULL OR strMeal LIKE '%' || :mealName || '%') AND " +
+//            "(:ingredients IS NULL OR strIngredients LIKE '%' || :ingredients || '%') AND " +
+//            "(:minCalories IS NULL OR sumOfCalories >= :minCalories) AND " +
+//            "(:maxCalories IS NULL OR sumOfCalories <= :maxCalories) " +
+//            "ORDER BY CASE WHEN :sortBy IS NULL THEN 0 ELSE 1 END")
+//    fun getFilteredAndSortedMeals(mealName:String?, ingredients:String?, minCalories:Double?,maxCalories:Double?,sortBy:Int?): List<MealEntity>
+
+
+    @Query("SELECT DISTINCT m.idMeal, strmeal, strDrinkAlternate, strCategory,strArea,strInstructions,strMealThumb,strTags,strYoutube,strSource,strImageSource,strCreativeCommonsConfirmed,dateModified,sumOfCalories FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE \n" +
+            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND ((:minCalories IS NULL OR sumOfCalories >= :minCalories ) AND  (:maxCalories IS NULL OR sumOfCalories <= :maxCalories )) \n" +
+            "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END LIMIT 10 OFFSET :a")
+    abstract fun getFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int) : Observable<List<MealEntity>>
+
+    @Query("SELECT DISTINCT m.idMeal, strmeal, strDrinkAlternate, strCategory,strArea,strInstructions,strMealThumb,strTags,strYoutube,strSource,strImageSource,strCreativeCommonsConfirmed,dateModified,sumOfCalories FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE \n" +
+            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND ((:minCalories IS NULL OR sumOfCalories <= :minCalories ) OR  (:maxCalories IS NULL OR sumOfCalories >= :maxCalories )) \n" +
+            "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END LIMIT 10 OFFSET :a")
+    abstract fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?, a:Int) : Observable<List<MealEntity>>
+
+
+    @Query("SELECT COUNT (DISTINCT m.idMeal) FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE \n" +
+            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND ((:minCalories IS NULL OR sumOfCalories >= :minCalories ) AND  (:maxCalories IS NULL OR sumOfCalories <= :maxCalories )) \n" +
+            "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END")
+    abstract fun getCountFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?) : Observable<Int>
+
+    @Query("SELECT COUNT (DISTINCT m.idMeal) FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE \n" +
+            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND ((:minCalories IS NULL OR sumOfCalories <= :minCalories ) OR  (:maxCalories IS NULL OR sumOfCalories >= :maxCalories )) \n" +
+            "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END")
+    abstract fun getCountFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?) : Observable<Int>
+
 }

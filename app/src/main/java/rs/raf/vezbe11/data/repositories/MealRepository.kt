@@ -35,4 +35,15 @@ interface MealRepository {
     fun getAllCategories():Observable<List<CategoryEntity>>
 
     fun getAllMealsForCategory(category : String) : Observable<List<MealEntity>>
+
+    fun getMealsInRange(a:Int) : Observable<List<MealEntity>>
+
+    fun getNumOfMeals(category: String):Observable<Int>
+
+    fun getCountFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?) : Observable<Int>
+    fun getCountFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?) : Observable<Int>
+
+    fun getFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int) : Observable<List<MealEntity>>
+
+    fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int) : Observable<List<MealEntity>>
 }

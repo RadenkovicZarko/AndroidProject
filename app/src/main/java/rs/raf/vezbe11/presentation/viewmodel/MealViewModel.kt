@@ -27,6 +27,7 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val mealState : MutableLiveData<MealState> = MutableLiveData()
     override val userState : MutableLiveData<UserState> = MutableLiveData()
     override val categoryState : MutableLiveData<CategoryState> = MutableLiveData()
+    override val numOfMealsState : MutableLiveData<NumOfMealsState> = MutableLiveData()
 //    try using .postValue() when changing what is selected for saving
     override val currentPersonalMealSave : MutableLiveData<MealEntity> = MutableLiveData()
     override val currentUser : MutableLiveData<UserEntity> = MutableLiveData()
@@ -143,9 +144,6 @@ class MealViewModel (private val mealRepository: MealRepository,
     override fun getCAndMRelations() {
         mealRepository.getCategoryMealRelations() .flatMapIterable { categoryList -> categoryList } // FlatMap the list into individual items
             .subscribe { categoryEntity ->
-                Timber.e("Kategorija")
-                Timber.e(categoryEntity.meal.strCategory)
-                Timber.e("Jela")
                 categoryEntity.mealsWithCategory.forEach { item -> Timber.e(item.strMeal) }
             }
 
@@ -162,7 +160,6 @@ class MealViewModel (private val mealRepository: MealRepository,
                     },
                     {
                         userState.value = UserState.Error("Error happened while fetching data from db")
-                        Timber.e(it)
                     }
                 )
             subscriptions.add(subscription)
@@ -225,7 +222,6 @@ class MealViewModel (private val mealRepository: MealRepository,
                 },
                 {
                     insertPersonalMeal.value = AddPersonalMealState.Error("Error happened while fetching data from db")
-                    Timber.e(it)
                 }
             )
         subscriptions.add(subscription)
@@ -247,10 +243,179 @@ class MealViewModel (private val mealRepository: MealRepository,
         subscriptions.add(subscription)
     }
 
+    override fun getMealsInRange(a: Int) {
+        val subscription = mealRepository
+            .getMealsInRange(a)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    mealState.value = MealState.Success(it)
+                },
+                {
+                    mealState.value = MealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun getNumOfMeals(category: String) {
+        val subscription = mealRepository
+            .getNumOfMeals(category)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    numOfMealsState.value = NumOfMealsState.Success(it)
+                },
+                {
+                    numOfMealsState.value = NumOfMealsState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun getCountFilteredAndSortedMealsBetween(
+        meal: String?,
+        ingredient: String?,
+        minCalories: Double?,
+        maxCalories: Double?,
+        sort: Int?
+    ) {
+        publishSubject5.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,0))
+    }
+
+    override fun getCountFilteredAndSortedMealsNormal(
+        meal: String?,
+        ingredient: String?,
+        minCalories: Double?,
+        maxCalories: Double?,
+        sort: Int?
+    ) {
+        publishSubject4.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,0))
+    }
+
+    override fun getFilteredAndSortedMealsBetween(
+        meal: String?,
+        ingredient: String?,
+        minCalories: Double?,
+        maxCalories: Double?,
+        sort: Int?,a:Int
+    ) {
+        publishSubject3.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,a))
+    }
+
+    override fun getFilteredAndSortedMealsNormal(
+        meal: String?,
+        ingredient: String?,
+        minCalories: Double?,
+        maxCalories: Double?,
+        sort: Int?,a:Int
+    ) {
+        publishSubject2.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,a))
+    }
+
     override fun getCaloriesByNameOfIngredientOrMeal(letters: String) {
         publishSubject.onNext(letters)
     }
 
+    private val publishSubject3: PublishSubject<QueryFilter> = PublishSubject.create()
+    private val publishSubject5: PublishSubject<QueryFilter> = PublishSubject.create()
+
+    init {
+        val subscriptionMeal3 = publishSubject3
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap { it ->
+                mealRepository
+                    .getFilteredAndSortedMealsBetween(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort,it.a)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError {
+                        Timber.e("Error in publish subject")
+                    }
+            }
+            .subscribe(
+                {
+                    mealState.value = MealState.Success(it)
+                },
+                {
+                    mealState.value = MealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscriptionMeal3)
+
+        val subscriptionMeal5 = publishSubject5
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap { it ->
+                mealRepository
+                    .getCountFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError {
+                        Timber.e("Error in publish subject")
+                    }
+            }
+            .subscribe(
+                {
+                    numOfMealsState.value = NumOfMealsState.Success(it)
+                },
+                {
+                    numOfMealsState.value = NumOfMealsState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscriptionMeal5)
+    }
+
+
+    private val publishSubject2: PublishSubject<QueryFilter> = PublishSubject.create()
+    private val publishSubject4: PublishSubject<QueryFilter> = PublishSubject.create()
+    init {
+        val subscriptionMeal2 = publishSubject2
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap { it ->
+                mealRepository
+                    .getFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort,it.a)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError {
+                        Timber.e("Error in publish subject")
+                    }
+            }
+            .subscribe(
+                {
+                    mealState.value = MealState.Success(it)
+                },
+                {
+                    mealState.value = MealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscriptionMeal2)
+
+        val subscriptionMeal4 = publishSubject4
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap { it ->
+                mealRepository
+                    .getCountFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError {
+                        Timber.e("Error in publish subject")
+                    }
+            }
+            .subscribe(
+                {
+                    numOfMealsState.value = NumOfMealsState.Success(it)
+                },
+                {
+                    numOfMealsState.value = NumOfMealsState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscriptionMeal4)
+    }
 
     private val publishSubject: PublishSubject<String> = PublishSubject.create()
 
@@ -280,4 +445,17 @@ class MealViewModel (private val mealRepository: MealRepository,
 
 
 
+    class QueryFilter(meal: String?,
+                      ingredient: String?,
+                      minCalories: Double?,
+                      maxCalories: Double?,
+                      sort: Int?,a:Int){
+        val meal: String? = meal
+        val ingredient: String? = ingredient
+        val minCalories: Double? = minCalories
+        val maxCalories: Double? = maxCalories
+        val sort: Int? = sort
+        val a : Int = a
+
+    }
 }

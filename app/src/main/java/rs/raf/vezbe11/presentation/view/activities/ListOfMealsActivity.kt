@@ -19,7 +19,8 @@ class ListOfMealsActivity : AppCompatActivity()  {
         setContentView(R.layout.activity_meals)
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        val fragment = ListOfMealsFragment.newInstance("Beef") // Instantiate your fragment class
+        var str = intent.getStringExtra("category")!!
+        val fragment = ListOfMealsFragment.newInstance(str) // Instantiate your fragment class
 
         fragmentTransaction.add(R.id.fragmentContainerMeals, fragment)
         fragmentTransaction.commit()

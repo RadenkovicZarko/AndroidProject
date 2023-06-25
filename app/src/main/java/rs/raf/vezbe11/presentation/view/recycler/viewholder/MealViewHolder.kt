@@ -13,10 +13,9 @@ import timber.log.Timber
 class MealViewHolder (private val itemBinding: LayoutItemMealBinding, private val listener: MealAdapter.OnItemClickListener) : RecyclerView.ViewHolder(itemBinding.root) {
 
     fun bind(meal: MealEntity) {
-        Timber.e("ODRADIO")
         itemBinding.mealNameTv.text = meal.strMeal
         Picasso.get().load(meal.strMealThumb).into(itemBinding.iconMealIvRc)
-        itemBinding.caloriesTv.text = 0.0.toString()
+        itemBinding.caloriesTv.text = meal.sumOfCalories.toString()
         itemView.setOnClickListener{
             val position = adapterPosition
             val text = meal.idMeal

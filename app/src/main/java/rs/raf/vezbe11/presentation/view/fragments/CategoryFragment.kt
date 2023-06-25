@@ -33,6 +33,7 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
     private lateinit var adapter: CategoryAdapter
     lateinit var editText : EditText
     var mainAdapter = mainAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,16 +86,15 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
 //        // Pokrecemo operaciju dovlacenja podataka sa servera, kada podaci stignu,
 //        // bice sacuvani u bazi, tada ce se triggerovati observable na koji smo se pretplatili
 //        // preko metode getAllMovies()
-        mainViewModel.fetchAllCategories()
-        mainViewModel.fetchAllIngredients()
-        mainViewModel.fetchAllMeals()
+//        mainViewModel.fetchAllCategories()
+//        mainViewModel.fetchAllIngredients()
+//        mainViewModel.fetchAllMeals()
 
     }
 
     private fun renderState(state: CategoryState) {
         when (state) {
             is CategoryState.Success -> {
-                Timber.e("DESILO SE")
                 adapter.submitList(state.categories)
             }
             is CategoryState.Error -> {
@@ -121,8 +121,6 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
         intent.putExtra("category", text)
         startActivity(intent)
     }
-
-
 
 
     override fun onDestroyView() {

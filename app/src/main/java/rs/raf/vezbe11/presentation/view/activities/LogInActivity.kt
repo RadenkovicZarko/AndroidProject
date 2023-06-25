@@ -68,7 +68,6 @@ class LogInActivity : AppCompatActivity() {
     private fun renderState(state: UserState) {
         when (state) {
             is UserState.Success -> {
-                Timber.e(state.users.get(0).userName)
             }
             is UserState.Error -> {
                 Timber.e("Error")

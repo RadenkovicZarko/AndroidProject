@@ -31,12 +31,11 @@ class MealRepositoryImpl (
         return remoteDataSource.getAllMealsId().flatMap { mealResponse ->
             val meals = mealResponse.meals
 
-            if (meals != null && meals.isNotEmpty()) {
+            if (meals.isNotEmpty()) {
                 localMealSource.deleteAll()
                 localIngredientMealSource.deleteAll()
                 meals.forEach {
                         remoteDataSource.getMealById(it.idMeal).forEach { mealResponse2 ->
-                            Timber.e("DESILO SE")
                             val meals2 = mealResponse2.meals
                             if ( meals2.isNotEmpty()) {
 
@@ -96,8 +95,8 @@ class MealRepositoryImpl (
                                                         strIngredient19: String?, strMeasure19 : String? ,
                                                         strIngredient20: String?, strMeasure20 : String?  ) : Double
                                 {
-                                    var listaObroka = listOf<String?>()
-                                    var listaMeasures = listOf<String?>()
+                                    val listaObroka = mutableListOf<String?>()
+                                    val listaMeasures = mutableListOf<String?>()
                                     if(strIngredient1!=null) { listaObroka+=strIngredient1; listaMeasures+=strMeasure1}
                                     if(strIngredient1!=null) { listaObroka+=strIngredient2; listaMeasures+=strMeasure2}
                                     if(strIngredient1!=null) { listaObroka+=strIngredient3; listaMeasures+=strMeasure3}
@@ -123,8 +122,8 @@ class MealRepositoryImpl (
                                     var suma = 0.0
                                     var  i = 0
                                     listaObroka.forEach {
-                                        var ingredient= it?.let { it1 -> localIngredientSource.getIngredientByName(it1) }
-                                        var measure = parseValueToGrams(listaMeasures.get(i))
+                                        val ingredient= it?.let { it1 -> localIngredientSource.getIngredientByName(it1) }
+                                        val measure = parseValueToGrams(listaMeasures.get(i))
                                         i++
                                         suma+= ingredient?.calories?.times(measure) ?: 0.0
 
@@ -199,8 +198,6 @@ class MealRepositoryImpl (
                                     ).filter { i -> i != null && i.idIngredient != "" }
                                         .map { it as IngredientMealEntity }
                                 }
-                                Timber.e(entitieIngredientMeal.size.toString())
-                                Timber.e(entitie.size.toString())
                                 localIngredientMealSource.insertAll(entitieIngredientMeal).blockingAwait()
                                 localMealSource.insertAll(entitie).blockingAwait()
                             }
@@ -302,7 +299,7 @@ class MealRepositoryImpl (
     override fun fetchAllA(): Observable<Resource<Unit>> {
         return remoteDataSource.getAllAreas().flatMap { areaResponse ->
             val areas = areaResponse.meals
-            if(areas != null && areas.isNotEmpty())
+            if(areas.isNotEmpty())
             {
                 val entities = areas.map {
                     AreaEntity(
@@ -321,7 +318,7 @@ class MealRepositoryImpl (
 
         return remoteDataSource.getAllIngredients().flatMap { ingredientResponse ->
             val ingredients = ingredientResponse.meals
-            if(ingredients != null && ingredients.isNotEmpty())
+            if(ingredients.isNotEmpty())
             {
                 var i =0
                 val entities = ingredients.map {it->
@@ -331,8 +328,6 @@ class MealRepositoryImpl (
                     }
                     Timber.e(i.toString())
                     i++
-                    Timber.e(calories.toString())
-                    Timber.e("Desilo se")
                     IngredientEntity(
                         it.strIngredient,
                         it.strIngredient,
@@ -377,8 +372,7 @@ class MealRepositoryImpl (
     override fun fetchAllCalories(): Observable<Resource<Unit>> {
 
         var allIngredients = ""
-        var listAllIngredients: List<String> = listOf()
-        Timber.e("Desilo se1")
+        val listAllIngredients: MutableList<String> = mutableListOf()
         localIngredientSource.getAll().blockingFirst().forEach { it2 ->
             var str = ""
             if (allIngredients == "") {
@@ -394,28 +388,23 @@ class MealRepositoryImpl (
                     str = it2.strIngredient
                 }
             }
-            if(str.equals("Gherkin Relish"))
-                Timber.e("TOOOOO")
+
 
             allIngredients = str
         }
         listAllIngredients+=allIngredients
 
 
-        Timber.e("DEsilo se 2")
         listAllIngredients.forEach { Timber.e(it) }
         var lista : List<IngredientEntity> = listOf()
         return caloriesRemoteDataSource.getCalories(listAllIngredients.get(0)).flatMap{ it ->
                var name = ""
                var calories = 0.0
-               Timber.e("USAO123")
                it.forEach { it1 ->
                    var p = false
                    val capitalizedStr = it1.name.split(" ").joinToString(" ") { it.capitalize() }
                    name += capitalizedStr
                    calories += it1.calories
-                   Timber.e("--------------------------------------------")
-                   Timber.e(name)
                    listAllIngredients.forEach { it2 ->
                        if(name == "Soda") {
                            p =true
@@ -424,18 +413,14 @@ class MealRepositoryImpl (
 
                        val words = it2.split(" and ")
                        if (words.contains(name)) p = true
-                       Timber.e(it2)
                    }
 
                    if (p == true) {
-                       Timber.e("USAO1")
-                       var ing = localIngredientSource.loadSingle(name)
+                       val ing = localIngredientSource.loadSingle(name)
                        ing.calories = calories
-                       Timber.e("USAO2")
 //                       localIngredientSource.updateCalories(ing)
                        lista+=ing
                        name = ""
-                       Timber.e("USAO3")
                        calories = 0.0
                    } else {
                        name += " "
@@ -592,6 +577,58 @@ class MealRepositoryImpl (
 
     override fun getAllMealsForCategory(category: String): Observable<List<MealEntity>> {
         return localMealSource.getAllMealsForCategory(category)
+    }
+
+    override fun getMealsInRange(a: Int): Observable<List<MealEntity>> {
+        return localMealSource.getMealsInRange(a)
+    }
+
+    override fun getNumOfMeals(category: String):Observable<Int>{
+        return localMealSource.getNumOfMeals(category)
+    }
+
+    override fun getCountFilteredAndSortedMealsBetween(
+        meal: String?,
+        ingredient: String?,
+        minCalories: Double?,
+        maxCalories: Double?,
+        sort: Int?,
+
+    ): Observable<Int> {
+        return localMealSource.getCountFilteredAndSortedMealsBetween(meal,ingredient,minCalories,maxCalories,sort)
+    }
+
+    override fun getCountFilteredAndSortedMealsNormal(
+        meal: String?,
+        ingredient: String?,
+        minCalories: Double?,
+        maxCalories: Double?,
+        sort: Int?,
+
+    ): Observable<Int> {
+        return localMealSource.getCountFilteredAndSortedMealsNormal(meal,ingredient,minCalories,maxCalories,sort)
+    }
+
+    override fun getFilteredAndSortedMealsBetween(
+        meal: String?,
+        ingredient: String?,
+        minCalories: Double?,
+        maxCalories: Double?,
+        sort: Int?,a:Int
+    ): Observable<List<MealEntity>> {
+
+        return localMealSource.getFilteredAndSortedMealsBetween(meal,ingredient,minCalories,maxCalories,sort,a)
+    }
+
+    override fun getFilteredAndSortedMealsNormal(
+        meal: String?,
+        ingredient: String?,
+        minCalories: Double?,
+        maxCalories: Double?,
+        sort: Int?,a:Int
+    ): Observable<List<MealEntity>> {
+
+        return localMealSource.getFilteredAndSortedMealsNormal(meal,ingredient,minCalories,maxCalories,sort,a)
     }
 
 

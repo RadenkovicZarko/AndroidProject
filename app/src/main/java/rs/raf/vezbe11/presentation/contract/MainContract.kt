@@ -14,6 +14,7 @@ interface MainContract {
         val mealState: LiveData<MealState>
         val userState: LiveData<UserState>
         val categoryState: LiveData<CategoryState>
+        val numOfMealsState: LiveData<NumOfMealsState>
         val currentPersonalMealSave: LiveData<MealEntity>
         val currentUser: LiveData<UserEntity>
         val insertPersonalMeal: LiveData<AddPersonalMealState>
@@ -42,5 +43,17 @@ interface MainContract {
 
 
         fun getAllMealsForCategory(category : String)
+
+        fun getMealsInRange(a:Int)
+
+        fun getNumOfMeals(category: String)
+        fun getCountFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?)
+
+        fun getCountFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?)
+
+        fun getFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int)
+
+        fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int)
+
     }
 }
