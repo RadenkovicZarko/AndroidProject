@@ -15,7 +15,9 @@
         android:background="@color/eva_purple"
         android:gravity="center"
         android:orientation="horizontal"
-
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toTopOf="@id/planerRecyclerView"
         >
 
         <TextView
@@ -65,9 +67,11 @@
         android:id="@+id/planerRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="600dp"
+        android:background="@color/eva_black"
         android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@id/emailLayout"
         app:layout_constraintTop_toBottomOf="@+id/days" />
+
     <LinearLayout
         android:id="@+id/emailLayout"
         android:layout_width="match_parent"
@@ -80,7 +84,7 @@
         android:orientation="horizontal"
         >
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/editemailText"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:hint="@string/enter_email"

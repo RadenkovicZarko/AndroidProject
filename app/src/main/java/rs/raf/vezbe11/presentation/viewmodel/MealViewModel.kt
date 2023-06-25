@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import rs.raf.vezbe11.data.models.PlannerItem
 import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
@@ -33,7 +34,7 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val deletePersonalMeal: MutableLiveData<DeletePersonalMealState> = MutableLiveData()
     override val personalMealsState: MutableLiveData<PersonalMealState> = MutableLiveData()
     override val personalOneMealState: MutableLiveData<PersonalMealEntity> = MutableLiveData()
-
+    override val plannerList: MutableLiveData<List<PlannerItem>> = MutableLiveData()
 
     override fun fetchAllMeals() {
         val subscription = mealRepository
@@ -244,6 +245,39 @@ class MealViewModel (private val mealRepository: MealRepository,
         subscriptions.add(subscription)
     }
 
+    override fun loadPlannerList() {
+        var lst = arrayListOf<PlannerItem>()
+
+        for(i in 0 .. 27)
+            lst.add(PlannerItem(calcDay(i), calcTypeMeal(i), null))
+
+        plannerList.value = lst.toList()
+        Timber.e(lst.toList().toString())
+    }
+
+    private fun calcDay(i: Int): String{
+        return when(i/4){
+            0 -> "Monday"
+            1 -> "Tuesday"
+            2 -> "Wednesday"
+            3 -> "Thursday"
+            4 -> "Friday"
+            5 -> "Saturday"
+            6 -> "Sunday"
+            else -> "Monday"
+        }
+    }
+
+    private fun calcTypeMeal(i: Int): String{
+        return when(i%4){
+            0 -> "Breakfast"
+            1 -> "Lunch"
+            2 -> "Dinner"
+            3 -> "Snack"
+            else -> "Breakfast"
+        }
+    }
+
     override fun getAllMealsForCategory(category: String) {
         val subscription = mealRepository
             .getAllMealsForCategory(category)
@@ -273,6 +307,22 @@ class MealViewModel (private val mealRepository: MealRepository,
                     Timber.e(it)
                 }
             )
+    }
+
+    override fun getAllMeals() {
+        val subscription = mealRepository
+            .getAll()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    mealState.value = MealState.Success(it)
+                },
+                {
+                    mealState.value = MealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscription)
     }
 
     override fun getMealsInRange(a: Int) {

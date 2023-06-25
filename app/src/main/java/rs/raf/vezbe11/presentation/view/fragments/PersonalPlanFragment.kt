@@ -1,36 +1,62 @@
 package rs.raf.vezbe11.presentation.view.fragments
 
-import android.app.Activity
-import android.app.DatePickerDialog
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.TextView
+import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import rs.raf.vezbe11.R
-import com.bumptech.glide.Glide
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import rs.raf.vezbe11.data.models.entities.MealEntity
-import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.presentation.contract.MainContract
+import rs.raf.vezbe11.presentation.view.recycler.adapter.PlannerAdapter
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
-// change it later to fragment_personal_plan
 // INSERT INTO users VALUES ("Vanjce","123",21,210,150,0,10)
-class PersonalPlanFragment: Fragment(R.layout.fragment_personal_plan) {
+class PersonalPlanFragment: Fragment(R.layout.fragment_personal_plan), PlannerAdapter.OnItemClickListener{
+    private val mainViewModel: MainContract.ViewModel by sharedViewModel<MealViewModel>()
+    ////////////////////////////
+    private lateinit var adapter: PlannerAdapter
+    private var listRV: RecyclerView? = null
+    private var sendBtn: Button? = null
+    private var emailET: EditText? = null
+    ////////////////////////////
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init(view)
+    }
 
+    private fun init(view: View) {
+        initUi(view)
+        initRecycler(view)
+        initObservers(view)
+    }
+
+    private fun initUi(view: View) {
+        listRV = view.findViewById(R.id.planerRecyclerView)
+        sendBtn = view.findViewById(R.id.sendButton)
+        emailET = view.findViewById(R.id.editemailText)
+    }
+
+    private fun initRecycler(view: View) {
+        listRV?.layoutManager = GridLayoutManager(view.context, 4)
+        adapter = PlannerAdapter(this)
+        listRV?.adapter = adapter
+    }
+
+    private fun initObservers(view: View) {
+        mainViewModel.plannerList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            adapter.submitList(it)
+        })
+
+        mainViewModel.loadPlannerList()
+    }
+
+    override fun chooseMeal(position: Int) {
+        val meal = mainViewModel.plannerList.value?.get(position)
+        Toast.makeText(context, "Meal: ${meal?.day}, ${meal?.typeOfMeal}", Toast.LENGTH_SHORT).show()
+    }
 }

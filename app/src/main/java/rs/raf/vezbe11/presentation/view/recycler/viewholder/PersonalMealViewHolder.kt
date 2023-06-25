@@ -3,7 +3,6 @@ package rs.raf.vezbe11.presentation.view.recycler.viewholder
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.compat.SharedViewModelCompat.sharedViewModel
 
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

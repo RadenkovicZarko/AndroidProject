@@ -277,7 +277,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
 
                 var mealId = mainViewModel.currentPersonalMealSave.value?.idMeal
                 var userId = mainViewModel.currentUser.value?.userName
-                var name = mainViewModel.currentPersonalMealSave.value?.strMeal
+                var name = nameMealTV?.text.toString()
 
 
                 val personalMeal = PersonalMealEntity(

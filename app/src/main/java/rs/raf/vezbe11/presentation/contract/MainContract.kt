@@ -2,6 +2,7 @@ package rs.raf.vezbe11.presentation.contract
 
 import androidx.lifecycle.LiveData
 import io.reactivex.Observable
+import rs.raf.vezbe11.data.models.PlannerItem
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
@@ -21,8 +22,10 @@ interface MainContract {
         val numOfMealsState: LiveData<NumOfMealsState>
         val  deletePersonalMeal: LiveData<DeletePersonalMealState>
         val personalOneMealState: LiveData<PersonalMealEntity>
+        val plannerList: LiveData<List<PlannerItem>>
         fun fetchAllMeals()
         fun fetchAllCategories()
+
         fun fetchAllAreas()
         fun fetchAllIngredients()
         fun fetchAllCalories()
@@ -50,7 +53,11 @@ interface MainContract {
 
         fun getOnePersonalMealsByUser(idUser: String, idMeal: String)
 
+        fun loadPlannerList()
+
         fun getMealsInRange(a:Int)
+
+        fun getAllMeals()
 
         fun getNumOfMeals(category: String)
         fun getCountFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?)
@@ -60,6 +67,7 @@ interface MainContract {
         fun getFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int)
 
         fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int)
+
 
     }
 }
