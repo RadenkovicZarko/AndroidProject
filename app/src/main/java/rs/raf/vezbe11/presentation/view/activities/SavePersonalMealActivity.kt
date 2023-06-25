@@ -27,11 +27,12 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SavePersonalMealActivity: AppCompatActivity(){
+class SavePersonalMealActivity : AppCompatActivity() {
     private val mainViewModel: MainContract.ViewModel by viewModel<MealViewModel>()
     val CURRENT_MEAL_KEY = "currentMealKey"
     val LOGIN_KEY = "loginKey"
     val EDIT = "edit"
+
     /////////////////////////////
     var datePickerTV: TextView? = null
     var arrayAdapter: ArrayAdapter<String>? = null
@@ -39,12 +40,15 @@ class SavePersonalMealActivity: AppCompatActivity(){
     var mealIV: AppCompatImageView? = null
     var saveBtn: Button? = null
     var nameMealTV: TextView? = null
+
     /////////////////////////////
     var year: Int = 0
     var month: Int = 0
     var day: Int = 0
-    var currentImageUrl = "https://preview.redd.it/h3qww4vmh3191.jpg?width=960&crop=smart&auto=webp&v=enabled&s=9b5ce1a7e50e30a2bc2c2873e895dcdae2626289"
+    var currentImageUrl =
+        "https://preview.redd.it/h3qww4vmh3191.jpg?width=960&crop=smart&auto=webp&v=enabled&s=9b5ce1a7e50e30a2bc2c2873e895dcdae2626289"
     var personalMeal: PersonalMealEntity? = null
+
     /////////////////////////////
     val REQUEST_IMAGE_CAPTURE = 1
 
@@ -65,23 +69,24 @@ class SavePersonalMealActivity: AppCompatActivity(){
         initSave()
     }
 
-    private fun load_shared_pref(){
+    private fun load_shared_pref() {
         loadCurrentUser()
         loadCurrentMeal()
         loadCurrentEdit()
     }
 
-    private fun loadCurrentEdit(){
+    private fun loadCurrentEdit() {
         val message = intent.getStringExtra(EDIT)
 
         val gson = Gson()
         personalMeal = gson.fromJson(message, PersonalMealEntity::class.java)
     }
 
-    private fun loadCurrentMeal(){
+    private fun loadCurrentMeal() {
         val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
-        val message = sharedPreferences.getString(CURRENT_MEAL_KEY,null)
+        val message = sharedPreferences.getString(CURRENT_MEAL_KEY, null) ?: return
 
+        if(message == "") return
         val gson = Gson()
         val meal = gson.fromJson(message, MealEntity::class.java)
         mainViewModel.setPersonalMealForSaving(meal)
@@ -90,7 +95,7 @@ class SavePersonalMealActivity: AppCompatActivity(){
 
     private fun loadCurrentUser() {
         val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
-        val message = sharedPreferences.getString(LOGIN_KEY,null)
+        val message = sharedPreferences.getString(LOGIN_KEY, null)
 
         val gson = Gson()
         val user = gson.fromJson(message, UserEntity::class.java)
@@ -101,11 +106,14 @@ class SavePersonalMealActivity: AppCompatActivity(){
     // Showing image of the meal
     private fun initImageView() {
         mealIV = findViewById(R.id.saved_mealIVa)
-        val url = mainViewModel.currentPersonalMealSave.value?.strImageSource
-        Glide.with(this).load(url).circleCrop().into(mealIV?:return)
+        var url = mainViewModel.currentPersonalMealSave.value?.strImageSource
+
+        if(url == null || url == "") url = personalMeal?.strPersonalUrl
+
+        Glide.with(this).load(url).circleCrop().into(mealIV ?: return)
 
 
-        mealIV?.setOnClickListener{
+        mealIV?.setOnClickListener {
             openCamera()
         }
 
@@ -124,7 +132,11 @@ class SavePersonalMealActivity: AppCompatActivity(){
             }
             // Continue only if the File was successfully created
             photoFile?.let {
-                val photoURI: Uri = FileProvider.getUriForFile(this.applicationContext, "rs.raf.vezbe11.fileprovider", it)
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this.applicationContext,
+                    "rs.raf.vezbe11.fileprovider",
+                    it
+                )
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
             }
@@ -134,7 +146,8 @@ class SavePersonalMealActivity: AppCompatActivity(){
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val timeStamp: String =
+            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val storageDir: File = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
         val imageFile = File.createTempFile(
             "JPEG_${timeStamp}_", /* prefix */
@@ -160,7 +173,8 @@ class SavePersonalMealActivity: AppCompatActivity(){
             this.sendBroadcast(mediaScanIntent)
 
             // Show a toast with the image path
-            Glide.with(this.applicationContext).load(currentImageUrl).circleCrop().into(mealIV?:return)
+            Glide.with(this.applicationContext).load(currentImageUrl).circleCrop()
+                .into(mealIV ?: return)
         }
     }
     /////////////////////////////////////
@@ -168,24 +182,26 @@ class SavePersonalMealActivity: AppCompatActivity(){
     private fun initNameMeal() {
         nameMealTV = findViewById(R.id.saved_meal_namea)
         val name = mainViewModel.currentPersonalMealSave.value?.strMeal
-        nameMealTV?.text = name
-        }
+        if(name == null || name == "")
+            nameMealTV?.text = personalMeal?.strName
+        else
+            nameMealTV?.text = name
+    }
 
-        /////////////////////////////////////
+    /////////////////////////////////////
 
     private fun initDatePicker() {
         datePickerTV = findViewById(R.id.datepickera)
 
         val c = Calendar.getInstance()
 
-        if(personalMeal != null){
+        if (personalMeal != null) {
             val datee = personalMeal?.date
             val dateParts = datee?.split("-")
-            year = dateParts?.get(0)?.toInt()?:0
-            month = dateParts?.get(1)?.toInt()?:0
-            day = dateParts?.get(2)?.toInt()?:0
-        }
-        else {
+            year = dateParts?.get(0)?.toInt() ?: 0
+            month = dateParts?.get(1)?.toInt() ?: 0
+            day = dateParts?.get(2)?.toInt() ?: 0
+        } else {
             year = c.get(Calendar.YEAR)
             month = (c.get(Calendar.MONTH) + 1)
             day = c.get(Calendar.DAY_OF_MONTH)
@@ -200,7 +216,7 @@ class SavePersonalMealActivity: AppCompatActivity(){
                     // on below line we are setting
                     // date to our text view.
                     year = yearr
-                    month = (monthOfYear+1)
+                    month = (monthOfYear + 1)
                     day = dayOfMonth
 
                     changeDate(day, month, year)
@@ -228,28 +244,34 @@ class SavePersonalMealActivity: AppCompatActivity(){
         val items = listOf("Breakfast", "Lunch", "Dinner", "Snack")
 
         var type = personalMeal?.strTypeOfMeal
+        // get reference to the autocomplete text view
+        autocompleteTV = findViewById(R.id.autoCompleteTextViewa)
+        if (type != null) {
+            autocompleteTV?.setText(type)
+        }
 
         // create an array adapter and pass the required parameter
         // in our case pass the context, drop down layout , and array.
-        arrayAdapter = ArrayAdapter(this.applicationContext, R.layout.dropdown_item_meal_type, items)
-        // get reference to the autocomplete text view
-        autocompleteTV = findViewById(R.id.autoCompleteTextViewa)
+        arrayAdapter =
+            ArrayAdapter(this.applicationContext, R.layout.dropdown_item_meal_type, items)
         // set adapter to the autocomplete tv to the arrayAdapter
         autocompleteTV?.setAdapter(arrayAdapter)
 
-        if(type != null){
-            autocompleteTV?.setText(type)
-        }
     }
+
     /////////////////////////////////////
     private fun initSave() {
         saveBtn = findViewById<Button>(R.id.save_personal_meal_btna)
-        saveBtn?.setOnClickListener{
+        saveBtn?.setOnClickListener {
             // TODO save the personal meal to the db
             val type_of_meal = autocompleteTV?.text.toString()
             if (type_of_meal == this.applicationContext.getString(R.string.choose_a_meal))
-                Toast.makeText(this.applicationContext, "Please choose a type of meal", Toast.LENGTH_SHORT).show()
-            else{
+                Toast.makeText(
+                    this.applicationContext,
+                    "Please choose a type of meal",
+                    Toast.LENGTH_SHORT
+                ).show()
+            else {
 
                 var date_str = format_date(day, month, year)
 
@@ -257,8 +279,6 @@ class SavePersonalMealActivity: AppCompatActivity(){
                 var userId = mainViewModel.currentUser.value?.userName
                 var name = mainViewModel.currentPersonalMealSave.value?.strMeal
 
-
-                Toast.makeText(this.applicationContext, "Meal saved: $userId", Toast.LENGTH_SHORT).show()
 
                 val personalMeal = PersonalMealEntity(
                     1,
@@ -271,10 +291,8 @@ class SavePersonalMealActivity: AppCompatActivity(){
                 )
 
                 mainViewModel.insertPersonalMeal(personalMeal)
-//                mainViewModel.getAllPersonalMealsByUser()
-
-//                val intent = Intent(this, MainNavigationActivity::class.java)
-//                startActivity(intent)
+                Toast.makeText(this.applicationContext, "Meal saved: $name", Toast.LENGTH_SHORT)
+                    .show()
                 finish()
             }
 

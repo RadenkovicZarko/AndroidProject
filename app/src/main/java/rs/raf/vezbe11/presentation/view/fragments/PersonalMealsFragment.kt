@@ -121,13 +121,18 @@ class PersonalMealsFragment:Fragment(R.layout.fragment_personal_meals), Personal
     }
 
     override fun onEditClick(position: Int) {
+        val meal = mainViewModel.currentPersonalMealSave.value
         val sharedPreferences = activity?.getSharedPreferences(activity?.packageName, AppCompatActivity.MODE_PRIVATE)
-        val gson = Gson()
-        val json: String = gson.toJson(mainViewModel.currentPersonalMealSave.value)
-
         val editor = sharedPreferences?.edit()
+        val gson = Gson()
+        if(meal == null){
+            editor?.putString(CURRENT_MEAL_KEY,"")
+        }else{
+        var json: String = gson.toJson(mainViewModel.currentPersonalMealSave.value)
         editor?.putString(CURRENT_MEAL_KEY,json)
+        }
         editor?.apply()
+
 
         val intent = Intent(requireContext(), SavePersonalMealActivity::class.java)
         val anotherJson: String = gson.toJson(adapter.currentList[position])
