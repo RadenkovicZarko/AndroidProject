@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:id="@+id/saved_mealIVa"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/datepickera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"
+        />
+
+    <TextView
+        android:id="@+id/saved_meal_namea"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:gravity="left|center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="meal_name"
+        android:textColor="@color/eva_green"
+        android:textSize="30sp" />
+
+
+    <!--Create a TextInputLayout and choose the style,
+                for now we are choosing the OutlinedBox ExposedDropdownMenu   -->
+
+    <TextView
+        android:id="@+id/datepickera"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_box"
+        android:drawablePadding="10dp"
+        android:gravity="left|center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="pick date"
+        android:textColor="@color/eva_green"
+        android:textSize="20sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        app:boxStrokeColor="@color/eva_green"
+        app:boxStrokeWidth="2dp"
+        app:boxBackgroundColor="@color/eva_purple"
+        app:layout_constraintLeft_toLeftOf="@id/datepickera"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Inside text input layout add
+              an auto complete text view
+                and make its input type to none-->
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextViewa"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textColor="@color/eva_green"
+            android:inputType="none"
+            android:text="@string/choose_a_meal"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/save_personal_meal_btna"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:text="@string/save"
+        android:textSize="17dp"
+        android:backgroundTint="@color/eva_purple"
+        android:textColor="@color/eva_green"
+        style="?android:attr/buttonBarButtonStyle"
+        />
+
+</LinearLayout>

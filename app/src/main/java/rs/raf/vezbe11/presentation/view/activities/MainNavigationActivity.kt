@@ -42,7 +42,7 @@ class MainNavigationActivity: AppCompatActivity()  {
         val gson = Gson()
         val user = gson.fromJson(message, UserEntity::class.java)
         mainViewModel.setCurrentUser(user)
-        Toast.makeText(this, "Welcome ${user.userName}", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Welcome ${user.userName}", Toast.LENGTH_SHORT).show()
     }
 
     private fun initViewPager() {

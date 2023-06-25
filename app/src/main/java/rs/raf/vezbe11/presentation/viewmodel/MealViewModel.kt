@@ -1,11 +1,9 @@
 package rs.raf.vezbe11.presentation.viewmodel
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
-import io.reactivex.Observable.zip
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -32,8 +30,9 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val currentPersonalMealSave : MutableLiveData<MealEntity> = MutableLiveData()
     override val currentUser : MutableLiveData<UserEntity> = MutableLiveData()
     override val insertPersonalMeal : MutableLiveData<AddPersonalMealState> = MutableLiveData()
+    override val deletePersonalMeal: MutableLiveData<DeletePersonalMealState> = MutableLiveData()
     override val personalMealsState: MutableLiveData<PersonalMealState> = MutableLiveData()
-
+    override val personalOneMealState: MutableLiveData<PersonalMealEntity> = MutableLiveData()
 
 
     override fun fetchAllMeals() {
@@ -211,6 +210,24 @@ class MealViewModel (private val mealRepository: MealRepository,
         subscriptions.add(subscription)
     }
 
+    override fun getOnePersonalMealsByUser(idUser: String, idMeal: String) {
+        val subscription = mealRepository
+            .getOnePersonalMealsByUser(idUser, idMeal)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    if(it.isNotEmpty()){
+                        personalOneMealState.value = it[0]
+                    }
+                },
+                {
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
     override fun insertPersonalMeal(meal: PersonalMealEntity) {
         val subscription = mealRepository
             .insertPersonalMeal(meal)
@@ -241,6 +258,21 @@ class MealViewModel (private val mealRepository: MealRepository,
                 }
             )
         subscriptions.add(subscription)
+    }
+    override fun deletePersonalMeal(meal: PersonalMealEntity) {
+        val subscripiton =mealRepository
+            .deletePersonalMeal(meal)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    deletePersonalMeal.value = DeletePersonalMealState.Success
+                },
+                {
+                    deletePersonalMeal.value = DeletePersonalMealState.Error("Error happened while fetching data from db")
+                    Timber.e(it)
+                }
+            )
     }
 
     override fun getMealsInRange(a: Int) {

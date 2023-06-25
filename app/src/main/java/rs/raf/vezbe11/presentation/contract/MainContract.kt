@@ -14,7 +14,6 @@ interface MainContract {
         val mealState: LiveData<MealState>
         val userState: LiveData<UserState>
         val categoryState: LiveData<CategoryState>
-        val numOfMealsState: LiveData<NumOfMealsState>
         val currentPersonalMealSave: LiveData<MealEntity>
         val currentUser: LiveData<UserEntity>
         val insertPersonalMeal: LiveData<AddPersonalMealState>
@@ -43,6 +42,10 @@ interface MainContract {
 
 
         fun getAllMealsForCategory(category : String)
+
+        fun deletePersonalMeal(meal: PersonalMealEntity)
+
+        fun getOnePersonalMealsByUser(idUser: String, idMeal: String)
 
         fun getMealsInRange(a:Int)
 

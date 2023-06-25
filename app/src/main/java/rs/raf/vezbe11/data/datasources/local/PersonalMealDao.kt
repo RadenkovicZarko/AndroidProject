@@ -1,6 +1,7 @@
 package rs.raf.vezbe11.data.datasources.local
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -26,6 +27,9 @@ abstract class PersonalMealDao {
     @Query("DELETE FROM personal_meals")
     abstract fun deleteAll()
 
+    @Delete
+    abstract fun delete(entity: PersonalMealEntity): Completable
+
     @Transaction
     open fun deleteAndInsertAll(entities: List<PersonalMealEntity>) {
         deleteAll()
@@ -34,4 +38,6 @@ abstract class PersonalMealDao {
     @Query("SELECT * FROM personal_meals WHERE idUserForeign=:idUser")
     abstract fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealEntity>>
 
+    @Query("SELECT * FROM personal_meals WHERE idUserForeign=:idUser and idMealForeign=:idMeal")
+    abstract fun getOnePersonalMealsByUser(idUser: String, idMeal: String): Observable<List<PersonalMealEntity>>
 }

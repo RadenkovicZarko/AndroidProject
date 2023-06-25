@@ -348,6 +348,14 @@ class MealRepositoryImpl (
         return localPersonalMealSource.insert(meal)
 
     }
+
+    override fun deletePersonalMeal(meal: PersonalMealEntity): Completable {
+        return localPersonalMealSource.delete(meal)
+    }
+
+    override fun getOnePersonalMealsByUser(idUser: String, idMeal: String): Observable<List<PersonalMealEntity>> {
+        return localPersonalMealSource.getOnePersonalMealsByUser(idUser,idMeal)
+    }
     override fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealEntity>> {
         return localPersonalMealSource.getAllPersonalMealsByUser(idUser)
 

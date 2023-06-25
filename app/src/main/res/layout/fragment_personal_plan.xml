@@ -1,8 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recyclerMainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/eva_green"
-    >
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/days"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@color/eva_purple"
+        android:gravity="center"
+        android:orientation="horizontal"
+
+        >
+
+        <TextView
+            android:id="@+id/breakTV"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:textColor="@color/eva_green"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/breakfast" />
+
+        <TextView
+            android:id="@+id/lunchTV"
+            android:layout_width="90dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textColor="@color/eva_green"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/lunch" />
+
+        <TextView
+            android:id="@+id/dinnerTV"
+            android:layout_width="90dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textColor="@color/eva_green"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/dinner" />
+
+        <TextView
+            android:id="@+id/snackTV"
+            android:layout_width="90dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textColor="@color/eva_green"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:text="@string/snack" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/planerRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/emailLayout"
+        app:layout_constraintTop_toBottomOf="@+id/days" />
+    <LinearLayout
+        android:id="@+id/emailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="7dp"
+        android:background="@color/eva_purple"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_email"
+            android:textColorHint="@color/eva_green"
+            android:textColor="@color/eva_green"
+            android:textColorLink="@color/eva_green"
+            android:layout_marginEnd="30dp"
+            android:inputType="text"
+            />
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send"
+            android:backgroundTint="@color/eva_green"
+            android:textColor="@color/eva_purple"
+            />
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
