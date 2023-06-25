@@ -1,7 +1,6 @@
 package rs.raf.vezbe11.presentation.contract
 
 import androidx.lifecycle.LiveData
-import io.reactivex.Observable
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
@@ -17,7 +16,9 @@ interface MainContract {
         val currentPersonalMealSave: LiveData<MealEntity>
         val currentUser: LiveData<UserEntity>
         val insertPersonalMeal: LiveData<AddPersonalMealState>
+        val deletePersonalMeal: LiveData<DeletePersonalMealState>
         val personalMealsState: LiveData<PersonalMealState>
+        val personalOneMealState: LiveData<PersonalMealEntity>
         fun fetchAllMeals()
         fun fetchAllCategories()
         fun fetchAllAreas()
@@ -42,5 +43,9 @@ interface MainContract {
 
 
         fun getAllMealsForCategory(category : String)
+
+        fun deletePersonalMeal(meal: PersonalMealEntity)
+
+        fun getOnePersonalMealsByUser(idUser: String, idMeal: String)
     }
 }
