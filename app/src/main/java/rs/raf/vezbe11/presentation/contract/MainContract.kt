@@ -18,6 +18,9 @@ interface MainContract {
         val currentUser: LiveData<UserEntity>
         val insertPersonalMeal: LiveData<AddPersonalMealState>
         val personalMealsState: LiveData<PersonalMealState>
+        val numOfMealsState: LiveData<NumOfMealsState>
+        val  deletePersonalMeal: LiveData<DeletePersonalMealState>
+        val personalOneMealState: LiveData<PersonalMealEntity>
         fun fetchAllMeals()
         fun fetchAllCategories()
         fun fetchAllAreas()
