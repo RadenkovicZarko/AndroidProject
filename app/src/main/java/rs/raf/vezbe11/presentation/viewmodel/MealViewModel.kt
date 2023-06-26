@@ -1,7 +1,7 @@
 package rs.raf.vezbe11.presentation.viewmodel
 
 import android.annotation.SuppressLint
-import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,6 +38,7 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val personalMealsDates: MutableLiveData<PersonalMealState> = MutableLiveData()
     override val mealDetailsState: MutableLiveData<MealDetailsState>  = MutableLiveData()
     override val ingredientsForMealState: MutableLiveData<IngredientsForMealState> = MutableLiveData()
+    override val personalMealUpdate: MutableLiveData<AddPersonalMealState> = MutableLiveData()
 
     override fun fetchAllMeals() {
         val subscription = mealRepository
@@ -244,6 +245,22 @@ class MealViewModel (private val mealRepository: MealRepository,
                 },
                 {
                     insertPersonalMeal.value = AddPersonalMealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun updatePersonalMeal(meal: PersonalMealEntity) {
+        val subscription = mealRepository
+            .updatePersonalMeal(meal)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    personalMealUpdate.value = AddPersonalMealState.Success
+                },
+                {
+                    personalMealUpdate.value = AddPersonalMealState.Error("Error happened while fetching data from db")
                 }
             )
         subscriptions.add(subscription)

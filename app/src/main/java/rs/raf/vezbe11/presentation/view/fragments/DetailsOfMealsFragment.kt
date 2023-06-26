@@ -1,5 +1,6 @@
 package rs.raf.vezbe11.presentation.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import okhttp3.internal.notifyAll
 import org.koin.android.ext.android.bind
@@ -15,6 +17,8 @@ import rs.raf.vezbe11.R
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.databinding.FragmentDetailsOfMealsBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
+import rs.raf.vezbe11.presentation.view.activities.MainNavigationActivity
+import rs.raf.vezbe11.presentation.view.activities.SavePersonalMealActivity
 import rs.raf.vezbe11.presentation.view.recycler.adapter.CategoryAdapter
 import rs.raf.vezbe11.presentation.view.states.IngredientsForMealState
 import rs.raf.vezbe11.presentation.view.states.MealDetailsState
@@ -34,6 +38,8 @@ class DetailsOfMealsFragment(idMeal:String) : Fragment(R.layout.fragment_details
     lateinit var meal: MealEntity
     var mealId = idMeal
     var listOfIngredients = listOf<String>()
+    val CURRENT_MEAL_KEY = "currentMealKey"
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,8 +82,13 @@ class DetailsOfMealsFragment(idMeal:String) : Fragment(R.layout.fragment_details
 
     private fun initListeners() {
         binding.saveBtn.setOnClickListener {
-            TODO()
             //OVE VANJCE TREBA DA SE ODRADI POKRETANJE TVOG NEKAKO...
+            val intent = Intent(context, SavePersonalMealActivity::class.java)
+            val gson = Gson()
+            val json = gson.toJson(meal)
+            intent.putExtra(CURRENT_MEAL_KEY, json)
+            startActivity(intent)
+            activity?.finish()
         }
     }
 

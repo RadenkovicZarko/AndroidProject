@@ -9,7 +9,7 @@ import java.sql.Date
 @Entity(tableName="personal_meals")
 data class PersonalMealEntity(
     @PrimaryKey(autoGenerate = true)
-    var idPersonalMeal: Long,
+    var idPersonalMeal: Long = 0,
     var strName: String?,
     val strTypeOfMeal: String?,
 
