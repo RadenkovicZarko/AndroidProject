@@ -89,7 +89,7 @@ fun createOkHttpClient2(): OkHttpClient {
     val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
         val originalRequest = chain.request()
         val requestWithApiKey = originalRequest.newBuilder()
-            .header("X-Api-Key", "eJrNsy+GS96wpkdL1yYAzg==OompL8KH7KE9rlQ1")
+            .header("X-Api-Key", "AF5uRN5fkIlFeM64Q1XeY4BReSu47Sx8Kp8wTFJu")
             .build()
         chain.proceed(requestWithApiKey)
     }

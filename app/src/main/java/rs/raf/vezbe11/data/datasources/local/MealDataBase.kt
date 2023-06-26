@@ -9,7 +9,7 @@ import rs.raf.vezbe11.data.models.entities.*
 
 @Database(
     entities = [MealEntity::class, AreaEntity::class, IngredientEntity::class , IngredientMealEntity::class, CategoryEntity::class, UserEntity::class, PersonalMealEntity::class],
-    version = 2,
+    version = 1,
     exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class MealDataBase : RoomDatabase(){

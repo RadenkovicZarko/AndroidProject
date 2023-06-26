@@ -1,6 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="666dp">
+
+        <Button
+            android:id="@+id/categoryBtn"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_weight="1"
+            android:text="Category"
+            tools:layout_editor_absoluteX="304dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <Button
+            android:id="@+id/areaBtn"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_weight="1"
+            android:text="Area"
+            tools:layout_editor_absoluteX="151dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <Button
+            android:id="@+id/ingridientBtn"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_weight="1"
+            android:text="Ingredient"
+            tools:layout_editor_absoluteX="304dp"
+            tools:layout_editor_absoluteY="0dp" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/parameterEt"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="81dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="592dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name of parameter" />
+
+    <EditText
+        android:id="@+id/mealEt"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="151dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="522dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name of meal" />
+
+    <EditText
+        android:id="@+id/tagEt"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="228dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="445dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name of tag" />
+
+    <CheckBox
+        android:id="@+id/sort"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="299dp"
+        android:layout_marginEnd="142dp"
+        android:layout_marginBottom="384dp"
+        android:text="CheckBox" />
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mealsRv"
+        android:layout_width="wrap_content"
+        android:layout_height="325dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="366dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginBottom="40dp" />
+
+
+</RelativeLayout>
+

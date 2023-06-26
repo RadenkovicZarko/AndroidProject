@@ -15,6 +15,7 @@ import androidx.viewpager.widget.ViewPager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.vezbe11.R
 import rs.raf.vezbe11.databinding.FragmentCategoryBinding
+
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.activities.ListOfMealsActivity
 import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
@@ -86,9 +87,10 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
 //        // Pokrecemo operaciju dovlacenja podataka sa servera, kada podaci stignu,
 //        // bice sacuvani u bazi, tada ce se triggerovati observable na koji smo se pretplatili
 //        // preko metode getAllMovies()
-//        mainViewModel.fetchAllCategories()
-//        mainViewModel.fetchAllIngredients()
-//        mainViewModel.fetchAllMeals()
+        mainViewModel.fetchAllAreas()
+        mainViewModel.fetchAllCategories()
+        mainViewModel.fetchAllIngredients()
+        mainViewModel.fetchAllMeals()
 
     }
 
