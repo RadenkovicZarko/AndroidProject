@@ -551,7 +551,7 @@ class MealRepositoryImpl (
 
 
     override fun getAll(): Observable<List<MealEntity>> {
-        TODO("Not yet implemented")
+        return localMealSource.getAll()
     }
 
     override fun getAllMeals(): Observable<List<MealEntity>> {

@@ -13,9 +13,7 @@ class PlannerMealViewHolder(private val itemBinding:LayoutItemMealBinding, priva
         Glide.with(itemView.context).load(meal.strMealThumb).circleCrop().into(itemBinding.iconMealIvRc)
         itemBinding.caloriesTv.text = meal.sumOfCalories.toString()
         itemView.setOnClickListener{
-            val position = adapterPosition
-//            TODO implement on activityResult
-
+            listener.returnChoice(meal)
         }
 
     }

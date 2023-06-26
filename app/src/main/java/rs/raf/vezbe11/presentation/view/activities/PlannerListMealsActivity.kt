@@ -1,15 +1,20 @@
 package rs.raf.vezbe11.presentation.view.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.recycler.adapter.PlannerMealAdapter
 import rs.raf.vezbe11.presentation.view.states.MealState
@@ -21,7 +26,10 @@ class PlannerListMealsActivity: AppCompatActivity(), PlannerMealAdapter.OnItemCl
     private lateinit var adapter: PlannerMealAdapter
     private var listRV: RecyclerView? = null
     private var progressBar: ProgressBar? = null
+    private var mealInfo: TextView? = null
     ////////////////////////////
+    private val MEAL_PLANNER_KEY = "mealPlannerKey"
+    private val MEAL_METADATA_KEY = "mealMetadataKey"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +44,15 @@ class PlannerListMealsActivity: AppCompatActivity(), PlannerMealAdapter.OnItemCl
     }
 
     private fun initUi() {
+        initTextView()
         initRecycler()
+    }
+
+    private fun initTextView() {
+        val message = intent.getStringExtra(MEAL_METADATA_KEY)
+
+        mealInfo = findViewById(R.id.plannerMealInfoTV)
+        mealInfo?.text = message
     }
 
     private fun initRecycler() {
@@ -78,7 +94,13 @@ class PlannerListMealsActivity: AppCompatActivity(), PlannerMealAdapter.OnItemCl
         progressBar?.isVisible = loading
     }
 
-    override fun returnChoice(position: Int) {
-        TODO("Not yet implemented")
+    override fun returnChoice(meal: MealEntity) {
+        var gson = Gson()
+        val meal_json: String = gson.toJson(meal)
+
+        val resultIntent = Intent()
+        resultIntent.putExtra(MEAL_PLANNER_KEY, meal_json)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 }
