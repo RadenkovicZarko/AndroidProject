@@ -23,6 +23,7 @@ interface MainContract {
         val  deletePersonalMeal: LiveData<DeletePersonalMealState>
         val personalOneMealState: LiveData<PersonalMealEntity>
         val plannerList: LiveData<List<PlannerItem>>
+        val personalMealsDates: LiveData<PersonalMealState>
         fun fetchAllMeals()
         fun fetchAllCategories()
 
@@ -52,6 +53,8 @@ interface MainContract {
         fun deletePersonalMeal(meal: PersonalMealEntity)
 
         fun getOnePersonalMealsByUser(idUser: String, idMeal: String)
+
+        fun getPersonalMealsBetweenDates(startDate: Long, endDate: Long, idUser: String)
 
         fun loadPlannerList()
 

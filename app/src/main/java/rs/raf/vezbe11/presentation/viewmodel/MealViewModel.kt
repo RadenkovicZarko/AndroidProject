@@ -35,7 +35,7 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val personalMealsState: MutableLiveData<PersonalMealState> = MutableLiveData()
     override val personalOneMealState: MutableLiveData<PersonalMealEntity> = MutableLiveData()
     override val plannerList: MutableLiveData<List<PlannerItem>> = MutableLiveData()
-
+    override val personalMealsDates: MutableLiveData<PersonalMealState> = MutableLiveData()
     override fun fetchAllMeals() {
         val subscription = mealRepository
             .fetchAllM()
@@ -205,7 +205,8 @@ class MealViewModel (private val mealRepository: MealRepository,
                     personalMealsState.value = PersonalMealState.Success(it)
                 },
                 {
-                    personalMealsState.value = PersonalMealState.Error("Error happened while fetching data from db")
+                    personalMealsState.value = PersonalMealState.Error(it.toString())
+                    Timber.e(it)
                 }
             )
         subscriptions.add(subscription)
@@ -240,6 +241,22 @@ class MealViewModel (private val mealRepository: MealRepository,
                 },
                 {
                     insertPersonalMeal.value = AddPersonalMealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun getPersonalMealsBetweenDates(startDate: Long, endDate: Long, idUser: String) {
+        val subscription = mealRepository
+            .getPersonalMealsBetweenDates(startDate, endDate, idUser)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    personalMealsDates.value = PersonalMealState.Success(it)
+                },
+                {
+                    personalMealsDates.value = PersonalMealState.Error("Error happened while fetching data from db")
                 }
             )
         subscriptions.add(subscription)

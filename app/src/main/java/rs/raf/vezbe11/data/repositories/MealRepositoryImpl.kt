@@ -361,6 +361,9 @@ class MealRepositoryImpl (
 
     }
 
+    override fun getPersonalMealsBetweenDates(startDate: Long, endDate: Long, idUser: String): Observable<List<PersonalMealEntity>>{
+        return localPersonalMealSource.getPersonalMealsBetweenDatesFromUser(startDate,endDate,idUser);
+    }
 //    private fun makeString () : String
 //    {
 //        val localIngredients = localIngredientSource.getAll()

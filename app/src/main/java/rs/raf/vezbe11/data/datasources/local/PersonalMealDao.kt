@@ -1,18 +1,13 @@
 package rs.raf.vezbe11.data.datasources.local
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Observable
+import rs.raf.vezbe11.data.models.converters.DateConverter
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
-import rs.raf.vezbe11.data.models.relations.PersonalMealAndMeal
-import rs.raf.vezbe11.data.models.relations.PersonalMealAndUser
 
 @Dao
+@TypeConverters(DateConverter::class)
 abstract class PersonalMealDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -40,4 +35,7 @@ abstract class PersonalMealDao {
 
     @Query("SELECT * FROM personal_meals WHERE idUserForeign=:idUser and idMealForeign=:idMeal")
     abstract fun getOnePersonalMealsByUser(idUser: String, idMeal: String): Observable<List<PersonalMealEntity>>
+
+    @Query("SELECT * FROM personal_meals WHERE idUserForeign=:idUser AND date BETWEEN :startDate AND :endDate")
+    abstract fun getPersonalMealsBetweenDatesFromUser(startDate: Long, endDate: Long, idUser: String): Observable<List<PersonalMealEntity>>
 }

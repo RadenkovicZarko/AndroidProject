@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.data.models.converters.DateConverter
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
@@ -25,6 +26,7 @@ import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 class SavePersonalMealActivity : AppCompatActivity() {
@@ -196,11 +198,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
         val c = Calendar.getInstance()
 
         if (personalMeal != null) {
-            val datee = personalMeal?.date
-            val dateParts = datee?.split("-")
-            year = dateParts?.get(0)?.toInt() ?: 0
-            month = dateParts?.get(1)?.toInt() ?: 0
-            day = dateParts?.get(2)?.toInt() ?: 0
+            extractVals(personalMeal?.date)
         } else {
             year = c.get(Calendar.YEAR)
             month = (c.get(Calendar.MONTH) + 1)
@@ -230,6 +228,21 @@ class SavePersonalMealActivity : AppCompatActivity() {
             datePickerDialog.show()
         }
 
+    }
+
+    private fun extractVals(date: java.sql.Date?) {
+        if(date == null){
+            year = 0
+            month = 0
+            day = 0
+
+        }else{
+            val str = date.toString()
+            val arr = str.split("-")
+            year = arr[0].toInt()
+            month = arr[1].toInt()
+            day = arr[2].toInt()
+        }
     }
 
     private fun changeDate(day: Int, month: Int, year: Int) {
@@ -279,12 +292,11 @@ class SavePersonalMealActivity : AppCompatActivity() {
                 var userId = mainViewModel.currentUser.value?.userName
                 var name = nameMealTV?.text.toString()
 
-
                 val personalMeal = PersonalMealEntity(
                     1,
                     name,
                     type_of_meal,
-                    date_str,
+                    toDate(date_str),
                     currentImageUrl,
                     mealId,
                     userId
@@ -297,6 +309,11 @@ class SavePersonalMealActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    fun toDate(str: String): java.sql.Date {
+        var date = LocalDate.parse(str)
+        return java.sql.Date(date.year - 1900, date.monthValue - 1, date.dayOfMonth)
     }
 
     private fun format_date(day: Int, month: Int, year: Int): String {

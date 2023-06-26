@@ -19,9 +19,11 @@ import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import rs.raf.vezbe11.data.models.converters.DateConverter
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 class PersonalStatsFragment: Fragment(R.layout.fragment_personal_save_meal) {
@@ -69,29 +71,31 @@ class PersonalStatsFragment: Fragment(R.layout.fragment_personal_save_meal) {
 
                 Toast.makeText(requireContext(), "Meal saved: $type_of_meal", Toast.LENGTH_SHORT).show()
                 var date_str = format_date(day, month, year)
-
+                var saveDate = toDate(date_str)
                 var mealId = mainViewModel.currentPersonalMealSave.value?.idMeal
                 var userId = mainViewModel.currentUser.value?.userName
                 var name = mainViewModel.currentPersonalMealSave.value?.strMeal
-
-
-                Toast.makeText(requireContext(), "Meal saved: $userId", Toast.LENGTH_SHORT).show()
 
                 val personalMeal = PersonalMealEntity(
                     1,
                     name,
                     type_of_meal,
-                    date_str,
+                    saveDate,
                     currentImageUrl,
                     mealId,
                     userId
                 )
 
+
                 mainViewModel.insertPersonalMeal(personalMeal)
-//                mainViewModel.getAllPersonalMealsByUser()
             }
 
         }
+    }
+
+        fun toDate(str: String): java.sql.Date {
+            var date = LocalDate.parse(str)
+            return java.sql.Date(date.year - 1900, date.monthValue - 1, date.dayOfMonth)
     }
 
     private fun format_date(day: Int, month: Int, year: Int): String {
@@ -101,7 +105,7 @@ class PersonalStatsFragment: Fragment(R.layout.fragment_personal_save_meal) {
             day_str = "0$day"
         if (month < 10)
             month_str = "0$month"
-        return "$year-$month_str-$day_str"
+        return "${year}-$month_str-$day_str"
     }
 
     /////////////////////////////////////
