@@ -50,4 +50,8 @@ interface MealRepository {
     fun getFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int,category: String) : Observable<List<MealEntity>>
 
     fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int,category: String) : Observable<List<MealEntity>>
+
+    fun getMealById(idMeal: String):Observable<MealEntity>
+
+    abstract fun getIngredientsForMeal(idMeal : String) : Observable<List<String>>
 }

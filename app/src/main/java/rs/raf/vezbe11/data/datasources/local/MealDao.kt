@@ -69,4 +69,10 @@ abstract class MealDao {
             "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END")
     abstract fun getCountFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?, category: String) : Observable<Int>
 
+
+    @Query("SELECT * FROM meals WHERE idMeal = :idMeal")
+    abstract fun getMealById(idMeal: String):Observable<MealEntity>
+
+    @Query("SELECT idIngredient FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal ) WHERE m.idMeal = :idMeal")
+    abstract fun getIngredientsForMeal(idMeal : String) : Observable<List<String>>
 }

@@ -291,7 +291,8 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
 
 
     override fun onItemClick(text: String) {
-        TODO("Not yet implemented")
+        val newFragment = DetailsOfMealsFragment(text)
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragmentContainerMeals,newFragment)?.addToBackStack(null)?.commit()
     }
 
 

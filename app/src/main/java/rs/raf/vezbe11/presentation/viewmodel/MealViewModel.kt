@@ -35,6 +35,8 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val personalMealsState: MutableLiveData<PersonalMealState> = MutableLiveData()
     override val personalOneMealState: MutableLiveData<PersonalMealEntity> = MutableLiveData()
     override val plannerList: MutableLiveData<List<PlannerItem>> = MutableLiveData()
+    override val mealDetailsState: MutableLiveData<MealDetailsState>  = MutableLiveData()
+    override val ingredientsForMealState: MutableLiveData<IngredientsForMealState> = MutableLiveData()
 
     override fun fetchAllMeals() {
         val subscription = mealRepository
@@ -168,7 +170,7 @@ class MealViewModel (private val mealRepository: MealRepository,
 
 
     override fun getMealsByName(name: String) {
-        TODO("Not yet implemented")
+        TODO()
     }
 
     override fun getAllCategories() {
@@ -399,6 +401,38 @@ class MealViewModel (private val mealRepository: MealRepository,
     ,category: String
     ) {
         publishSubject2.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,a, category))
+    }
+
+    override fun getMealById(idMeal: String) {
+        val subscription = mealRepository
+            .getMealById(idMeal)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    mealDetailsState.value = MealDetailsState.Success(it)
+                },
+                {
+                    mealDetailsState.value = MealDetailsState.Error("Greska")
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun getIngredientsForMeal(idMeal: String) {
+        val subscription = mealRepository
+            .getIngredientsForMeal(idMeal)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    ingredientsForMealState.value = IngredientsForMealState.Success(it)
+                },
+                {
+                    ingredientsForMealState.value = IngredientsForMealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscription)
     }
 
     override fun getCaloriesByNameOfIngredientOrMeal(letters: String) {

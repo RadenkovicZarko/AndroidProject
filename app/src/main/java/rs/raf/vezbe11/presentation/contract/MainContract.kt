@@ -23,6 +23,8 @@ interface MainContract {
         val  deletePersonalMeal: LiveData<DeletePersonalMealState>
         val personalOneMealState: LiveData<PersonalMealEntity>
         val plannerList: LiveData<List<PlannerItem>>
+        val mealDetailsState : LiveData<MealDetailsState>
+        val ingredientsForMealState : LiveData<IngredientsForMealState>
         fun fetchAllMeals()
         fun fetchAllCategories()
 
@@ -68,6 +70,9 @@ interface MainContract {
 
         fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int,category: String)
 
+        fun getMealById(idMeal: String)
+
+        fun getIngredientsForMeal(idMeal : String)
 
     }
 }

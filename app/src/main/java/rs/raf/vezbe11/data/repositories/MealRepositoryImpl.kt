@@ -641,5 +641,14 @@ class MealRepositoryImpl (
         return localMealSource.getFilteredAndSortedMealsNormal(meal,ingredient,minCalories,maxCalories,sort,a,category)
     }
 
+    override fun getMealById(idMeal: String): Observable<MealEntity> {
+        return localMealSource.getMealById(idMeal)
+    }
+
+    override fun getIngredientsForMeal(idMeal: String): Observable<List<String>> {
+
+        return localMealSource.getIngredientsForMeal(idMeal)
+    }
+
 
 }
