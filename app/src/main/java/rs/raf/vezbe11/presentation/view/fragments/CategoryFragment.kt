@@ -86,9 +86,9 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
 //        // Pokrecemo operaciju dovlacenja podataka sa servera, kada podaci stignu,
 //        // bice sacuvani u bazi, tada ce se triggerovati observable na koji smo se pretplatili
 //        // preko metode getAllMovies()
-//        mainViewModel.fetchAllCategories()
-//        mainViewModel.fetchAllIngredients()
-//        mainViewModel.fetchAllMeals()
+        mainViewModel.fetchAllCategories()
+        mainViewModel.fetchAllIngredients()
+        mainViewModel.fetchAllMeals()
 
     }
 

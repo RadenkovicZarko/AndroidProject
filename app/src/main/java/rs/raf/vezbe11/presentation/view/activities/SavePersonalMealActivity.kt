@@ -34,6 +34,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
     val CURRENT_MEAL_KEY = "currentMealKey"
     val LOGIN_KEY = "loginKey"
     val EDIT = "edit"
+    var shouldEdit = true
 
     /////////////////////////////
     var datePickerTV: TextView? = null
@@ -75,6 +76,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
         loadCurrentUser()
         loadCurrentMeal()
         loadCurrentEdit()
+
     }
 
     private fun loadCurrentEdit() {
@@ -82,23 +84,22 @@ class SavePersonalMealActivity : AppCompatActivity() {
 
         val gson = Gson()
         personalMeal = gson.fromJson(message, PersonalMealEntity::class.java)
+        currentImageUrl = personalMeal?.strPersonalUrl?: currentImageUrl
     }
 
     private fun loadCurrentMeal() {
-        val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
-        val message = sharedPreferences.getString(CURRENT_MEAL_KEY, null) ?: return
-
+        val message = intent.getStringExtra(CURRENT_MEAL_KEY) ?: return
         if(message == "") return
         val gson = Gson()
         val meal = gson.fromJson(message, MealEntity::class.java)
         mainViewModel.setPersonalMealForSaving(meal)
-
+        shouldEdit = false
+        currentImageUrl = meal.strMealThumb?: currentImageUrl
     }
 
     private fun loadCurrentUser() {
         val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
         val message = sharedPreferences.getString(LOGIN_KEY, null)
-
         val gson = Gson()
         val user = gson.fromJson(message, UserEntity::class.java)
         mainViewModel.setCurrentUser(user)
@@ -108,12 +109,12 @@ class SavePersonalMealActivity : AppCompatActivity() {
     // Showing image of the meal
     private fun initImageView() {
         mealIV = findViewById(R.id.saved_mealIVa)
-        var url = mainViewModel.currentPersonalMealSave.value?.strImageSource
+        var url = mainViewModel.currentPersonalMealSave.value?.strMealThumb
 
-        if(url == null || url == "") url = personalMeal?.strPersonalUrl
+        if(url == null || url == "")
+            url = personalMeal?.strPersonalUrl
 
         Glide.with(this).load(url).circleCrop().into(mealIV ?: return)
-
 
         mealIV?.setOnClickListener {
             openCamera()
@@ -201,7 +202,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
             extractVals(personalMeal?.date)
         } else {
             year = c.get(Calendar.YEAR)
-            month = (c.get(Calendar.MONTH) + 1)
+            month = (c.get(Calendar.MONTH)+1)
             day = c.get(Calendar.DAY_OF_MONTH)
         }
         changeDate(day, month, year)
@@ -214,7 +215,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
                     // on below line we are setting
                     // date to our text view.
                     year = yearr
-                    month = (monthOfYear + 1)
+                    month = (monthOfYear)
                     day = dayOfMonth
 
                     changeDate(day, month, year)
@@ -292,17 +293,29 @@ class SavePersonalMealActivity : AppCompatActivity() {
                 var userId = mainViewModel.currentUser.value?.userName
                 var name = nameMealTV?.text.toString()
 
-                val personalMeal = PersonalMealEntity(
-                    1,
-                    name,
-                    type_of_meal,
-                    toDate(date_str),
-                    currentImageUrl,
-                    mealId,
-                    userId
-                )
 
-                mainViewModel.insertPersonalMeal(personalMeal)
+                if(shouldEdit){
+                    val pm = PersonalMealEntity(
+                        idPersonalMeal= personalMeal?.idPersonalMeal?:0,
+                        strName= name,
+                        strTypeOfMeal=type_of_meal,
+                        date=toDate(date_str),
+                        strPersonalUrl=currentImageUrl,
+                        idMealForeign=mealId,
+                        idUserForeign=userId
+                    )
+                    mainViewModel.updatePersonalMeal(pm)
+                } else{
+                    val personalMeal = PersonalMealEntity(
+                        strName= name,
+                        strTypeOfMeal=type_of_meal,
+                        date=toDate(date_str),
+                        strPersonalUrl=currentImageUrl,
+                        idMealForeign=mealId,
+                        idUserForeign=userId
+                    )
+                    mainViewModel.insertPersonalMeal(personalMeal)
+                }
                 Toast.makeText(this.applicationContext, "Meal saved: $name", Toast.LENGTH_SHORT)
                     .show()
                 finish()

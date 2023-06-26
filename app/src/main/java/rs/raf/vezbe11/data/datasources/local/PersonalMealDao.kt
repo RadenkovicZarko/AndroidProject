@@ -30,6 +30,10 @@ abstract class PersonalMealDao {
         deleteAll()
         insertAll(entities).blockingAwait()
     }
+
+    @Update
+    abstract fun update(entity: PersonalMealEntity): Completable
+
     @Query("SELECT * FROM personal_meals WHERE idUserForeign=:idUser")
     abstract fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealEntity>>
 
