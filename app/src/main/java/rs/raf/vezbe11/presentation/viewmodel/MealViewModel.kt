@@ -362,9 +362,10 @@ class MealViewModel (private val mealRepository: MealRepository,
         ingredient: String?,
         minCalories: Double?,
         maxCalories: Double?,
-        sort: Int?
+        sort: Int?,
+        category: String
     ) {
-        publishSubject5.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,0))
+        publishSubject5.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,0, category))
     }
 
     override fun getCountFilteredAndSortedMealsNormal(
@@ -372,9 +373,10 @@ class MealViewModel (private val mealRepository: MealRepository,
         ingredient: String?,
         minCalories: Double?,
         maxCalories: Double?,
-        sort: Int?
+        sort: Int?,
+        category: String
     ) {
-        publishSubject4.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,0))
+        publishSubject4.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,0, category))
     }
 
     override fun getFilteredAndSortedMealsBetween(
@@ -383,8 +385,9 @@ class MealViewModel (private val mealRepository: MealRepository,
         minCalories: Double?,
         maxCalories: Double?,
         sort: Int?,a:Int
+    ,category: String
     ) {
-        publishSubject3.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,a))
+        publishSubject3.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,a, category))
     }
 
     override fun getFilteredAndSortedMealsNormal(
@@ -393,8 +396,9 @@ class MealViewModel (private val mealRepository: MealRepository,
         minCalories: Double?,
         maxCalories: Double?,
         sort: Int?,a:Int
+    ,category: String
     ) {
-        publishSubject2.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,a))
+        publishSubject2.onNext(QueryFilter(meal,ingredient,minCalories,maxCalories,sort,a, category))
     }
 
     override fun getCaloriesByNameOfIngredientOrMeal(letters: String) {
@@ -410,7 +414,7 @@ class MealViewModel (private val mealRepository: MealRepository,
             .distinctUntilChanged()
             .switchMap { it ->
                 mealRepository
-                    .getFilteredAndSortedMealsBetween(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort,it.a)
+                    .getFilteredAndSortedMealsBetween(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort,it.a,it.category)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
@@ -432,7 +436,7 @@ class MealViewModel (private val mealRepository: MealRepository,
             .distinctUntilChanged()
             .switchMap { it ->
                 mealRepository
-                    .getCountFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort)
+                    .getCountFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort,it.category)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
@@ -459,7 +463,7 @@ class MealViewModel (private val mealRepository: MealRepository,
             .distinctUntilChanged()
             .switchMap { it ->
                 mealRepository
-                    .getFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort,it.a)
+                    .getFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort,it.a,it.category)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
@@ -481,7 +485,7 @@ class MealViewModel (private val mealRepository: MealRepository,
             .distinctUntilChanged()
             .switchMap { it ->
                 mealRepository
-                    .getCountFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort)
+                    .getCountFilteredAndSortedMealsNormal(it.meal,it.ingredient,it.minCalories,it.maxCalories,it.sort,it.category)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
@@ -531,13 +535,14 @@ class MealViewModel (private val mealRepository: MealRepository,
                       ingredient: String?,
                       minCalories: Double?,
                       maxCalories: Double?,
-                      sort: Int?,a:Int){
+                      sort: Int?,a:Int,category: String){
         val meal: String? = meal
         val ingredient: String? = ingredient
         val minCalories: Double? = minCalories
         val maxCalories: Double? = maxCalories
         val sort: Int? = sort
         val a : Int = a
+        val category = category
 
     }
 }

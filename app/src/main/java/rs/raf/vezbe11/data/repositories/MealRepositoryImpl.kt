@@ -600,10 +600,10 @@ class MealRepositoryImpl (
         ingredient: String?,
         minCalories: Double?,
         maxCalories: Double?,
-        sort: Int?,
+        sort: Int?, category: String
 
     ): Observable<Int> {
-        return localMealSource.getCountFilteredAndSortedMealsBetween(meal,ingredient,minCalories,maxCalories,sort)
+        return localMealSource.getCountFilteredAndSortedMealsBetween(meal,ingredient,minCalories,maxCalories,sort, category)
     }
 
     override fun getCountFilteredAndSortedMealsNormal(
@@ -612,9 +612,10 @@ class MealRepositoryImpl (
         minCalories: Double?,
         maxCalories: Double?,
         sort: Int?,
+        category: String
 
     ): Observable<Int> {
-        return localMealSource.getCountFilteredAndSortedMealsNormal(meal,ingredient,minCalories,maxCalories,sort)
+        return localMealSource.getCountFilteredAndSortedMealsNormal(meal,ingredient,minCalories,maxCalories,sort,category)
     }
 
     override fun getFilteredAndSortedMealsBetween(
@@ -622,10 +623,11 @@ class MealRepositoryImpl (
         ingredient: String?,
         minCalories: Double?,
         maxCalories: Double?,
-        sort: Int?,a:Int
+        sort: Int?,a:Int,
+        category: String
     ): Observable<List<MealEntity>> {
 
-        return localMealSource.getFilteredAndSortedMealsBetween(meal,ingredient,minCalories,maxCalories,sort,a)
+        return localMealSource.getFilteredAndSortedMealsBetween(meal,ingredient,minCalories,maxCalories,sort,a, category)
     }
 
     override fun getFilteredAndSortedMealsNormal(
@@ -633,10 +635,10 @@ class MealRepositoryImpl (
         ingredient: String?,
         minCalories: Double?,
         maxCalories: Double?,
-        sort: Int?,a:Int
+        sort: Int?,a:Int, category: String
     ): Observable<List<MealEntity>> {
 
-        return localMealSource.getFilteredAndSortedMealsNormal(meal,ingredient,minCalories,maxCalories,sort,a)
+        return localMealSource.getFilteredAndSortedMealsNormal(meal,ingredient,minCalories,maxCalories,sort,a,category)
     }
 
 

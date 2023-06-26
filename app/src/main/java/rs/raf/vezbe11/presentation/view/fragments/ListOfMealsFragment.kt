@@ -91,13 +91,13 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
             nameOfMeal = it.toString()
             if(nameOfMeal == "")
                 nameOfMeal=null
-            if(binding.cbBetween.isSelected) {
-                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0)
-                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort)
+            if(!binding.cbBetween.isChecked) {
+                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0,text)
+                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort,text)
             }
             else {
-                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 )
-                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort )
+                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 ,text)
+                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort ,text)
             }
             currentPage = 0
 
@@ -107,13 +107,13 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
             nameOfIngredient = it.toString()
             if(nameOfIngredient == "")
                 nameOfIngredient=null
-            if(binding.cbBetween.isSelected) {
-                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0)
-                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort)
+            if(!binding.cbBetween.isChecked) {
+                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0,text)
+                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort,text)
             }
             else {
-                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 )
-                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort )
+                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 ,text)
+                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort ,text)
             }
             currentPage = 0
         }
@@ -125,7 +125,7 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
             loadPreviousPage()
         }
         binding.filterBtn.setOnClickListener{
-            if(binding.etLess.text.toString()!="")
+            if(binding.etLess.text.toString().toDoubleOrNull()!=0.0)
             {
                 lCalories = binding.etLess.text.toString().toDoubleOrNull()
             }
@@ -133,7 +133,7 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
             {
                 lCalories = null
             }
-            if(binding.etHigher.text.toString()!="")
+            if(binding.etHigher.text.toString().toDoubleOrNull()!=0.0)
             {
                 hCalories = binding.etHigher.text.toString().toDoubleOrNull()
             }
@@ -141,35 +141,40 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
             {
                 hCalories = null
             }
-            if(binding.cbBetween.isSelected) {
-                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0)
-                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort)
+            if(!binding.cbBetween.isChecked) {
+                Timber.e("USAO")
+                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0,text)
+                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort,text)
             }
             else {
-                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 )
-                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort )
+                Timber.e(nameOfMeal + " " + nameOfIngredient  + " " + lCalories  + " " + hCalories  + " " + sort  + " " + text)
+                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 ,text)
+                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort ,text)
             }
+            currentPage = 0
 
         }
         binding.ascBtn.setOnClickListener {
-            if(binding.cbBetween.isSelected) {
-                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0)
-                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort)
+            if(!binding.cbBetween.isChecked) {
+                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0,text)
+                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort,text)
             }
             else {
-                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 )
-                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort )
+                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 ,text)
+                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort ,text)
             }
+            currentPage = 0
         }
         binding.dscBtn.setOnClickListener{
-            if(binding.cbBetween.isSelected) {
-                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0)
-                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort)
+            if(!binding.cbBetween.isChecked) {
+                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0,text)
+                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort,text)
             }
             else {
-                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 )
-                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort )
+                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0 ,text)
+                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort ,text)
             }
+            currentPage = 0
         }
     }
 
@@ -181,13 +186,13 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
             val startIndex = previousPage * 10
 
             // Implement your logic to load the previous page of data (e.g., from an API)
-            if(binding.cbBetween.isSelected) {
-                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, startIndex)
-                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort)
+            if(!binding.cbBetween.isChecked) {
+                mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, startIndex,text)
+                mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort,text)
             }
             else {
-                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, startIndex )
-                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort )
+                mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, startIndex ,text)
+                mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort ,text)
             }
 
             isLoading = false
@@ -205,13 +210,13 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
 
         // Implement your logic to load the next page of data (e.g., from an API)
 
-        if(binding.cbBetween.isSelected) {
-            mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, startIndex)
-            mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort)
+        if(!binding.cbBetween.isChecked) {
+            mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, startIndex,text)
+            mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort,text)
         }
         else {
-            mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, startIndex )
-            mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort )
+            mainViewModel.getFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, startIndex ,text)
+            mainViewModel.getCountFilteredAndSortedMealsBetween(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort ,text)
         }
         isLoading = false
         currentPage = nextPage
@@ -221,7 +226,7 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
 
     private fun updateButtonStates() {
         binding.previousButton.isEnabled = currentPage > 0
-        binding.nextButton.isEnabled = currentPage < totalPages
+        binding.nextButton.isEnabled = currentPage < totalPages -1
     }
 
 
@@ -231,7 +236,10 @@ class ListOfMealsFragment : Fragment(R.layout.fragment_list_of_meals), MealAdapt
             renderState(it)
         })
 
-        mainViewModel.getMealsInRange(0)
+
+        mainViewModel.getFilteredAndSortedMealsNormal(nameOfMeal, nameOfIngredient, lCalories, hCalories, sort, 0,text)
+        mainViewModel.getCountFilteredAndSortedMealsNormal(  nameOfMeal, nameOfIngredient, lCalories, hCalories, sort,text)
+
 
         mainViewModel.numOfMealsState.observe(viewLifecycleOwner, Observer{ it->
             renderNumOfMealsState(it)

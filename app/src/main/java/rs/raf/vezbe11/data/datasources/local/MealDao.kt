@@ -49,24 +49,24 @@ abstract class MealDao {
 
 
     @Query("SELECT DISTINCT m.idMeal, strmeal, strDrinkAlternate, strCategory,strArea,strInstructions,strMealThumb,strTags,strYoutube,strSource,strImageSource,strCreativeCommonsConfirmed,dateModified,sumOfCalories FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE \n" +
-            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND ((:minCalories IS NULL OR sumOfCalories >= :minCalories ) AND  (:maxCalories IS NULL OR sumOfCalories <= :maxCalories )) \n" +
+            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND (((:minCalories IS NOT NULL AND sumOfCalories >= :minCalories ) AND  (:maxCalories IS NOT NULL AND sumOfCalories <= :maxCalories )) OR (:minCalories IS NULL AND :maxCalories IS NULL)) AND strCategory = :category \n" +
             "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END LIMIT 10 OFFSET :a")
-    abstract fun getFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int) : Observable<List<MealEntity>>
+    abstract fun getFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int,category: String) : Observable<List<MealEntity>>
 
     @Query("SELECT DISTINCT m.idMeal, strmeal, strDrinkAlternate, strCategory,strArea,strInstructions,strMealThumb,strTags,strYoutube,strSource,strImageSource,strCreativeCommonsConfirmed,dateModified,sumOfCalories FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE \n" +
-            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND ((:minCalories IS NULL OR sumOfCalories <= :minCalories ) OR  (:maxCalories IS NULL OR sumOfCalories >= :maxCalories )) \n" +
+            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND (((:minCalories IS NOT NULL AND sumOfCalories <= :minCalories ) OR  (:maxCalories IS NOT NULL AND sumOfCalories >= :maxCalories ))OR (:minCalories IS NULL AND :maxCalories IS NULL))  AND strCategory = :category \n" +
             "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END LIMIT 10 OFFSET :a")
-    abstract fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?, a:Int) : Observable<List<MealEntity>>
+    abstract fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?, a:Int, category: String) : Observable<List<MealEntity>>
 
 
     @Query("SELECT COUNT (DISTINCT m.idMeal) FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE \n" +
-            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND ((:minCalories IS NULL OR sumOfCalories >= :minCalories ) AND  (:maxCalories IS NULL OR sumOfCalories <= :maxCalories )) \n" +
+            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND (((:minCalories IS NOT NULL AND sumOfCalories >= :minCalories ) AND  (:maxCalories IS NOT NULL AND sumOfCalories <= :maxCalories ))OR (:minCalories IS NULL AND :maxCalories IS NULL) ) AND strCategory = :category \n" +
             "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END")
-    abstract fun getCountFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?) : Observable<Int>
+    abstract fun getCountFilteredAndSortedMealsBetween(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?, category: String) : Observable<Int>
 
     @Query("SELECT COUNT (DISTINCT m.idMeal) FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE \n" +
-            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND ((:minCalories IS NULL OR sumOfCalories <= :minCalories ) OR  (:maxCalories IS NULL OR sumOfCalories >= :maxCalories )) \n" +
+            "(:meal IS NULL OR strMeal LIKE '%' || :meal || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') AND (((:minCalories IS NOT NULL AND sumOfCalories <= :minCalories ) OR  (:maxCalories IS NOT NULL AND sumOfCalories >= :maxCalories ))OR (:minCalories IS NULL AND :maxCalories IS NULL) )AND strCategory = :category \n" +
             "ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE (CASE WHEN :sort IS 1 THEN sumOfCalories ELSE -sumOfCalories END)  END")
-    abstract fun getCountFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?) : Observable<Int>
+    abstract fun getCountFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?, category: String) : Observable<Int>
 
 }
