@@ -88,5 +88,7 @@ abstract class MealDao {
             "AND (:area IS NULL OR strArea LIKE '%' || :area || '%') AND (:tag IS NULL OR strTags LIKE '%' || :tag || '%') AND (:meal IS NULL OR strmeal LIKE '%' || :meal || '%') ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE strmeal END")
     abstract fun getCountOfFilteredMeals(category: String?, ingredient: String?, area: String? , tag:String?, meal: String?, sort: Int? ) : Observable<Int>
 
+    @Query("SELECT COUNT(idMeal) FROM meals")
+    abstract fun countAllMeals() : Observable<Int>
 
 }

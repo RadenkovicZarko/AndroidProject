@@ -377,6 +377,10 @@ class MealRepositoryImpl (
         return localPersonalMealSource.update(meal)
     }
 
+    override fun getAllMealsCount():Observable<Int>{
+        return localMealSource.countAllMeals()
+    }
+
 //    private fun makeString () : String
 //    {
 //        val localIngredients = localIngredientSource.getAll()

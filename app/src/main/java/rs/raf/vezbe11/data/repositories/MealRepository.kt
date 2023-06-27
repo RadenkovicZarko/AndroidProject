@@ -40,6 +40,8 @@ interface MealRepository {
     fun getAllPersonalMealsByUser(idUser: String): Observable<List<PersonalMealEntity>>
 
     fun updatePersonalMeal(meal: PersonalMealEntity): Completable
+
+    fun getAllMealsCount():Observable<Int>
     fun getAllCategories():Observable<List<CategoryEntity>>
 
     fun getAllMealsForCategory(category : String) : Observable<List<MealEntity>>

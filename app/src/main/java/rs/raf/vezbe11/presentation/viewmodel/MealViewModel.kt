@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 class MealViewModel (private val mealRepository: MealRepository,
 ) : ViewModel(), MainContract.ViewModel{
 
-    private val subscriptions = CompositeDisposable()
+    override val subscriptions = CompositeDisposable()
     override val mealState : MutableLiveData<MealState> = MutableLiveData()
     override val userState : MutableLiveData<UserState> = MutableLiveData()
     override val categoryState : MutableLiveData<CategoryState> = MutableLiveData()
@@ -41,7 +41,7 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val ingredientsForMealState: MutableLiveData<IngredientsForMealState> = MutableLiveData()
     override val personalMealUpdate: MutableLiveData<AddPersonalMealState> = MutableLiveData()
     override val filterMealState: MutableLiveData<FilterMealState> = MutableLiveData()
-    override  val countOfFilterMealState: MutableLiveData<CountOfFilterMealState> = MutableLiveData()
+    override val countOfFilterMealState: MutableLiveData<CountOfFilterMealState> = MutableLiveData()
 
     override fun fetchAllMeals() {
         val subscription = mealRepository
@@ -283,6 +283,13 @@ class MealViewModel (private val mealRepository: MealRepository,
                 }
             )
         subscriptions.add(subscription)
+    }
+
+    override fun getMealsCount(): Int {
+        val count = mealRepository
+            .getAllMealsCount()
+            .blockingFirst()
+        return count?:0
     }
 
     override fun loadPlannerList() {

@@ -20,6 +20,7 @@ import rs.raf.vezbe11.databinding.FragmentCategoryBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
+import timber.log.Timber
 
 class MainNavigationActivity: AppCompatActivity()  {
     var viewPager: ViewPager? = null
@@ -27,6 +28,7 @@ class MainNavigationActivity: AppCompatActivity()  {
     val LOGIN_KEY = "loginKey"
     private val mainViewModel: MainContract.ViewModel by viewModel<MealViewModel>()
     var loadingPbCat: ProgressBar? = null
+    var shouldShowLoad = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,13 +81,20 @@ class MainNavigationActivity: AppCompatActivity()  {
 
 
     fun fetchAllData() {
-        mainViewModel.fetchAllD()
+        val num = mainViewModel.getMealsCount()
+
+        if(num > 40){
+            shouldShowLoad = false
+            Timber.e("Already have some data: $num")
+        }
+
+        val subs = mainViewModel.fetchAllD()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-                        showLoadingState(true) // Show loading state
+                        showLoadingState(shouldShowLoad) // Show loading state
                     }
                     is Resource.Success -> {
                         // All fetch operations were successful
@@ -101,6 +110,7 @@ class MainNavigationActivity: AppCompatActivity()  {
                     }
                 }
             }
+        mainViewModel.subscriptions.add(subs)
     }
 
     private fun showLoadingState(loading: Boolean) {
