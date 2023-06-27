@@ -1,8 +1,11 @@
 package rs.raf.vezbe11.presentation.view.fragments
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -18,15 +21,19 @@ import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.activities.PlannerListMealsActivity
 import rs.raf.vezbe11.presentation.view.recycler.adapter.PlannerAdapter
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
+import timber.log.Timber
 
 // INSERT INTO users VALUES ("Vanjce","123",21,210,150,0,10)
-class PersonalPlanFragment: Fragment(R.layout.fragment_personal_plan), PlannerAdapter.OnItemClickListener{
+class PersonalPlanFragment : Fragment(R.layout.fragment_personal_plan),
+    PlannerAdapter.OnItemClickListener {
     private val mainViewModel: MainContract.ViewModel by sharedViewModel<MealViewModel>()
+
     ////////////////////////////
     private lateinit var adapter: PlannerAdapter
     private var listRV: RecyclerView? = null
     private var sendBtn: Button? = null
     private var emailET: EditText? = null
+
     ////////////////////////////
     private val SECOND_ACTIVITY_REQUEST_CODE = 0
     private val MEAL_PLANNER_KEY = "mealPlannerKey"
@@ -43,6 +50,40 @@ class PersonalPlanFragment: Fragment(R.layout.fragment_personal_plan), PlannerAd
         initUi(view)
         initRecycler(view)
         initObservers(view)
+        initListeners()
+    }
+
+    private fun initListeners() {
+        sendBtn?.setOnClickListener {
+            sendEmail(emailET?.text.toString())
+
+        }
+    }
+
+    private fun sendEmail(email: String) {
+        val gson = Gson()
+        var listParam = ""
+        mainViewModel.plannerList.value?.forEach {
+            if(it.meal!=null)
+            {
+                listParam += "\n---------------------------------------------------------\n"
+                listParam += it.day +"\n"
+                listParam += it.typeOfMeal +"\n"
+                listParam += it.meal?.idMeal+" "+it.meal?.strMeal + " " +it.meal?.strCategory +" "+it.meal?.strInstructions+" "+it.meal?.strYoutube+" "+it.meal?.strTags+"\n"
+            }
+        }
+
+
+        val emailSubject = "Open My App"
+        val emailContent = "myapp://open"
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/html"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            putExtra(Intent.EXTRA_SUBJECT, emailSubject)
+            putExtra(Intent.EXTRA_TEXT, listParam)
+        }
+        startActivity(Intent.createChooser(intent, "Send Email"))
     }
 
     private fun initUi(view: View) {
@@ -70,7 +111,7 @@ class PersonalPlanFragment: Fragment(R.layout.fragment_personal_plan), PlannerAd
         current_day_type = position
         val intent = Intent(context, PlannerListMealsActivity::class.java)
         val str = "${meal?.day} - ${meal?.typeOfMeal}"
-        intent.putExtra(MEAL_METADATA_KEY,str)
+        intent.putExtra(MEAL_METADATA_KEY, str)
         startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
     }
 

@@ -27,14 +27,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/boarder"
+
             android:text="Category"
             tools:layout_editor_absoluteX="304dp"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0dp"
+            android:background="@drawable/boarder"
+            />
 
         <Button
             android:id="@+id/areaBtn"
             android:layout_width="0dp"
+            android:backgroundTint="@color/eva_purple"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/boarder"

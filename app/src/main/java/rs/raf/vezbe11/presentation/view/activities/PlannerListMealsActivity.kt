@@ -20,13 +20,15 @@ import rs.raf.vezbe11.presentation.view.recycler.adapter.PlannerMealAdapter
 import rs.raf.vezbe11.presentation.view.states.MealState
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
 
-class PlannerListMealsActivity: AppCompatActivity(), PlannerMealAdapter.OnItemClickListener {
+class PlannerListMealsActivity : AppCompatActivity(), PlannerMealAdapter.OnItemClickListener {
     private val mainViewModel: MainContract.ViewModel by viewModel<MealViewModel>()
+
     ////////////////////////////
     private lateinit var adapter: PlannerMealAdapter
     private var listRV: RecyclerView? = null
     private var progressBar: ProgressBar? = null
     private var mealInfo: TextView? = null
+
     ////////////////////////////
     private val MEAL_PLANNER_KEY = "mealPlannerKey"
     private val MEAL_METADATA_KEY = "mealMetadataKey"
@@ -62,8 +64,8 @@ class PlannerListMealsActivity: AppCompatActivity(), PlannerMealAdapter.OnItemCl
         listRV?.adapter = adapter
     }
 
-    private fun initObservers(){
-        mainViewModel.mealState.observe(this, Observer{ it->
+    private fun initObservers() {
+        mainViewModel.mealState.observe(this, Observer { it ->
             renderState(it)
         })
 

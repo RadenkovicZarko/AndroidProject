@@ -25,7 +25,7 @@ class LogInActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
-        val message = sharedPreferences.getString(LOGIN_KEY,null)
+        val message = sharedPreferences.getString(LOGIN_KEY, null)
         if (message != null) {
             val intent = Intent(this, MainNavigationActivity::class.java)
             startActivity(intent)
@@ -42,18 +42,20 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun initUi() {
-
         binding.loginButton.setOnClickListener { e ->
-            mainViewModel.findUserWithUsernameAndPassword(binding.etUsername.text.toString(), binding.etPassword.text.toString())
+            mainViewModel.findUserWithUsernameAndPassword(
+                binding.etUsername.text.toString(),
+                binding.etPassword.text.toString()
+            )
             mainViewModel.userState.observe(this, Observer { it ->
-                when(it){
+                when (it) {
                     is UserState.Success -> {
                         val sharedPreferences = getSharedPreferences(packageName, MODE_PRIVATE)
                         val gson = Gson()
                         val json: String = gson.toJson(it.users[0])
 
                         val editor = sharedPreferences.edit()
-                        editor.putString(LOGIN_KEY,json)
+                        editor.putString(LOGIN_KEY, json)
                         editor.apply()
                         val intent = Intent(this, MainNavigationActivity::class.java)
                         startActivity(intent)
