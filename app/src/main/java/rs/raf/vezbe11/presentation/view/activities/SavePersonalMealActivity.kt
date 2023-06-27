@@ -51,6 +51,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
     var currentImageUrl =
         "https://preview.redd.it/h3qww4vmh3191.jpg?width=960&crop=smart&auto=webp&v=enabled&s=9b5ce1a7e50e30a2bc2c2873e895dcdae2626289"
     var personalMeal: PersonalMealEntity? = null
+    var kcals = 0.0
 
     /////////////////////////////
     val REQUEST_IMAGE_CAPTURE = 1
@@ -74,8 +75,8 @@ class SavePersonalMealActivity : AppCompatActivity() {
 
     private fun load_shared_pref() {
         loadCurrentUser()
-        loadCurrentMeal()
         loadCurrentEdit()
+        loadCurrentMeal()
 
     }
 
@@ -85,6 +86,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
         val gson = Gson()
         personalMeal = gson.fromJson(message, PersonalMealEntity::class.java)
         currentImageUrl = personalMeal?.strPersonalUrl?: currentImageUrl
+        kcals = personalMeal?.calories?: 0.0
     }
 
     private fun loadCurrentMeal() {
@@ -95,6 +97,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
         mainViewModel.setPersonalMealForSaving(meal)
         shouldEdit = false
         currentImageUrl = meal.strMealThumb?: currentImageUrl
+        kcals = meal.sumOfCalories
     }
 
     private fun loadCurrentUser() {
@@ -293,7 +296,6 @@ class SavePersonalMealActivity : AppCompatActivity() {
                 var userId = mainViewModel.currentUser.value?.userName
                 var name = nameMealTV?.text.toString()
 
-
                 if(shouldEdit){
                     val pm = PersonalMealEntity(
                         idPersonalMeal= personalMeal?.idPersonalMeal?:0,
@@ -301,6 +303,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
                         strTypeOfMeal=type_of_meal,
                         date=toDate(date_str),
                         strPersonalUrl=currentImageUrl,
+                        calories=kcals,
                         idMealForeign=mealId,
                         idUserForeign=userId
                     )
@@ -311,6 +314,7 @@ class SavePersonalMealActivity : AppCompatActivity() {
                         strTypeOfMeal=type_of_meal,
                         date=toDate(date_str),
                         strPersonalUrl=currentImageUrl,
+                        calories=kcals,
                         idMealForeign=mealId,
                         idUserForeign=userId
                     )

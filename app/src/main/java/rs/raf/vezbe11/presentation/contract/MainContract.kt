@@ -1,6 +1,5 @@
 package rs.raf.vezbe11.presentation.contract
 
-import android.app.slice.Slice
 import androidx.lifecycle.LiveData
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -29,7 +28,7 @@ interface MainContract {
         val plannerList: LiveData<List<PlannerItem>>
         val mealDetailsState : LiveData<MealDetailsState>
         val ingredientsForMealState : LiveData<IngredientsForMealState>
-        val personalMealsDates: LiveData<PersonalMealState>
+        val personalMealsDates: LiveData<List<PersonalMealEntity>>
         val personalMealUpdate: LiveData<AddPersonalMealState>
         val filterMealState: LiveData<FilterMealState>
         val countOfFilterMealState : LiveData<CountOfFilterMealState>
@@ -66,7 +65,8 @@ interface MainContract {
 
         fun getOnePersonalMealsByUser(idUser: String, idMeal: String)
 
-        fun getPersonalMealsBetweenDates(startDate: Long, endDate: Long, idUser: String)
+        fun getPersonalMealsBetweenDates(startDate: Long, endDate: Long, idUser: String): List<PersonalMealEntity>
+
 
         fun getMealsCount(): Int
 

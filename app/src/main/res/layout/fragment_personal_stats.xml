@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:gravity="center"
     android:orientation="vertical">
 
     <!--text view for displaying heading-->
@@ -17,18 +17,67 @@
         android:layout_marginBottom="4dp"
         android:gravity="center"
         android:padding="4dp"
-        android:text="@string/this_week"
+        android:text="Recommended daily intake: 2000 kcal"
         android:textAlignment="center"
         android:textColor="@color/eva_green"
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <!--line graph view where we will
+    <!--bar chart view where we will
         be displaying our data-->
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/idGraphView"
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/statsTV" />
+        android:layout_height="400dp"
+        android:layout_weight="1" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        >
+
+
+        <Button
+            android:id="@+id/show_kcalBtn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="40dp"
+            android:backgroundTint="@color/eva_purple"
+            android:text="@string/kcal"
+            android:textColor="@color/eva_green"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/show_countBtn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:backgroundTint="@color/eva_purple"
+            android:text="@string/count"
+            android:textColor="@color/eva_green"
+            android:textSize="17sp" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/logoutBtn"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/eva_green"
+        android:text="@string/logout"
+        android:textColor="@color/eva_purple"
+        android:textSize="17sp" />
+
+
+</LinearLayout>

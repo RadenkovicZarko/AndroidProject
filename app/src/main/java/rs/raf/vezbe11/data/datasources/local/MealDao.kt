@@ -91,4 +91,7 @@ abstract class MealDao {
     @Query("SELECT COUNT(idMeal) FROM meals")
     abstract fun countAllMeals() : Observable<Int>
 
+    @Query("Select sumOfCalories FROM meals WHERE idMeal = :idMeal")
+    abstract fun getKcalById(idMeal: String):Observable<Double>
+
 }

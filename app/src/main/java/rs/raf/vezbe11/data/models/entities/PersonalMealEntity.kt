@@ -16,6 +16,7 @@ data class PersonalMealEntity(
     @TypeConverters(DateConverter::class)
     val date: Date?,
     val strPersonalUrl: String?,
+    val calories: Double?,
     val idMealForeign: String?,
     val idUserForeign: String?
 )

@@ -17,5 +17,8 @@
     <string name="snack">Snack</string>
     <string name="enter_email">Enter email</string>
     <string name="this_week">This week</string>
+    <string name="count">count</string>
+    <string name="kcal">kcal</string>
+    <string name="logout">logout</string>
 
 </resources>

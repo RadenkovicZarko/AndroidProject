@@ -373,6 +373,10 @@ class MealRepositoryImpl (
         return localPersonalMealSource.getPersonalMealsBetweenDatesFromUser(startDate,endDate,idUser);
     }
 
+    override fun getCaloriesForMeal(idMeal: String): Observable<Double> {
+        return localMealSource.getKcalById(idMeal)
+    }
+
     override fun updatePersonalMeal(meal: PersonalMealEntity): Completable{
         return localPersonalMealSource.update(meal)
     }
