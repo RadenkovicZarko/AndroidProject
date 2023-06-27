@@ -1,6 +1,8 @@
 package rs.raf.vezbe11.presentation.contract
 
+import android.app.slice.Slice
 import androidx.lifecycle.LiveData
+import io.reactivex.Observable
 import rs.raf.vezbe11.data.models.PlannerItem
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
@@ -26,6 +28,8 @@ interface MainContract {
         val ingredientsForMealState : LiveData<IngredientsForMealState>
         val personalMealsDates: LiveData<PersonalMealState>
         val personalMealUpdate: LiveData<AddPersonalMealState>
+        val filterMealState: LiveData<FilterMealState>
+        val countOfFilterMealState : LiveData<CountOfFilterMealState>
         fun fetchAllMeals()
         fun fetchAllCategories()
 
@@ -78,6 +82,7 @@ interface MainContract {
         fun getMealById(idMeal: String)
 
         fun getIngredientsForMeal(idMeal : String)
-
+        fun getFilteredMeals(category: String?, ingredient: String?, area: String?, tag: String?, meal: String?, sort: Int?,a:Int)
+        fun getCountOfFilteredMeals(category: String?, ingredient: String?, area: String? , tag:String?, meal: String?, sort: Int? )
     }
 }

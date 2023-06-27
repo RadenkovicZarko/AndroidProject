@@ -56,6 +56,9 @@ interface MealRepository {
     fun getFilteredAndSortedMealsNormal(meal:String?,ingredient:String?,minCalories:Double?,maxCalories:Double?,sort:Int?,a:Int,category: String) : Observable<List<MealEntity>>
 
     fun getMealById(idMeal: String):Observable<MealEntity>
+    fun getIngredientsForMeal(idMeal : String) : Observable<List<String>>
+    fun getFilteredMeals(category: String?, ingredient: String?, area: String? , tag:String?, meal: String?, sort: Int?, a : Int): Observable<List<MealEntity>>
+    fun getCountOfFilteredMeals(category: String?, ingredient: String?, area: String? , tag:String?, meal: String?, sort: Int? ) : Observable<Int>
 
-    abstract fun getIngredientsForMeal(idMeal : String) : Observable<List<String>>
+
 }

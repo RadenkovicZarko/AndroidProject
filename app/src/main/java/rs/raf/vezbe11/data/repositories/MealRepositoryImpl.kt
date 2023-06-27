@@ -658,5 +658,21 @@ class MealRepositoryImpl (
         return localMealSource.getIngredientsForMeal(idMeal)
     }
 
+    override fun getFilteredMeals(category: String?, ingredient: String?, area: String?, tag: String?, meal: String?, sort: Int?,a : Int) : Observable<List<MealEntity>>
+    {
+        return localMealSource.getFilteredMeals(category,ingredient,area, tag, meal, sort,a)
+    }
+
+    override fun getCountOfFilteredMeals(
+        category: String?,
+        ingredient: String?,
+        area: String?,
+        tag: String?,
+        meal: String?,
+        sort: Int?
+    ): Observable<Int> {
+        return localMealSource.getCountOfFilteredMeals(category, ingredient, area, tag, meal, sort)
+    }
+
 
 }

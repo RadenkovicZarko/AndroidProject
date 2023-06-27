@@ -39,6 +39,8 @@ class MealViewModel (private val mealRepository: MealRepository,
     override val mealDetailsState: MutableLiveData<MealDetailsState>  = MutableLiveData()
     override val ingredientsForMealState: MutableLiveData<IngredientsForMealState> = MutableLiveData()
     override val personalMealUpdate: MutableLiveData<AddPersonalMealState> = MutableLiveData()
+    override val filterMealState: MutableLiveData<FilterMealState> = MutableLiveData()
+    override  val countOfFilterMealState: MutableLiveData<CountOfFilterMealState> = MutableLiveData()
 
     override fun fetchAllMeals() {
         val subscription = mealRepository
@@ -470,13 +472,59 @@ class MealViewModel (private val mealRepository: MealRepository,
         subscriptions.add(subscription)
     }
 
+    override fun getCountOfFilteredMeals(
+        category: String?,
+        ingredient: String?,
+        area: String?,
+        tag: String?,
+        meal: String?,
+        sort: Int?
+    ) {
+        publishSubject7.onNext(QueryFilterMeals(category, ingredient, area, tag, meal, sort,0))
+    }
+
+    override fun getFilteredMeals(
+        category: String?,
+        ingredient: String?,
+        area: String?,
+        tag: String?,
+        meal: String?,
+        sort: Int?,
+        a: Int
+    ) {
+        publishSubject6.onNext(QueryFilterMeals(category, ingredient, area, tag, meal, sort,a))
+
+    }
+
+    class QueryFilterMeals(
+        category: String?,
+        ingredient: String?,
+        area: String?,
+        tag: String?,
+        meal: String?,
+        sort: Int?,
+        a : Int
+    ){
+        val category = category
+        val ingredient = ingredient
+        val area = area
+        val tag = tag
+        val meal = meal
+        val sort = sort
+        val a = a
+    }
+
     override fun getCaloriesByNameOfIngredientOrMeal(letters: String) {
         publishSubject.onNext(letters)
     }
 
     private val publishSubject3: PublishSubject<QueryFilter> = PublishSubject.create()
     private val publishSubject5: PublishSubject<QueryFilter> = PublishSubject.create()
-
+    private val publishSubject6: PublishSubject<QueryFilterMeals> = PublishSubject.create()
+    private val publishSubject7: PublishSubject<QueryFilterMeals> = PublishSubject.create()
+    private val publishSubject2: PublishSubject<QueryFilter> = PublishSubject.create()
+    private val publishSubject4: PublishSubject<QueryFilter> = PublishSubject.create()
+    private val publishSubject: PublishSubject<String> = PublishSubject.create()
     init {
         val subscriptionMeal3 = publishSubject3
             .debounce(200, TimeUnit.MILLISECONDS)
@@ -521,12 +569,55 @@ class MealViewModel (private val mealRepository: MealRepository,
                 }
             )
         subscriptions.add(subscriptionMeal5)
-    }
 
 
-    private val publishSubject2: PublishSubject<QueryFilter> = PublishSubject.create()
-    private val publishSubject4: PublishSubject<QueryFilter> = PublishSubject.create()
-    init {
+        val subscriptionMeal6 = publishSubject6
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap { it ->
+                mealRepository
+                    .getFilteredMeals(it.category,it.ingredient,it.area,it.tag,it.meal,it.sort,it.a)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError {
+                        Timber.e("Error in publish subject")
+                    }
+            }
+            .subscribe(
+                {
+                    filterMealState.value = FilterMealState.Success(it)
+                },
+                {
+                    filterMealState.value = FilterMealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscriptionMeal6)
+
+        val subscriptionMeal7 = publishSubject7
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap { it ->
+                mealRepository
+                    .getCountOfFilteredMeals(it.category,it.ingredient,it.area,it.tag,it.meal,it.sort)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError {
+                        Timber.e("Error in publish subject")
+                    }
+            }
+            .subscribe(
+                {
+                    countOfFilterMealState.value = CountOfFilterMealState.Success(it)
+                },
+                {
+                    countOfFilterMealState.value = CountOfFilterMealState.Error("Error happened while fetching data from db")
+                }
+            )
+        subscriptions.add(subscriptionMeal7)
+
+
+
+
         val subscriptionMeal2 = publishSubject2
             .debounce(200, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
@@ -570,11 +661,7 @@ class MealViewModel (private val mealRepository: MealRepository,
                 }
             )
         subscriptions.add(subscriptionMeal4)
-    }
 
-    private val publishSubject: PublishSubject<String> = PublishSubject.create()
-
-    init {
         val subscriptionMeal = publishSubject
             .debounce(200, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()

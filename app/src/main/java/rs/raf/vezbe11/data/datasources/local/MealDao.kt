@@ -75,4 +75,18 @@ abstract class MealDao {
 
     @Query("SELECT idIngredient FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal ) WHERE m.idMeal = :idMeal")
     abstract fun getIngredientsForMeal(idMeal : String) : Observable<List<String>>
+
+
+    @Query("SELECT DISTINCT m.idMeal, strmeal, strDrinkAlternate, strCategory,strArea,strInstructions,strMealThumb,strTags,strYoutube,strSource,strImageSource,strCreativeCommonsConfirmed,dateModified,sumOfCalories \n" +
+            "FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE (:category IS NULL OR strCategory LIKE '%' || :category || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') \n" +
+            "AND (:area IS NULL OR strArea LIKE '%' || :area || '%') AND (:tag IS NULL OR strTags LIKE '%' || :tag || '%') AND (:meal IS NULL OR strmeal LIKE '%' || :meal || '%') ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE strmeal END LIMIT 10 OFFSET :a")
+    abstract fun getFilteredMeals(category: String?, ingredient: String?, area: String? , tag:String?, meal: String?, sort: Int? , a :Int) : Observable<List<MealEntity>>
+
+
+    @Query("SELECT COUNT (DISTINCT m.idMeal) \n" +
+            "FROM meals m JOIN crossTable c ON (m.idMeal = c.idMeal) WHERE (:category IS NULL OR strCategory LIKE '%' || :category || '%') AND (:ingredient IS NULL OR idIngredient LIKE '%' || :ingredient || '%') \n" +
+            "AND (:area IS NULL OR strArea LIKE '%' || :area || '%') AND (:tag IS NULL OR strTags LIKE '%' || :tag || '%') AND (:meal IS NULL OR strmeal LIKE '%' || :meal || '%') ORDER BY CASE WHEN :sort IS NULL THEN 0 ELSE strmeal END")
+    abstract fun getCountOfFilteredMeals(category: String?, ingredient: String?, area: String? , tag:String?, meal: String?, sort: Int? ) : Observable<Int>
+
+
 }
