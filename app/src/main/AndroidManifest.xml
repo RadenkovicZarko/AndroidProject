@@ -23,6 +23,8 @@
         <activity android:name=".presentation.view.activities.SavePersonalMealActivity"/>
         <activity android:name=".presentation.view.activities.ListOfMealsActivity"/>
         <activity android:name=".presentation.view.activities.PlannerListMealsActivity"/>
+        <activity android:name=".presentation.view.activities.DetailsOfMealActivity"/>
+
         <activity android:name=".presentation.view.activities.SplashActivity"
             android:exported="true">
             <intent-filter>

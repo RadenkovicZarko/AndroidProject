@@ -1,5 +1,6 @@
 package rs.raf.vezbe11.presentation.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,8 @@ import rs.raf.vezbe11.R
 import rs.raf.vezbe11.databinding.FragmentCategoryBinding
 import rs.raf.vezbe11.databinding.FragmentFilterBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
+import rs.raf.vezbe11.presentation.view.activities.DetailsOfMealActivity
+import rs.raf.vezbe11.presentation.view.activities.ListOfMealsActivity
 import rs.raf.vezbe11.presentation.view.recycler.adapter.CategoryAdapter
 import rs.raf.vezbe11.presentation.view.recycler.adapter.FilterMealAdapter
 import rs.raf.vezbe11.presentation.view.recycler.adapter.MealAdapter
@@ -258,8 +261,9 @@ class FilterFragment: Fragment(R.layout.fragment_filter), FilterMealAdapter.OnIt
     }
 
     override fun onItemClick(text: String) {
-        val newFragment = DetailsOfMealsFragment(text)
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragmentContainerMeals,newFragment)?.addToBackStack(null)?.commit()
+        val intent = Intent(requireContext() , DetailsOfMealActivity::class.java)
+        intent.putExtra("category", text)
+        startActivity(intent)
     }
 
 
