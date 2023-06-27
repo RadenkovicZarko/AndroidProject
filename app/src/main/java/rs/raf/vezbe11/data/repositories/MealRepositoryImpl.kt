@@ -125,7 +125,7 @@ class MealRepositoryImpl (
                                         val ingredient= it?.let { it1 -> localIngredientSource.getIngredientByName(it1) }
                                         val measure = parseValueToGrams(listaMeasures.get(i))
                                         i++
-                                        suma+= ingredient?.calories?.times(measure) ?: 0.0
+                                        suma+= ingredient?.calories?.times(measure/100) ?: 0.0
 
                                     }
                                     val decimalFormat = DecimalFormat("#.##")
