@@ -34,8 +34,8 @@ class MealRepositoryImpl (
             if (meals.isNotEmpty()) {
                 localMealSource.deleteAll()
                 localIngredientMealSource.deleteAll()
-                meals.forEach {
-                        remoteDataSource.getMealById(it.idMeal).forEach { mealResponse2 ->
+                val observables = meals.map {
+                        remoteDataSource.getMealById(it.idMeal).flatMap { mealResponse2 ->
                             val meals2 = mealResponse2.meals
                             if ( meals2.isNotEmpty()) {
 
@@ -200,12 +200,17 @@ class MealRepositoryImpl (
                                 }
                                 localIngredientMealSource.insertAll(entitieIngredientMeal).blockingAwait()
                                 localMealSource.insertAll(entitie).blockingAwait()
+                                Observable.just(Resource.Success(Unit))
                             }
-                            Observable.just(Resource.Success(Unit))
+                            else
+                            {
+                                Observable.just(Resource.Error())
+                            }
+
                         }
                     }
 
-                Observable.just(Resource.Success(Unit))
+                Observable.concat(observables)
             }
             else {
                 Observable.just(Resource.Error())
@@ -344,6 +349,9 @@ class MealRepositoryImpl (
             }
         }
     }
+
+
+
     override fun insertPersonalMeal(meal: PersonalMealEntity): Completable {
         return localPersonalMealSource.insert(meal)
 

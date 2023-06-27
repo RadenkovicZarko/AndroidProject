@@ -6,13 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.databinding.FragmentCategoryBinding
 import rs.raf.vezbe11.databinding.FragmentFilterBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
@@ -297,6 +301,7 @@ class FilterFragment: Fragment(R.layout.fragment_filter), FilterMealAdapter.OnIt
 
         updateButtonStates()
     }
+
 
     private fun updateButtonStates() {
         binding.previousButtonFm.isEnabled = currentPage > 0

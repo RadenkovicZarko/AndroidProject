@@ -61,4 +61,5 @@ interface MealRepository {
     fun getCountOfFilteredMeals(category: String?, ingredient: String?, area: String? , tag:String?, meal: String?, sort: Int? ) : Observable<Int>
 
 
+
 }

@@ -4,6 +4,7 @@ import android.app.slice.Slice
 import androidx.lifecycle.LiveData
 import io.reactivex.Observable
 import rs.raf.vezbe11.data.models.PlannerItem
+import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.models.entities.MealEntity
 import rs.raf.vezbe11.data.models.entities.PersonalMealEntity
 import rs.raf.vezbe11.data.models.entities.UserEntity
@@ -84,5 +85,7 @@ interface MainContract {
         fun getIngredientsForMeal(idMeal : String)
         fun getFilteredMeals(category: String?, ingredient: String?, area: String?, tag: String?, meal: String?, sort: Int?,a:Int)
         fun getCountOfFilteredMeals(category: String?, ingredient: String?, area: String? , tag:String?, meal: String?, sort: Int? )
+
+        fun fetchAllD(): Observable<Resource<Unit>>
     }
 }

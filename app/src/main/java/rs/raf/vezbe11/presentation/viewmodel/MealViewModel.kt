@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -684,6 +685,43 @@ class MealViewModel (private val mealRepository: MealRepository,
             )
         subscriptions.add(subscriptionMeal)
     }
+
+
+
+    override fun fetchAllD(): Observable<Resource<Unit>> {
+        val fetchMeals = mealRepository.fetchAllM()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+        val fetchCategories = mealRepository.fetchAllC()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+        val fetchIngredients = mealRepository.fetchAllI()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+
+        val loadingResource = Resource.Loading<Unit>()
+
+        return Observable.concatArray(
+            Observable.just(loadingResource),
+            Observable.zip(
+                fetchMeals,
+                fetchCategories,
+                fetchIngredients,
+                io.reactivex.functions.Function3 { mealsResult: Resource<Unit>, categoriesResult: Resource<Unit>, ingredientsResult: Resource<Unit> ->
+                    // Check if all fetch operations were successful
+                    if (mealsResult is Resource.Success && categoriesResult is Resource.Success && ingredientsResult is Resource.Success) {
+                        Resource.Success(Unit)
+                    } else {
+                        Resource.Error()
+                    }
+                }
+            )
+        )
+    }
+
+
+
+
 
 
 

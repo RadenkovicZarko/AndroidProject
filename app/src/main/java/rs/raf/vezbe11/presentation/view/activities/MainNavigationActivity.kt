@@ -1,16 +1,22 @@
 package rs.raf.vezbe11.presentation.view.activities
 
 import android.os.Bundle
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.koin.androidx.viewmodel.compat.SharedViewModelCompat.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.models.entities.UserEntity
+import rs.raf.vezbe11.databinding.FragmentCategoryBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
@@ -20,7 +26,7 @@ class MainNavigationActivity: AppCompatActivity()  {
     var bottomNavigationView: BottomNavigationView? = null
     val LOGIN_KEY = "loginKey"
     private val mainViewModel: MainContract.ViewModel by viewModel<MealViewModel>()
-
+    var loadingPbCat: ProgressBar? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +36,11 @@ class MainNavigationActivity: AppCompatActivity()  {
     }
 
     private fun init() {
+        loadingPbCat = findViewById(R.id.loadingPbCat)
         initViewPager()
         initNavigation()
         loadCurrentUser()
+        fetchAllData()
     }
 
     private fun loadCurrentUser() {
@@ -67,6 +75,38 @@ class MainNavigationActivity: AppCompatActivity()  {
             }
             true
         }
+    }
+
+
+    fun fetchAllData() {
+        mainViewModel.fetchAllD()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        showLoadingState(true) // Show loading state
+                    }
+                    is Resource.Success -> {
+                        // All fetch operations were successful
+                        showLoadingState(false) // Hide loading state
+
+                        // Handle the success case
+                        // You can access the result using resource.data
+                    }
+                    is Resource.Error -> {
+                        showLoadingState(false) // Hide loading state
+
+                        // Handle the error case
+                    }
+                }
+            }
+    }
+
+    private fun showLoadingState(loading: Boolean) {
+        viewPager?.isVisible = !loading
+        bottomNavigationView?.isVisible=!loading
+        loadingPbCat?.isVisible=loading
     }
 
 

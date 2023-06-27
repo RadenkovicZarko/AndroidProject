@@ -7,13 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.databinding.FragmentCategoryBinding
 
 import rs.raf.vezbe11.presentation.contract.MainContract
@@ -91,6 +96,7 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
 //        mainViewModel.fetchAllIngredients()
 //        mainViewModel.fetchAllMeals()
 
+
     }
 
     private fun renderState(state: CategoryState) {
@@ -122,6 +128,9 @@ class CategoryFragment(mainAdapter: PagerAdapter): Fragment(), CategoryAdapter.O
         intent.putExtra("category", text)
         startActivity(intent)
     }
+
+
+
 
 
     override fun onDestroyView() {
