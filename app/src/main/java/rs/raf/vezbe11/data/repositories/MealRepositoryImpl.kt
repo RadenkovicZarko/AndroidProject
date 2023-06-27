@@ -320,33 +320,38 @@ class MealRepositoryImpl (
     }
 
     override fun fetchAllI(): Observable<Resource<Unit>> {
-
-        return remoteDataSource.getAllIngredients().flatMap { ingredientResponse ->
-            val ingredients = ingredientResponse.meals
-            if(ingredients.isNotEmpty())
-            {
-                var i =0
-                val entities = ingredients.map {it->
-                    var calories = 0.0
-                    val prom = caloriesRemoteDataSource.getCalories(it.strIngredient).blockingFirst().forEach{it1->
-                        calories += it1.calories
+        try{
+            return remoteDataSource.getAllIngredients().flatMap { ingredientResponse ->
+                val ingredients = ingredientResponse.meals
+                if(ingredients.isNotEmpty())
+                {
+                    var i =0
+                    val entities = ingredients.map {it->
+                        var calories = 0.0
+                        val prom = caloriesRemoteDataSource.getCalories(it.strIngredient).blockingFirst().forEach{it1->
+                            calories += it1.calories
+                        }
+                        Timber.e(i.toString())
+                        i++
+                        IngredientEntity(
+                            it.strIngredient,
+                            it.strIngredient,
+                            it.strDescription,
+                            it.strType,
+                            calories
+                        )
                     }
-                    Timber.e(i.toString())
-                    i++
-                    IngredientEntity(
-                        it.strIngredient,
-                        it.strIngredient,
-                        it.strDescription,
-                        it.strType,
-                        calories
-                    )
-                }
 
-                localIngredientSource.deleteAndInsertAll(entities)
-                Observable.just(Resource.Success(Unit))
-            }else {
-               Observable.just(Resource.Error())
+                    localIngredientSource.deleteAndInsertAll(entities)
+                    Observable.just(Resource.Success(Unit))
+                }else {
+                   Observable.just(Resource.Error())
+                }
             }
+
+        }catch (e:Exception){
+            Timber.e(e)
+            return Observable.just(Resource.Error())
         }
     }
 

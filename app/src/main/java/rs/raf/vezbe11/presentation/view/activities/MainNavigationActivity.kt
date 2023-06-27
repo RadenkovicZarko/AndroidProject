@@ -105,30 +105,36 @@ class MainNavigationActivity : AppCompatActivity() {
             shouldShowLoad = false
             Timber.e("Already have some data: $num")
         }
+        if(num == 125)
+            return
+        try {
+            val subs = mainViewModel.fetchAllD()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            showLoadingState(shouldShowLoad) // Show loading state
+                        }
+                        is Resource.Success -> {
+                            // All fetch operations were successful
+                            showLoadingState(false) // Hide loading state
 
-        val subs = mainViewModel.fetchAllD()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        showLoadingState(shouldShowLoad) // Show loading state
-                    }
-                    is Resource.Success -> {
-                        // All fetch operations were successful
-                        showLoadingState(false) // Hide loading state
+                            // Handle the success case
+                            // You can access the result using resource.data
+                        }
+                        is Resource.Error -> {
+                            showLoadingState(false) // Hide loading state
 
-                        // Handle the success case
-                        // You can access the result using resource.data
-                    }
-                    is Resource.Error -> {
-                        showLoadingState(false) // Hide loading state
-
-                        // Handle the error case
+                            // Handle the error case
+                        }
                     }
                 }
-            }
-        mainViewModel.subscriptions.add(subs)
+            mainViewModel.subscriptions.add(subs)
+
+        }catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 
     private fun showLoadingState(loading: Boolean) {
