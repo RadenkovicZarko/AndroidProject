@@ -60,7 +60,7 @@ class MainNavigationActivity : AppCompatActivity() {
         initViewPager()
         initNavigation()
         loadCurrentUser()
-        //fetchAllData()
+        fetchAllData()
     }
 
     private fun loadCurrentUser() {

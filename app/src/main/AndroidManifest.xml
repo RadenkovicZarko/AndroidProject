@@ -33,18 +33,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="myapp"
-                    android:host="open" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="http"
-                    android:host="www.mealPlannerVZ.com" />
+                    android:scheme="www.food-hub.rs"
+                    android:host="https" />
             </intent-filter>
         </activity>
         <activity android:name=".presentation.view.activities.LogInActivity" />

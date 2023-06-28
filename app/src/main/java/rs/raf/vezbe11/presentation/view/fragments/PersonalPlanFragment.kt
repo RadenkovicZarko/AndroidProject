@@ -81,7 +81,7 @@ class PersonalPlanFragment : Fragment(R.layout.fragment_personal_plan),
             type = "text/html"
             putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
             putExtra(Intent.EXTRA_SUBJECT, emailSubject)
-            putExtra(Intent.EXTRA_TEXT, listParam)
+            putExtra(Intent.EXTRA_TEXT, listParam+" https:\\\\www.food-hub.rs")
         }
         startActivity(Intent.createChooser(intent, "Send Email"))
     }
