@@ -15,6 +15,7 @@
         android:layout_marginTop="197dp"
         android:layout_marginEnd="98dp"
         android:layout_marginBottom="328dp"
+        android:tint="@color/eva_green"
         android:src="@drawable/food" />
 
 </RelativeLayout>

@@ -1,140 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
-
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linear"
-        android:layout_width="411dp"
-        android:layout_height="95dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints">
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="@color/eva_purple"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/categoryBtn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-
-            android:text="Category"
-            tools:layout_editor_absoluteX="304dp"
-            tools:layout_editor_absoluteY="0dp"
             android:background="@drawable/boarder"
-            />
+            android:text="Category"
+            android:textColor="@color/eva_black" />
 
         <Button
             android:id="@+id/areaBtn"
-            android:layout_width="0dp"
-            android:backgroundTint="@color/eva_purple"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@drawable/boarder"
             android:text="Area"
-            tools:layout_editor_absoluteX="151dp"
-            tools:layout_editor_absoluteY="0dp" />
+            android:textColor="@color/eva_black" />
 
         <Button
             android:id="@+id/ingridientBtn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@drawable/boarder"
             android:text="Ingredient"
-            tools:layout_editor_absoluteX="304dp"
-            tools:layout_editor_absoluteY="0dp" />
+            android:textColor="@color/eva_black" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/mealEt"
-        android:layout_width="211dp"
-        android:layout_height="49dp"
-        android:hint="Name of meal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parameterEt"
-        app:layout_constraintVertical_bias="0.071" />
+    <LinearLayout
+        android:id="@+id/linear_how"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/parameterEt"
-        android:layout_width="211dp"
-        android:layout_height="49dp"
-        android:hint="Name of parameter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
 
-        app:layout_constraintTop_toBottomOf="@+id/linear"
-        app:layout_constraintVertical_bias="0.035" />
+            <EditText
+                android:id="@+id/mealEt"
+                android:layout_width="200dp"
+                android:layout_height="49dp"
+                android:backgroundTint="@color/eva_green"
+                android:hint="Name of meal"
+                android:textColor="@color/eva_green"
+                android:textColorHint="@color/eva_green"
 
-    <EditText
-        android:id="@+id/tagEt"
-        android:layout_width="211dp"
-        android:layout_height="49dp"
-        android:hint="Name of tag"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mealEt"
-        app:layout_constraintVertical_bias="0.06" />
+                />
 
-    <CheckBox
-        android:id="@+id/sort"
-        android:layout_width="76dp"
-        android:layout_height="49dp"
-        android:text="Sort"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tagEt"
-        app:layout_constraintVertical_bias="0.044" />
+            <EditText
+                android:id="@+id/parameterEt"
+                android:layout_width="200dp"
+                android:layout_height="49dp"
+                android:backgroundTint="@color/eva_green"
+                android:hint="Name of parameter"
+                android:textColor="@color/eva_green"
+                android:textColorHint="@color/eva_green" />
+
+            <EditText
+                android:id="@+id/tagEt"
+                android:layout_width="200dp"
+                android:layout_height="49dp"
+                android:backgroundTint="@color/eva_green"
+                android:hint="Name of tag"
+                android:textColor="@color/eva_green"
+                android:textColorHint="@color/eva_green" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/sort"
+            android:layout_width="wrap_content"
+            android:layout_height="49dp"
+            android:layout_marginStart="50dp"
+            android:text="Sort"
+            android:backgroundTint="@color/eva_green"
+            android:textColor="@color/eva_green"
+            android:textColorHint="@color/eva_green"
+            />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mealsRv"
-        android:layout_width="364dp"
-        android:layout_height="230dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sort"
-        app:layout_constraintVertical_bias="0.162" />
+        android:layout_width="match_parent"
+        android:layout_height="350dp" />
 
-    <Button
-        android:id="@+id/previousButtonFm"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linear_layout_last"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Previous"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mealsRv" />
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        >
 
-    <Button
-        android:id="@+id/nextButtonFm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.924"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mealsRv" />
+        <Button
+            android:id="@+id/previousButtonFm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/eva_purple"
+            android:text="Previous"
+            android:textColor="@color/eva_green" />
+
+        <Button
+            android:id="@+id/nextButtonFm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:text="Next"
+            android:backgroundTint="@color/eva_purple"
+            android:textColor="@color/eva_green" />
+    </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 

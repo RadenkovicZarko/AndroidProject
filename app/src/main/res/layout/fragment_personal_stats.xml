@@ -75,8 +75,8 @@
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:backgroundTint="@color/eva_green"
-        android:text="@string/logout"
         android:textColor="@color/eva_purple"
+        android:text="@string/logout"
         android:textSize="17sp" />
 
 
