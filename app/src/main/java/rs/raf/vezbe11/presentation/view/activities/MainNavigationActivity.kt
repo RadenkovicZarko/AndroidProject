@@ -12,14 +12,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.koin.androidx.viewmodel.compat.SharedViewModelCompat.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
-import rs.raf.vezbe11.data.models.PlannerItem
 import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.models.entities.UserEntity
-import rs.raf.vezbe11.databinding.FragmentCategoryBinding
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.adapters.PagerAdapter
 import rs.raf.vezbe11.presentation.viewmodel.MealViewModel
@@ -60,7 +56,7 @@ class MainNavigationActivity : AppCompatActivity() {
         initViewPager()
         initNavigation()
         loadCurrentUser()
-        //fetchAllData()
+        fetchAllData()
     }
 
     private fun loadCurrentUser() {
@@ -105,8 +101,10 @@ class MainNavigationActivity : AppCompatActivity() {
             shouldShowLoad = false
             Timber.e("Already have some data: $num")
         }
-        if(num == 125)
+        if(num >= 123){
+            mainViewModel.fetchAllMeals()
             return
+        }
         try {
             val subs = mainViewModel.fetchAllD()
                 .subscribeOn(Schedulers.io())

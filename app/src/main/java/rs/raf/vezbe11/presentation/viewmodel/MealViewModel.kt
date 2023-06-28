@@ -1,7 +1,6 @@
 package rs.raf.vezbe11.presentation.viewmodel
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
@@ -691,6 +690,7 @@ class MealViewModel (private val mealRepository: MealRepository,
 
 
     override fun fetchAllD(): Observable<Resource<Unit>> {
+
         val fetchMeals = mealRepository.fetchAllM()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
